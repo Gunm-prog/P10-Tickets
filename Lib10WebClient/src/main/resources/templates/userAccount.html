@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="fragments/base :: base(~{::title},~{::h2},~{::section})">
+<div th:replace="fragments/base :: head"></div>
+
+<title>Search</title>
+
+<body>
+<div th:replace="fragments/header :: header"></div>
+<h2></h2>
+<section class="width90 container align-middle bg-light column-dir">
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="account-tab" data-toggle="tab" href="#account" role="tab"
+               aria-controls="account" aria-selected="true">
+                My account
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="loans-tab" data-toggle="tab" href="#loans" role="tab" aria-controls="loans"
+               aria-selected="false">
+                My Loans
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content overflow-70h" id="myTabContent">
+        <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
+            <form action="#" th:action="@{/updateUserAccount}" th:object="${userInfos}" method="post">
+                <div class="d-flex">
+                    <div>
+                        <div class="form-group">
+                            <div class="form-floating">
+                                <input id="firstName" class="form-control" th:field="*{firstName}"
+                                       th:value="${userInfos.firstName}" type="text" name="firstName"
+                                       placeholder="FirstName">
+                                <label for="firstName">First name</label>
+                            </div>
+
+                            <div class="form-floating">
+                                <input id="lastName" class="form-control" th:field="*{lastName}"
+                                       th:value="${userInfos.lastName}" type="text" name="lastName"
+                                       placeholder="lastName">
+                                <label for="lastName">Last name</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-floating">
+                                <input id="email" class="form-control" th:field="*{email}" type="email" name="email"
+                                       placeholder="Email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                                       title="valid email address">
+                                <label for="email">Email</label>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div>
+                        <div class="form-group">
+                            <div class="form-floating">
+                                <input id="number" class="form-control" th:field="*{addressDto.number}"
+                                       th:value="${userInfos.addressDto.number}" type="text" name="number"
+                                       placeholder="number">
+                                <label for="number">Number</label>
+                            </div>
+
+                            <div class="form-floating">
+                                <input id="street" class="form-control" th:field="*{addressDto.street}"
+                                       th:value="${userInfos.addressDto.street}" type="text" name="street"
+                                       placeholder="street">
+                                <label for="street">Street</label>
+                            </div>
+
+                            <div class="form-floating">
+                                <input id="zipCode" class="form-control" th:field="*{addressDto.zipCode}"
+                                       th:value="${userInfos.addressDto.zipCode}" type="text" name="zipCode"
+                                       placeholder="zipcode">
+                                <label for="zipCode">zipcode</label>
+                            </div>
+
+                            <div class="form-floating">
+                                <input id="city" class="form-control" th:field="*{addressDto.city}"
+                                       th:value="${userInfos.addressDto.city}" type="text" name="city"
+                                       placeholder="city">
+                                <label for="city">City</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary btn-block" type="submit">Change</button>
+                </div>
+            </form>
+        </div>
+
+
+        <div class="tab-pane fade" id="loans" role="tabpanel" aria-labelledby="loans-tab">
+            <table class="table width90 align-middle">
+                <tr class="tableTitle">
+                    <th>Books</th>
+                    <th>Loan start date</th>
+                    <th>Loan end date</th>
+                    <th>Library</th>
+                    <th>Status</th>
+                </tr>
+                <tr th:if="${not #lists.isEmpty(userInfos.loanDtos)}" th:each="loan: ${userInfos.loanDtos}">
+                    <td>
+                        <img class="bookCover float-start w-50"
+                             th:src="@{${'/image/covers/' + loan.copyDto.bookDto.bookId +'.png'}}" alt="bookImage"/>
+                        <h5 class="card-title" th:text="${loan.copyDto.bookDto.title}">Loaned book title</h5>
+                        <p class="card-text" th:text="${loan.copyDto.bookDto.isbn}">Isbn</p>
+                        <p class="card-text" th:text="${ loan.copyDto.bookDto.authorDto.firstName + ' ' +
+            loan.copyDto.bookDto.authorDto.lastName}">Author</p>
+                        <a class="nav-link"
+                           th:href="@{/books/details/{id}(id=${loan.copyDto.bookDto.bookId})}">Summary</a>
+                    </td>
+                    <td th:text="${#dates.format(loan.loanStartDate, 'dd-MMM-yyyy')}"> Loan start date</td>
+
+                    <td th:if="${loan.returned == false && loan.loanEndDate.before(#dates.createNow())}"
+                        th:text="${#dates.format(loan.loanEndDate, 'dd-MMM-yyyy')}" class="text-danger">Loan end date
+                    </td>
+                    <td th:if="${
+                        loan.returned == true && loan.loanEndDate.before(#dates.createNow())
+                    ||
+                        (loan.loanEndDate.after(#dates.createNow()))
+                    }"
+                        th:text="${#dates.format(loan.loanEndDate, 'dd-MMM-yyyy')}">Loan end date
+                    </td>
+
+                    <td>
+                        <a class="nav-link" th:text="${loan.copyDto.libraryDto.name}"
+                           th:href="@{/libraries/{id}(id=${loan.copyDto.libraryDto.libraryId})}">Library Name</a>
+                    </td>
+                    <td>
+                        <form action="#" th:action="@{'/extendLoan/{id}' (id=${loan.id})}" method="post"
+                              th:if="${loan.returned == false && loan.extended == false}">
+                            <input type="submit" value="Extend loan"/>
+                        </form>
+                        <p th:if="${loan.returned == true}" class="text-success">returned</p>
+                        <p th:if="${loan.returned == false}" class="text-warning">not returned</p>
+                    </td>
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(userInfos.loanDtos)}">
+                    <td colspan="5" class="text-success"> No loan from your account</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</section>
+</body>
+</html>
+

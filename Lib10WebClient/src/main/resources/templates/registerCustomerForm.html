@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr"
+      th:replace="fragments/base :: base(~{::title},~{::h2},~{::section})">
+
+<div th:replace="fragments/base :: head"></div>
+<title>Sign Up </title>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<h2></h2>
+<section class="login container align-middle bg-light">
+    <form action="#" th:action="@{/registration/customer}" th:object="${user}" method="post">
+        <h3></h3>
+
+        <div class="form-group">
+
+            <input id="firstName" class="form-control" th:field="*{firstName}" type="text" name="firstName"
+                   placeholder="first name" required>
+
+            <input id="lastName" class="form-control" th:field="*{lastName}" type="text" name="lastName"
+                   placeholder="Last name" required>
+        </div>
+        <div class="form-group">
+
+            <input id="email" class="form-control" th:field="*{email}" type="email" name="email" placeholder="Email"
+                   required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="valid email address">
+        </div>
+        <div class="form-group">
+
+            <input class="form-control" th:field="*{password}" type="password" name="password" id="password"
+                   placeholder="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
+                   title="1 uppercase, 1 lowercase, 1 digit and 6 characters minimum" required>
+
+            <input class="form-control" type="password" name="confirm_password" id="confirm_password"
+                   placeholder="confirm" required>
+        </div>
+
+        <div class="form-group">
+            <input id="number" class="form-control" th:field="*{addressDto.number}" type="text" name="number"
+                   placeholder="number" required>
+            <input id="street" class="form-control" th:field="*{addressDto.street}" type="text" name="street"
+                   placeholder="street" required>
+            <input id="zipCode" class="form-control" th:field="*{addressDto.zipCode}" type="text" name="zipCode"
+                   placeholder="zipcode" required>
+            <input id="city" class="form-control" th:field="*{addressDto.city}" type="text" name="city"
+                   placeholder="city" required>
+        </div>
+
+        <div class="form-group" th:if="${error}">
+            <p th:text="${error}" class="text-danger">error</p>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary btn-block" type="submit">Register</button>
+        </div>
+    </form>
+</section>
+</body>
+</html>

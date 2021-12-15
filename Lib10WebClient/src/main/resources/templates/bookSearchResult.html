@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="fragments/base :: base(~{::title},~{::h2},~{::section})">
+<div th:replace="fragments/base :: head"></div>
+
+
+<title>Search Results</title>
+
+<body>
+<div th:replace="fragments/header :: header"></div>
+<h2></h2>
+
+<section class="width90 container align-middle bg-light">
+    <div class="overflow-70h w-100">
+        <table class="table align-middle overflow-70h width90">
+            <tr class="tableTitle">
+                <th>Book</th>
+                <th>Availability</th>
+            </tr>
+            <tr th:if="${#lists.size(books) == 0}">
+                <td colspan="5">No result</td>
+            </tr>
+            <tr th:if="${#lists.size(books) != 0}" th:each="book: ${books}">
+                <td>
+                    <img class="bookCover float-start w-50" th:src="@{${'/image/covers/' + book.bookId +'.png'}}"
+                         alt="bookImage"/>
+                    <h5 class="card-title" th:text="${book.title}">Loaned book title</h5>
+                    <p class="card-text" th:text="${book.isbn}">Isbn</p>
+                    <p class="card-text" th:text="${ book.authorDto.firstName + ' ' + book.authorDto.lastName}">
+                        Author</p>
+                    <a class="nav-link" th:href="@{/books/details/{id}(id=${book.bookId})}">Summary</a>
+                </td>
+                <td>
+                    <div class="height-30vh overflow-auto">
+                        <table class="table overflow-auto width90">
+                            <tr>
+                                <th>Library</th>
+                                <th>Available</th>
+                                <th>Number of Copies</th>
+                            </tr>
+                            <tr th:each="library: ${book.libraries}">
+                                <td>
+                                    <p class="strong"><a class="nav-link" th:text="${library.name}"
+                                                         th:href="@{/libraries/{id}(id=${library.libraryId})}">Library
+                                        Name</a>
+                                    </p>
+                                </td>
+                                <td>
+
+                                    <p th:if="${library.NbAvailableCopies == 0}" th:text="${library.NbAvailableCopies}"
+                                       class="text-danger">NbAvailableCopies</p>
+                                    <p th:if="${library.NbAvailableCopies > 0}" th:text="${library.NbAvailableCopies}"
+                                       class="text-success">NbAvailableCopies</p>
+                                </td>
+                                <td>
+                                    <p th:text="${library.NbCopies}"> NbCopies</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</section>
+</body>
+</html>

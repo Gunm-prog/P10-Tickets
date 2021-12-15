@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="fragments/base :: base(~{::title},~{::h2},~{::section})">
+<div th:replace="fragments/base :: head"></div>
+
+
+<title>Library List</title>
+
+<body>
+<div th:replace="fragments/header :: header"></div>
+<h2></h2>
+<section class="section-card container align-middle borderless">
+
+    <div th:if="${#lists.size(libraries) == 0}">
+        <p>No result</p>
+    </div>
+    <div class="cards-container" th:if="${#lists.size(libraries) != 0}">
+        <div class="card col-sm-6" th:each="library:${libraries}">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${library.name}">Card title</h5>
+                <p class="card-text" th:text="${library.addressDto.number + ' ' +
+                library.addressDto.street}">Address</p>
+                <p class="card-text" th:text="${library.addressDto.zipCode + ' ' + library.addressDto.city}">Zipcode -
+                    City</p>
+                <p class="card-text" th:text="${library.phoneNumber}">Phone Number</p>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

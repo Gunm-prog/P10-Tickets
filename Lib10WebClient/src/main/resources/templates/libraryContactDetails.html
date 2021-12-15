@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="fragments/base :: base(~{::title},~{::h2},~{::section})">
+<div th:replace="fragments/base :: head"></div>
+
+
+<title>Contact Details</title>
+
+<body>
+<div th:replace="fragments/header :: header"></div>
+<h2></h2>
+<section class="search container align-middle bg-light">
+
+    <div class="card col-sm-9 forOne-card">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${library.name}">Card title</h5>
+            <p class="card-text" th:text="${library.addressDto.number + ' ' + library.addressDto.street}">Address</p>
+            <p class="card-text" th:text="${library.addressDto.zipCode}">Zipcode</p>
+            <p class="card-text" th:text="${library.addressDto.city}">City</p>
+            <p class="card-text" th:text="${'Phone: ' + library.phoneNumber}">Phone Number</p>
+
+        </div>
+    </div>
+</section>
+</body>
+</html>

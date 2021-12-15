@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="fragments/base :: base(~{::title},~{::h2},~{::section})">
+<div th:replace="fragments/base :: head"></div>
+
+<title>Search</title>
+
+<body>
+<div th:replace="fragments/header :: header"></div>
+<h2></h2>
+<section class="search container align-middle bg-light">
+    <form action="#" th:action="@{/books/searchResult}" th:object="${copy}" method="get">
+
+        <div class="form-group">
+            <select name="libraryId" th:field="*{libraryDto.libraryId}" class="form-select"
+                    aria-label="Default select example">
+                <option th:value=null>All libraries</option>
+                <option th:each="library: ${libraries}" th:value="${library.libraryId}" th:text="${library.name}">
+                    Library Name
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <input id="title" type="text" class="form-control" th:field="*{bookDto.title}" name="bookTitle"
+                   placeholder="Title">
+
+            <input id="Isbn" type="text" class="form-control" th:field="*{bookDto.isbn}" name="isbn" placeholder="Isbn">
+        </div>
+
+        <div class="form-group">
+            <input id="authorLastname" type="text" class="form-control" th:field="*{bookDto.authorDto.lastName}"
+                   name="AuthorLastname" placeholder="Author Lastname">
+
+            <input id="authorFirstname" type="text" class="form-control" th:field="*{bookDto.authorDto.firstName}"
+                   name="AuthorFirstName" placeholder="Author Firstname">
+        </div>
+
+
+        <div class="form-group">
+            <input class="btn btn-primary btn-block" type="submit" value="Search"/>
+        </div>
+    </form>
+</section>
+</body>
+</html>
