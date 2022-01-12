@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <modules>
@@ -15,7 +16,7 @@
     <description>Projet 10 : P10-Tickets</description>
     <packaging>pom</packaging>
 
-    <properties>
+   <!-- <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,6 +27,8 @@
         <sonar.language>java</sonar.language>
         <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco-merged-test-coverage-report/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
+
+
 
     <build>
         <plugins>
@@ -153,5 +156,5 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-    </build>
+    </build>-->
 </project>
