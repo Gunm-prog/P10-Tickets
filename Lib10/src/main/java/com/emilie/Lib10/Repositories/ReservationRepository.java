@@ -23,8 +23,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             "WHERE r.book.id = :bookId")
     List<Reservation> findByBookId(@Param("bookId") Long bookId);
 
-    //todo ajouter le param isActive false (on peut avoir plusieur resa active en simultané )
-    //todo a tester
     @Query(value="SELECT r FROM Reservation r " +
             "WHERE r.book.id = :bookId " +
             "AND r.isActive = false " +

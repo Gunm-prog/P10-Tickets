@@ -113,7 +113,6 @@ public class ReservationServiceImpl implements ReservationService {
             BookNotFoundException,
             ReservationAlreadyExistException {
 
-        //todo check if logged user is the owner exclude admin employee
         Optional<User> optionalUser=userRepository.findById( reservationDto.getUserDto().getUserId() );
         if (!optionalUser.isPresent()) {
             throw new UserNotFoundException( "user " + reservationDto.getUserDto().getUserId() + " not found" );
@@ -205,6 +204,9 @@ public class ReservationServiceImpl implements ReservationService {
         }
 
         Reservation reservation = optionalReservation.get();
+
+        //add endDate //TODO a tester
+        reservation.setReservationEndDate( makePeriodLocalDateTime( 2, null) );
         reservation.setActive( true );
         reservationRepository.save(reservation);
         return reservationToReservationDto( reservation );
@@ -454,18 +456,18 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
 
-    private Date makePeriodDate(int numberOfDays, Date initialEndDate) {
+    private LocalDateTime makePeriodLocalDateTime(int numberOfDays, Date initialEndDate) {
 
-        LocalDate localDate=LocalDate.now();
+        LocalDateTime localDateTime=LocalDateTime.now();
 
         if (initialEndDate != null) {
-            localDate=initialEndDate.toInstant().atZone( ZoneId.systemDefault() ).toLocalDate();
+            localDateTime = initialEndDate.toInstant().atZone( ZoneId.systemDefault() ).toLocalDateTime();
         }
 
-        localDate=localDate.plusDays( numberOfDays );
-        Instant instant=localDate.atStartOfDay( ZoneId.systemDefault() ).toInstant();
-        Date date=Date.from( instant );
-        return date;
+        localDateTime=localDateTime.plusDays( numberOfDays );
+     //   Instant instant=localDate.atStartOfDay( ZoneId.systemDefault() ).toInstant();
+     //   Date date=Date.from( instant );
+        return localDateTime;
     }
 
 }

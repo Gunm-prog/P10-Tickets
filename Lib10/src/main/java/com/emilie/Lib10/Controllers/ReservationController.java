@@ -1,21 +1,11 @@
 package com.emilie.Lib10.Controllers;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.emilie.Lib10.Config.JwtProperties;
-import com.emilie.Lib10.Config.JwtTokenUtil;
 import com.emilie.Lib10.Exceptions.*;
-import com.emilie.Lib10.Models.Dtos.BookDto;
-import com.emilie.Lib10.Models.Dtos.LoanDto;
 import com.emilie.Lib10.Models.Dtos.ReservationDto;
 import com.emilie.Lib10.Models.Dtos.UserDto;
-import com.emilie.Lib10.Models.Entities.Reservation;
-import com.emilie.Lib10.Services.contract.LoanService;
 import com.emilie.Lib10.Services.contract.ReservationService;
 import com.emilie.Lib10.Services.contract.UserService;
 import io.swagger.annotations.ApiOperation;
-import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Objects;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/reservations")
@@ -44,6 +32,7 @@ public class ReservationController {
     @PostMapping("/new")
     public ResponseEntity<?> save(@RequestBody ReservationDto reservationDto) {
         try {
+            //get user form jwt
             UserDto loggedUser = userService.getLoggedUser();
             reservationService.haveAccess( loggedUser, reservationDto );
 
