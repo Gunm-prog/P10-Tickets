@@ -134,6 +134,9 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public LoanDto extendLoan(Long loanId) throws LoanNotFoundException, ImpossibleExtendLoanException {
+
+        //todo controle if userLogged is the loan'user ?
+
         Optional<Loan> optionalLoan=loanRepository.findById( loanId );
         if (!optionalLoan.isPresent()) {
             throw new LoanNotFoundException( "loan " + loanId + " not found" );
@@ -144,6 +147,10 @@ public class LoanServiceImpl implements LoanService {
             throw new ImpossibleExtendLoanException( "this loan " + loanId + " has already been extended" );
         }
 
+        //todo a tester
+        if(loan.getLoanEndDate().before( makePeriodDate(0, null) ) ) {
+            throw new ImpossibleExtendLoanException( "unauthorize extend, loan's endDate is expired" );
+        }
 
         Date date=makePeriodDate( 30, loan.getLoanEndDate() );
         loan.setLoanEndDate( date );
