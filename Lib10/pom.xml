@@ -11,7 +11,7 @@
     </parent>
 
 <groupId>com.emilie</groupId>
-<artifactId>Lib7</artifactId>
+<artifactId>Lib10</artifactId>
 <version>0.0.1-SNAPSHOT</version>
 <packaging>jar</packaging>
     <!-- General information -->
