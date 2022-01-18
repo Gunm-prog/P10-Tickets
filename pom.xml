@@ -6,7 +6,6 @@
         <module>Lib10</module>
         <module>SpringBatch</module>
         <module>Lib10WebClient</module>
-
     </modules>
     <groupId>com.manager</groupId>
     <artifactId>manager</artifactId>
