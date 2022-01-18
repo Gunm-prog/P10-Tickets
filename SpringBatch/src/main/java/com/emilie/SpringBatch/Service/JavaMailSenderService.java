@@ -6,6 +6,7 @@ import com.emilie.SpringBatch.model.LoanEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
@@ -73,7 +74,7 @@ public class JavaMailSenderService {
 
     private void sendSimpleMessage(String to, String subject, String body) {
         SimpleMailMessage message=new SimpleMailMessage();
-        message.setFrom( "lib7@batch.com" );
+        message.setFrom( "lib10@batch.com" );
         message.setTo( to );
         message.setSubject( subject );
         message.setText( body );

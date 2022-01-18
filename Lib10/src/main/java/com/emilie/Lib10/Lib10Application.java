@@ -8,9 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Lib10Application {
 
     public static void main(String[] args) {
+
         SpringApplication.run( Lib10Application.class, args );
-
-
     }
-
 }
