@@ -52,6 +52,9 @@ public class User implements Serializable {
     @OneToMany(mappedBy="user")
     private Set<Loan> loans;
 
+    @OneToMany(mappedBy = "user")
+    private Set<Reservation> reservations;
+
     @Embedded
     private Address address;
 

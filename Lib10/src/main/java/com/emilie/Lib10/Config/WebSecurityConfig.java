@@ -62,6 +62,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers( "/api/v1/libraries/{id}" ).permitAll()
                 .and()
                 .authorizeRequests().antMatchers( "/api/v1/books/{id}" ).permitAll()
+                .and()
+                .authorizeRequests().antMatchers( "/api/v1/reservations/*" ).authenticated()
                 /*.and()*/
                 /*.authorizeRequests().antMatchers("/api/v1/users/createUserAccount").permitAll()*/
                 .antMatchers( "/register/employee" ).hasAnyRole( JwtProperties.ROLE_ADMIN, JwtProperties.ROLE_EMPLOYEE )

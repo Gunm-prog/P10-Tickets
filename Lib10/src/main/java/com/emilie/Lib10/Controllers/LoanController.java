@@ -2,8 +2,13 @@ package com.emilie.Lib10.Controllers;
 
 import com.emilie.Lib10.Exceptions.*;
 import com.emilie.Lib10.Models.Dtos.LoanDto;
+import com.emilie.Lib10.Models.Dtos.ReservationDto;
+import com.emilie.Lib10.Models.Dtos.UserDto;
 import com.emilie.Lib10.Services.contract.LoanService;
+import com.emilie.Lib10.Services.contract.ReservationService;
+import com.emilie.Lib10.Services.contract.UserService;
 import io.swagger.annotations.ApiOperation;
+import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,10 +23,14 @@ import java.util.List;
 public class LoanController {
 
     private final LoanService loanService;
+    private final ReservationService reservationService;
+    private final UserService userService;
 
     @Autowired
-    public LoanController(LoanService loanService) {
+    public LoanController(LoanService loanService, ReservationService reservationService, UserService userService) {
         this.loanService=loanService;
+        this.reservationService=reservationService;
+        this.userService=userService;
     }
 
     @ApiOperation(value="Retrieve loan by id, if registered in database")
@@ -80,6 +89,38 @@ public class LoanController {
     public ResponseEntity<String> save(@RequestBody LoanDto loanDto)
             throws UserNotFoundException, CopyNotFoundException, LoanAlreadyExistsException {
         try {
+
+            UserDto loggedUser = userService.getLoggedUser();
+            loanService.haveAccess( loggedUser, loanDto );
+
+            List <ReservationDto> reservationsList = reservationService.getReservationsByBookId( loanDto.getCopyDto().getBookDto().getBookId() );
+
+            //if book's reservation exist
+            if(!reservationsList.isEmpty()){
+                try{
+                    //found userReservation if it's active or exist
+                    ReservationDto userReservationDto = reservationService.haveActiveReservationForUser( loanDto.getUserDto(), loanDto.getCopyDto().getBookDto() );
+
+                    //delete the finished reservation
+                    reservationService.deleteById( userReservationDto.getId() );
+
+                    try{//active potential next reservation for this book
+                        ReservationDto nextReservation = reservationService.getNextReservationForBook( loanDto.getCopyDto().getBookDto() );
+                        reservationService.activeReservation( nextReservation );
+
+                        //todo send email
+
+                        //if nextReservation not found do nothing
+                    }catch(NotFoundException ignoredException){}
+
+                }catch(NotFoundException e){//if user can't loan the book because it's reserved.
+                    log.info( "loan can't be accept, the book is reserved" );
+                    return ResponseEntity
+                            .status( HttpStatus.UNAUTHORIZED )
+                            .body( "loan can't be accept, the book is reserved" );
+                }
+            }
+
             LoanDto newLoanDto=loanService.save( loanDto );
             log.info( "Loan " + newLoanDto.getId() + " have been created" );
             return new ResponseEntity<>( "loan " + newLoanDto.getId() + " has been created", HttpStatus.CREATED );
@@ -88,10 +129,15 @@ public class LoanController {
             return ResponseEntity
                     .status( HttpStatus.CONFLICT )
                     .body( e.getMessage() );
-        } catch (UserNotFoundException | CopyNotFoundException e) {
+        } catch ( UserNotFoundException | CopyNotFoundException e) {
             log.error( e.getMessage() );
             return ResponseEntity
                     .status( HttpStatus.NOT_FOUND )
+                    .body( e.getMessage() );
+        } catch ( UnauthorizedException e) {
+            log.error( e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.UNAUTHORIZED )
                     .body( e.getMessage() );
         } catch (Exception e) {
             log.warn( e.getMessage(), e );
@@ -167,8 +213,24 @@ public class LoanController {
     public ResponseEntity<?> returnLoan(@PathVariable(value="id") Long id)
             throws LoanNotFoundException {
         try {
-            LoanDto loanDtoReturned=loanService.returnLoan( id );
+
+            //retrieve the loan in database
+            LoanDto loanDtoReturned=loanService.findById( id );
+
+            //check if a reservation need to be pass active
+            try{
+                ReservationDto reservationDto = reservationService.getNextReservationForBook( loanDtoReturned.getCopyDto().getBookDto() );
+
+                reservationService.activeReservation( reservationDto );
+
+                //todo sendEmail
+
+                //if not found nextReservation, do nothing
+            }catch (NotFoundException ignoredException){}
+
+            loanService.returnLoan( id );
             log.info( "Loan " + id + " have been returned" );
+
             return new ResponseEntity<LoanDto>( loanDtoReturned, HttpStatus.OK );
         } catch (LoanNotFoundException e) {
             log.error( e.getMessage() );

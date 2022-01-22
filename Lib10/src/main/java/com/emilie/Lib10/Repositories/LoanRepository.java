@@ -20,6 +20,11 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
 
     Optional<Loan> findByCopyId(Long id);
 
+    @Query(value="SELECT l FROM Loan l " +
+            "WHERE l.copy.id = :copyId " +
+            "AND l.returned = false")
+    Optional<Loan> findNotReturnedByCopyId(@Param("copyId") Long copyId);
+
 
     @Query(value="SELECT l FROM Loan l " +
             "WHERE l.user.id = :userId")

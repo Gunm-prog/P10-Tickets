@@ -1,22 +1,22 @@
 package com.emilie.Lib10.Services.impl;
 
-import com.emilie.Lib10.Exceptions.*;
-import com.emilie.Lib10.Models.Dtos.*;
-import com.emilie.Lib10.Models.Entities.*;
 import com.emilie.Lib10.Repositories.CopyRepository;
 import com.emilie.Lib10.Repositories.LoanRepository;
 import com.emilie.Lib10.Repositories.UserRepository;
 import com.emilie.Lib10.Services.contract.LoanService;
+import com.emilie.Lib10.Exceptions.*;
+import com.emilie.Lib10.Models.Dtos.*;
+import com.emilie.Lib10.Models.Entities.*;
+import com.emilie.Lib10.Models.Entities.Copy;
+import com.emilie.Lib10.Models.Entities.Loan;
+import com.emilie.Lib10.Models.Entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class LoanServiceImpl implements LoanService {
@@ -61,7 +61,9 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public LoanDto save(LoanDto loanDto)
-            throws UserNotFoundException, CopyNotFoundException, LoanAlreadyExistsException {
+            throws UserNotFoundException,
+                   CopyNotFoundException,
+                   LoanAlreadyExistsException {
 
         Optional<User> optionalUser=userRepository.findById( loanDto.getUserDto().getUserId() );
         if (!optionalUser.isPresent()) {
@@ -73,8 +75,9 @@ public class LoanServiceImpl implements LoanService {
             throw new CopyNotFoundException( "copy " + loanDto.getCopyDto().getId() + " not found" );
         }
 
-        Optional<Loan> optionalLoan=loanRepository.findByCopyId( loanDto.getCopyDto().getId() );
-        if (optionalLoan.isPresent()) {
+        Optional<Loan> optionalLoan=loanRepository.findNotReturnedByCopyId( loanDto.getCopyDto().getId() );
+        //if loan not returned already exist
+        if (optionalLoan.isPresent() ) {
             throw new LoanAlreadyExistsException( "loan for copy " + loanDto.getCopyDto().getId() + " already exists" );
         }
 
@@ -167,6 +170,7 @@ public class LoanServiceImpl implements LoanService {
             throw new LoanNotFoundException( "loan " + loanId + " not found" );
         }
         Loan loan=optionalLoan.get();
+        loan.getCopy().setAvailable( true );
         loan.setReturned( true );
 
         loan=loanRepository.save( loan );
@@ -201,6 +205,16 @@ public class LoanServiceImpl implements LoanService {
         copyRepository.save( loan.getCopy() );
     }
 
+    @Override
+    public void haveAccess(UserDto loggedUser, LoanDto loanDto){
+        //if loggedUser is a customer
+        if(loggedUser.getRoles() == "CUSTOMER"){
+            //check if the reservation is owned by loggedUser
+            if(!Objects.equals( loggedUser.getUserId(), loanDto.getUserDto().getUserId() )){
+                throw new UnauthorizedException( "access denied" );
+            }
+        }
+    }
 
     private LoanDto loanToLoanDto(Loan loan) {
         LoanDto loanDto=new LoanDto();

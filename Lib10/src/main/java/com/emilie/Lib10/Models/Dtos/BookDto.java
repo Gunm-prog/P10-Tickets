@@ -21,6 +21,7 @@ public class BookDto implements Serializable {
     private String summary;
     private AuthorDto authorDto;
     private Set<CopyDto> copyDtos=new HashSet<>(); //instancie le tableau vide
+    private ReservationDto reservationDto;
 
 
 }

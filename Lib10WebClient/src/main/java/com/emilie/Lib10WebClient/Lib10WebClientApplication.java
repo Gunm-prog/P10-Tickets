@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 
-@SpringBootApplication(scanBasePackages="com.emilie.library10WebClient")
+@SpringBootApplication(scanBasePackages="com.emilie.Lib10WebClient")
 @EnableFeignClients
 public class Lib10WebClientApplication {
 

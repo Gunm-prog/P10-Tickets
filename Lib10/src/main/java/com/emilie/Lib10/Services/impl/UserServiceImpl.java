@@ -1,14 +1,14 @@
 package com.emilie.Lib10.Services.impl;
 
 
+import com.emilie.Lib10.Repositories.UserRepository;
+import com.emilie.Lib10.Services.contract.UserService;
 import com.emilie.Lib10.Exceptions.AddressNotFoundException;
 import com.emilie.Lib10.Exceptions.ImpossibleDeleteUserException;
 import com.emilie.Lib10.Exceptions.UserAlreadyExistException;
 import com.emilie.Lib10.Exceptions.UserNotFoundException;
 import com.emilie.Lib10.Models.Dtos.*;
 import com.emilie.Lib10.Models.Entities.*;
-import com.emilie.Lib10.Repositories.UserRepository;
-import com.emilie.Lib10.Services.contract.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto findById(Long id) throws UserNotFoundException {
         Optional<User> optionalUser=userRepository.findById( id );
-        if (optionalUser.isEmpty()) {
+        if (!optionalUser.isPresent()) {
             throw new UserNotFoundException( "User not found" );
         }
         User user=optionalUser.get();
@@ -304,6 +304,22 @@ public class UserServiceImpl implements UserService {
         author.setFirstName( authorDto.getFirstName() );
         author.setLastName( authorDto.getLastName() );
         return author;
+    }
+
+    private ReservationDto makeReservationDto(Reservation reservation){
+        ReservationDto reservationDto = new ReservationDto();
+        reservationDto.setId( reservation.getId());
+        reservationDto.setReservationStartDate( reservation.getReservationStartDate() );
+        reservationDto.setReservationEndDate( reservation.getReservationEndDate() );
+        return reservationDto;
+    }
+
+    private Reservation makeReservation (ReservationDto reservationDto){
+        Reservation reservation = new Reservation();
+        reservation.setId( reservationDto.getId() );
+        reservation.setReservationStartDate( reservationDto.getReservationStartDate() );
+        reservation.setReservationEndDate( reservationDto.getReservationEndDate() );
+        return reservation;
     }
 
 

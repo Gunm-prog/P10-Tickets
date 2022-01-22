@@ -1,5 +1,4 @@
 package com.emilie.Lib10.Repositories;
-
 import com.emilie.Lib10.Models.Entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

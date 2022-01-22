@@ -1,12 +1,12 @@
 package com.emilie.Lib10.Services.impl;
 
-import com.emilie.Lib10.Exceptions.*;
-import com.emilie.Lib10.Models.Dtos.*;
-import com.emilie.Lib10.Models.Entities.*;
 import com.emilie.Lib10.Repositories.BookRepository;
 import com.emilie.Lib10.Repositories.CopyRepository;
 import com.emilie.Lib10.Repositories.LibraryRepository;
 import com.emilie.Lib10.Services.contract.CopyService;
+import com.emilie.Lib10.Exceptions.*;
+import com.emilie.Lib10.Models.Dtos.*;
+import com.emilie.Lib10.Models.Entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,7 +61,7 @@ public class CopyServiceImpl implements CopyService {
     @Override
     public CopyDto findById(Long id) throws CopyNotFoundException {
         Optional<Copy> optionalCopy=copyRepository.findById( id );
-        if (optionalCopy.isEmpty()) {
+        if (!optionalCopy.isPresent()) {
             throw new CopyNotFoundException( "copy " + id + " not found" );
         }
         Copy copy=optionalCopy.get();
