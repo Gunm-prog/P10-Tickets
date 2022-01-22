@@ -1,4 +1,4 @@
-package com.emilie.library10WebClient.Entities;
+package com.emilie.Lib10WebClient.Entities;
 
 
 import lombok.Data;

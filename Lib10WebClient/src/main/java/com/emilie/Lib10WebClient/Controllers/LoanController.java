@@ -1,7 +1,7 @@
-package com.emilie.library10WebClient.Controllers;
+package com.emilie.Lib10WebClient.Controllers;
 
-import com.emilie.library10WebClient.Proxy.FeignProxy;
-import com.emilie.library10WebClient.Security.JwtProperties;
+import com.emilie.Lib10WebClient.Proxy.FeignProxy;
+import com.emilie.Lib10WebClient.Security.JwtProperties;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,11 +1,11 @@
-package com.emilie.library10WebClient.Proxy;
+package com.emilie.Lib10WebClient.Proxy;
 
 
-import com.emilie.library10WebClient.Entities.Book;
-import com.emilie.library10WebClient.Entities.Library;
-import com.emilie.library10WebClient.Entities.User;
-import com.emilie.library10WebClient.Entities.UserAccountLogin;
-import com.emilie.library10WebClient.Security.JwtProperties;
+import com.emilie.Lib10WebClient.Entities.Book;
+import com.emilie.Lib10WebClient.Entities.Library;
+import com.emilie.Lib10WebClient.Entities.User;
+import com.emilie.Lib10WebClient.Entities.UserAccountLogin;
+import com.emilie.Lib10WebClient.Security.JwtProperties;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

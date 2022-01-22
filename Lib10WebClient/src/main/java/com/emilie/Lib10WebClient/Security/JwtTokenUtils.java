@@ -1,4 +1,4 @@
-package com.emilie.library10WebClient.Security;
+package com.emilie.Lib10WebClient.Security;
 
 import org.springframework.web.util.WebUtils;
 import com.auth0.jwt.JWT;
