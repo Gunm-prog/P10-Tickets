@@ -15,13 +15,14 @@
     <bytecodeTargetLevel>
       <module name="Lib10" target="11" />
       <module name="P10-Tickets" target="1.5" />
-      <module name="SpringBatch" target="16" />
+      <module name="SpringBatch" target="1.8" />
       <module name="WebClient" target="16" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Lib10" options="-parameters" />
+      <module name="SpringBatch" options="-parameters" />
       <module name="WebClient" options="-parameters" />
     </option>
   </component>
