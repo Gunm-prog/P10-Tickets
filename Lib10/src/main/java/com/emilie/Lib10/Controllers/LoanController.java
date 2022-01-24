@@ -4,6 +4,7 @@ import com.emilie.Lib10.Exceptions.*;
 import com.emilie.Lib10.Models.Dtos.LoanDto;
 import com.emilie.Lib10.Models.Dtos.ReservationDto;
 import com.emilie.Lib10.Models.Dtos.UserDto;
+import com.emilie.Lib10.Services.JavaMailSenderService;
 import com.emilie.Lib10.Services.contract.LoanService;
 import com.emilie.Lib10.Services.contract.ReservationService;
 import com.emilie.Lib10.Services.contract.UserService;
@@ -17,20 +18,27 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/loans")
-@Slf4j
 public class LoanController {
 
     private final LoanService loanService;
     private final ReservationService reservationService;
     private final UserService userService;
+    private final JavaMailSenderService javaMailSenderService;
 
     @Autowired
-    public LoanController(LoanService loanService, ReservationService reservationService, UserService userService) {
+    public LoanController(
+            LoanService loanService,
+            ReservationService reservationService,
+            UserService userService,
+            JavaMailSenderService javaMailSenderService
+    ) {
         this.loanService=loanService;
         this.reservationService=reservationService;
         this.userService=userService;
+        this.javaMailSenderService=javaMailSenderService;
     }
 
     @ApiOperation(value="Retrieve loan by id, if registered in database")
@@ -272,6 +280,30 @@ public class LoanController {
                     .body( "INTERNAL_SERVER_ERROR" );
         }
 
+    }
+
+    @ApiOperation(value="send recovery mail for loan by id")
+    @GetMapping("/sendRecoveryMails/{id}")
+    public ResponseEntity<?> sendRecoveryMail(@PathVariable(value="id") Long id){
+
+        try{
+          // List<LoanDto> delayLoanList = loanService.findDelay();
+            LoanDto delayedLoan = loanService.findById( id );
+
+            javaMailSenderService.sendRecoveryMail( delayedLoan );
+
+            return new ResponseEntity<>( "recovery emails send", HttpStatus.OK );
+        }catch (LoanNotFoundException e) {
+            log.error( e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.NOT_FOUND )
+                    .body( "loan not found" );
+        }catch (Exception e){
+            log.warn( e.getMessage(), e );
+            return ResponseEntity
+                    .status( HttpStatus.INTERNAL_SERVER_ERROR )
+                    .body( "INTERNAL_SERVER_ERROR" );
+        }
     }
 
 }

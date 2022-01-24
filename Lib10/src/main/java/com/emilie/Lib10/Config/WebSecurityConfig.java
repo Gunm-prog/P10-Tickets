@@ -54,22 +54,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.csrf().disable()
                 // dont authenticate this particular request
                 .authorizeRequests().antMatchers( "/authenticate" ).permitAll()
-                .and()
-                .authorizeRequests().antMatchers( "/register/customer" ).permitAll()
-                .and()
-                .authorizeRequests().antMatchers( "/api/v1/copies/search" ).permitAll()
-                .and()
-                .authorizeRequests().antMatchers( "/api/v1/libraries/{id}" ).permitAll()
-                .and()
-                .authorizeRequests().antMatchers( "/api/v1/books/{id}" ).permitAll()
-                .and()
-                .authorizeRequests().antMatchers( "/api/v1/reservations/*" ).authenticated()
+                .and().authorizeRequests().antMatchers( "/register/customer" ).permitAll()
+                .and().authorizeRequests().antMatchers( "/api/v1/copies/search" ).permitAll()
+                .and().authorizeRequests().antMatchers( "/api/v1/libraries/{id}" ).permitAll()
+                .and().authorizeRequests().antMatchers( "/api/v1/books/{id}" ).permitAll()
+                .and().authorizeRequests().antMatchers( "/api/v1/reservations/*" ).authenticated()
                 /*.and()*/
                 /*.authorizeRequests().antMatchers("/api/v1/users/createUserAccount").permitAll()*/
                 .antMatchers( "/register/employee" ).hasAnyRole( JwtProperties.ROLE_ADMIN, JwtProperties.ROLE_EMPLOYEE )
                 /*.antMatchers("/edit/**").hasRole(JwtProperties.ROLE_TECHNICAL)*/
                 .antMatchers( "/api/v1/delete/**" ).hasAnyRole( JwtProperties.ROLE_ADMIN, JwtProperties.ROLE_EMPLOYEE )
                 .antMatchers( "/api/v1/loans/return/{id}" ).hasAnyRole( JwtProperties.ROLE_ADMIN, JwtProperties.ROLE_EMPLOYEE )
+                .antMatchers( "/api/v1/loans/send/{id}" ).hasAnyRole( JwtProperties.ROLE_ADMIN, JwtProperties.ROLE_EMPLOYEE )
+             //   .antMatchers( "/api/v1/loans/sendRecoveryMails/{id}" ).hasAnyRole( JwtProperties.ROLE_ADMIN, JwtProperties.ROLE_EMPLOYEE )
 
 
                 // all other requests need to be authenticated
