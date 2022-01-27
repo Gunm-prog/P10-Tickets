@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/reservations")
@@ -110,6 +111,23 @@ public class ReservationController {
                     .status( HttpStatus.UNAUTHORIZED )
                     .body( e.getMessage() );
         } catch (Exception e) {
+            log.warn( e.getMessage(), e );
+            return ResponseEntity
+                    .status( HttpStatus.INTERNAL_SERVER_ERROR )
+                    .body( "INTERNAL_SERVER_ERROR" );
+        }
+    }
+
+    @ApiOperation(value="retrieve reservationList")
+    @GetMapping("/all")
+    public ResponseEntity<?> response (){
+        try{
+            List<ReservationDto> resaDtoList = reservationService.findAll();
+
+            return ResponseEntity
+                    .status( HttpStatus.OK )
+                    .body( resaDtoList );
+        }catch (Exception e) {
             log.warn( e.getMessage(), e );
             return ResponseEntity
                     .status( HttpStatus.INTERNAL_SERVER_ERROR )

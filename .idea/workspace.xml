@@ -6,8 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="1a19c635-2f99-42d6-b083-844bea6c4f3c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Lib10/src/main/java/com/emilie/Lib10/Controllers/LoanController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Lib10/src/main/java/com/emilie/Lib10/Controllers/LoanController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Lib10/src/main/java/com/emilie/Lib10/Controllers/ReservationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Lib10/src/main/java/com/emilie/Lib10/Controllers/ReservationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lib10/src/main/java/com/emilie/Lib10/Services/impl/ReservationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Lib10/src/main/java/com/emilie/Lib10/Services/impl/ReservationServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpringBatch/src/main/java/com/emilie/SpringBatch/task/ScheduledTaskLauncher.java" beforeDir="false" afterPath="$PROJECT_DIR$/SpringBatch/src/main/java/com/emilie/SpringBatch/task/ScheduledTaskLauncher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SpringBatch/src/main/java/com/emilie/SpringBatch/web/FeignProxy.java" beforeDir="false" afterPath="$PROJECT_DIR$/SpringBatch/src/main/java/com/emilie/SpringBatch/web/FeignProxy.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,8 +19,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="HTML File" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -93,6 +95,9 @@
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="main.java.com.emilie.Lib10.Config" />
       <recent name="main.java.com.emilie.Lib10.Models" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.emilie.SpringBatch.model" />
     </key>
   </component>
   <component name="RunAnythingCache">

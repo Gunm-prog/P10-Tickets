@@ -51,30 +51,6 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationDtos;
     }
 
-   /* @Override
-    public List<ReservationDto> findDelay() {
-        List<Reservation> reservations=reservationRepository.searchDelay();
-        List<ReservationDto> reservationDtos=new ArrayList<>();
-        for (Reservation reservation : reservations) {
-            ReservationDto reservationDto=reservationToReservationDto( reservation );
-            reservationDtos.add( reservationDto );
-        }
-        return reservationDtos;
-    }*/
-
-
-   /* @Override
-    public List<ReservationDto> makeReservation(){
-        List<Reservation> reservations = reservationRepository.
-    }*/
-
-
-    /*@Override
-    public List<ReservationDto> searchReservations(Long Id, String password, String lastName, String firstName, String email) {
-        return null;
-    }*/
-
-
     @Override
     public ReservationDto findById(Long id) throws ReservationNotFoundException {
         Optional<Reservation> optionalReservation=reservationRepository.findById( id );
@@ -205,17 +181,11 @@ public class ReservationServiceImpl implements ReservationService {
 
         Reservation reservation = optionalReservation.get();
 
-        //add endDate //TODO a tester
         reservation.setReservationEndDate( makePeriodLocalDateTime( 2, null) );
         reservation.setActive( true );
         reservationRepository.save(reservation);
         return reservationToReservationDto( reservation );
     }
-
-     /* + autre methode pour le batch qui doit pouvoir supprimer les resa qui possèdent une endDate (not null) et dont la endDate expirées sachant que cette suppression de resa va entraîner une remontée
-     de l'ordre de priorité (autre résa qui va devenir active pour quelqu'un d'autre si elle existe)
-     pour faire ça appeler la méhtode qui est juste au dessus dans le TODO
-     */
 
     @Override
     public List<ReservationDto> findReservationByUserId(Long userId) throws ReservationNotFoundException{
@@ -231,36 +201,6 @@ public class ReservationServiceImpl implements ReservationService {
         }
         return reservationDtos;
     }
-
-
-
-
-   /* @Override
-    public ReservationDto update(ReservationDto reservationDto) throws
-            ReservationNotFoundException, UserNotFoundException, CopyNotFoundException {
-        Optional<Reservation> optionalReservation=reservationRepository.findById( reservationDto.getId() );
-        if (!optionalReservation.isPresent()) {
-            throw new ReservationNotFoundException( "reservation not found" );
-        }
-
-        Optional<User> optionalUser=userRepository.findById( reservationDto.getUserDto().getUserId() );
-        if (!optionalUser.isPresent()) {
-            throw new UsernameNotFoundException( "user not found" );
-        }
-
-        Optional<Copy> optionalCopy=copyRepository.findById( reservationDto.getCopyDto().getId() );
-        if (!optionalCopy.isPresent()) {
-            throw new CopyNotFoundException( "copy not found" );
-        }
-
-        Reservation reservation=reservationDtoToReservation( reservationDto );
-        reservation.setUser( optionalUser.get() );
-        reservation.setCopy( optionalCopy.get() );
-        reservation=reservationRepository.save( reservation );
-        return reservationToReservationDto(reservation);
-    }*/
-
-
 
     @Override
     public void deleteById(Long id) throws ReservationNotFoundException, ImpossibleDeleteReservationException {
