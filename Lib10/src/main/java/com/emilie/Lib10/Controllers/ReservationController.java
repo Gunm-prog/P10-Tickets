@@ -3,9 +3,11 @@ package com.emilie.Lib10.Controllers;
 import com.emilie.Lib10.Exceptions.*;
 import com.emilie.Lib10.Models.Dtos.ReservationDto;
 import com.emilie.Lib10.Models.Dtos.UserDto;
+import com.emilie.Lib10.Services.JavaMailSenderService;
 import com.emilie.Lib10.Services.contract.ReservationService;
 import com.emilie.Lib10.Services.contract.UserService;
 import io.swagger.annotations.ApiOperation;
+import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,11 +22,13 @@ import javax.servlet.http.HttpServletRequest;
 public class ReservationController {
 
     private final ReservationService reservationService;
+    private final JavaMailSenderService javaMailSenderService;
     private final UserService userService;
 
     @Autowired
-    public ReservationController(ReservationService reservationService, UserService userService) {
+    public ReservationController(ReservationService reservationService, JavaMailSenderService javaMailSenderService, UserService userService) {
         this.reservationService=reservationService;
+        this.javaMailSenderService = javaMailSenderService;
         this.userService=userService;
     }
 
@@ -77,6 +81,20 @@ public class ReservationController {
             reservationService.deleteById( id );
 
             log.info( "Reservation " + id + " have been canceled" );
+
+            //if the canceled reservation was active, we need to activate the potential next reservation
+            if(reservationDto.isActive()){
+                try {
+                    ReservationDto nextReservationDto = reservationService.getNextReservationForBook(reservationDto.getBookDto());
+
+                    reservationService.activeReservation( nextReservationDto );
+
+                    //send activeReservationMail
+                    javaMailSenderService.sendActiveReservationMail(nextReservationDto);
+                    log.info( "activeReservationMail successfully send for " + nextReservationDto.getUserDto().getUserId() );
+
+                }catch (NotFoundException ignoredException){}
+            }
 
             return ResponseEntity
                     .status( HttpStatus.OK )

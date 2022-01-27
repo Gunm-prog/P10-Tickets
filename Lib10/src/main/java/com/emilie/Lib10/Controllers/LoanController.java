@@ -113,15 +113,6 @@ public class LoanController {
                     //delete the finished reservation
                     reservationService.deleteById( userReservationDto.getId() );
 
-                    /*try{//active potential next reservation for this book
-                        ReservationDto nextReservation = reservationService.getNextReservationForBook( loanDto.getCopyDto().getBookDto() );
-                        reservationService.activeReservation( nextReservation );
-
-
-
-                        //if nextReservation not found do nothing
-                    }catch(NotFoundException ignoredException){}*/
-
                 }catch(NotFoundException e){//if user can't loan the book because it's reserved.
                     log.info( "loan can't be accept, the book is reserved" );
                     return ResponseEntity
@@ -232,7 +223,7 @@ public class LoanController {
 
                 reservationService.activeReservation( reservationDto );
 
-                //todo sendEmail
+                //send activeReservationMail
                 javaMailSenderService.sendActiveReservationMail(reservationDto);
                 log.info( "activeReservationMail successfully send for " + reservationDto.getUserDto().getUserId() );
 
