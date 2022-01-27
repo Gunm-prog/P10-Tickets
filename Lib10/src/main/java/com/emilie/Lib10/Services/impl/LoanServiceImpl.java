@@ -150,7 +150,7 @@ public class LoanServiceImpl implements LoanService {
             throw new ImpossibleExtendLoanException( "this loan " + loanId + " has already been extended" );
         }
 
-        //todo a tester
+
         if(loan.getLoanEndDate().before( makePeriodDate(0, null) ) ) {
             throw new ImpossibleExtendLoanException( "unauthorize extend, loan's endDate is expired" );
         }

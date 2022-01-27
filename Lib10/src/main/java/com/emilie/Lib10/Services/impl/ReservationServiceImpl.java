@@ -99,11 +99,6 @@ public class ReservationServiceImpl implements ReservationService {
             throw new BookNotFoundException( "book " + reservationDto.getBookDto().getBookId() + " not found" );
         }
 
-        /*Optional<Copy> optionalCopy=copyRepository.findById( reservationDto.getCopyDto().getId() );
-        if (!optionalCopy.isPresent()) {
-            throw new CopyNotFoundException( "copy not found" );
-        }*/
-
         User user = optionalUser.get();
         Book book = optionalBook.get();
 
@@ -121,7 +116,7 @@ public class ReservationServiceImpl implements ReservationService {
             }
         }
 
-        //get all reservations for the book to know its position in list
+        //get Reservation List for a specific book
         List<Reservation> reservations=reservationRepository.findByBookId( reservationDto.getBookDto().getBookId() );
 
         //check if the user have already reserved this book
@@ -162,7 +157,6 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public ReservationDto getNextReservationForBook(BookDto bookDto) throws NotFoundException {
-        System.out.println(bookDto);
         Optional <Reservation> optionalReservation = reservationRepository.findOlderByBookId( bookDto.getBookId() );
 
         if(!optionalReservation.isPresent()){

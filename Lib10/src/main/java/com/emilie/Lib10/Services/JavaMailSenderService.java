@@ -80,7 +80,7 @@ public class JavaMailSenderService {
 
     }
 
-    //todo mail for reservation available
+
     public void sendActiveReservationMail(ReservationDto reservationDto) throws MessagingException {
         Mail mail = new Mail();
         mail.setFrom("lib10@batch.com");

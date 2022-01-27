@@ -120,7 +120,7 @@ public class ReservationController {
 
     @ApiOperation(value="retrieve reservationList")
     @GetMapping("/all")
-    public ResponseEntity<?> response (){
+    public ResponseEntity<?> getAllReservations (){
         try{
             List<ReservationDto> resaDtoList = reservationService.findAll();
 
