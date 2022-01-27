@@ -1,4 +1,4 @@
-package com.emilie.Lib10.Config;
+package com.emilie.Lib10.Config.Jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

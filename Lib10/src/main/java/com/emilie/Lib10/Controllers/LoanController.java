@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -112,14 +113,14 @@ public class LoanController {
                     //delete the finished reservation
                     reservationService.deleteById( userReservationDto.getId() );
 
-                    try{//active potential next reservation for this book
+                    /*try{//active potential next reservation for this book
                         ReservationDto nextReservation = reservationService.getNextReservationForBook( loanDto.getCopyDto().getBookDto() );
                         reservationService.activeReservation( nextReservation );
 
-                        //todo send email
+
 
                         //if nextReservation not found do nothing
-                    }catch(NotFoundException ignoredException){}
+                    }catch(NotFoundException ignoredException){}*/
 
                 }catch(NotFoundException e){//if user can't loan the book because it's reserved.
                     log.info( "loan can't be accept, the book is reserved" );
@@ -223,20 +224,22 @@ public class LoanController {
         try {
 
             //retrieve the loan in database
-            LoanDto loanDtoReturned=loanService.findById( id );
+            LoanDto loanDto=loanService.findById( id );
 
             //check if a reservation need to be pass active
             try{
-                ReservationDto reservationDto = reservationService.getNextReservationForBook( loanDtoReturned.getCopyDto().getBookDto() );
+                ReservationDto reservationDto = reservationService.getNextReservationForBook( loanDto.getCopyDto().getBookDto() );
 
                 reservationService.activeReservation( reservationDto );
 
                 //todo sendEmail
+                javaMailSenderService.sendActiveReservationMail(reservationDto);
+                log.info( "activeReservationMail successfully send for " + reservationDto.getUserDto().getUserId() );
 
                 //if not found nextReservation, do nothing
             }catch (NotFoundException ignoredException){}
 
-            loanService.returnLoan( id );
+            LoanDto loanDtoReturned = loanService.returnLoan( id );
             log.info( "Loan " + id + " have been returned" );
 
             return new ResponseEntity<LoanDto>( loanDtoReturned, HttpStatus.OK );
@@ -283,21 +286,19 @@ public class LoanController {
     }
 
     @ApiOperation(value="send recovery mail for loan by id")
-    @GetMapping("/sendRecoveryMails/{id}")
-    public ResponseEntity<?> sendRecoveryMail(@PathVariable(value="id") Long id){
+    @PostMapping("/sendRecoveryMails")
+    public ResponseEntity<?> sendRecoveryMail(){
 
         try{
           // List<LoanDto> delayLoanList = loanService.findDelay();
-            LoanDto delayedLoan = loanService.findById( id );
+         //   LoanDto delayedLoan = loanService.findById( id );
+            List<UserDto> userWithDelayedLoans = userService.findUsersWithDelayedLoans();
 
-            javaMailSenderService.sendRecoveryMail( delayedLoan );
+            for(UserDto userDto : userWithDelayedLoans){
+                javaMailSenderService.sendRecoveryMail( userDto );
+            }
 
             return new ResponseEntity<>( "recovery emails send", HttpStatus.OK );
-        }catch (LoanNotFoundException e) {
-            log.error( e.getMessage() );
-            return ResponseEntity
-                    .status( HttpStatus.NOT_FOUND )
-                    .body( "loan not found" );
         }catch (Exception e){
             log.warn( e.getMessage(), e );
             return ResponseEntity

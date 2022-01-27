@@ -23,8 +23,8 @@ public class LoanStatusService {
         return feignProxy.getLoanDelayLoan( accessToken );
     }
 
-    public void sendRecoveryMails(String accessToken, Long loanId){
-        feignProxy.callRecoveryMailSender( accessToken, loanId );
+    public void sendRecoveryMails(String accessToken){
+        feignProxy.callRecoveryMailSender( accessToken );
     }
 
 }

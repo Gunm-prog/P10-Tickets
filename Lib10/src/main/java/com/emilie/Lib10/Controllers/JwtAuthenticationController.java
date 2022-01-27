@@ -1,6 +1,6 @@
 package com.emilie.Lib10.Controllers;
 
-import com.emilie.Lib10.Config.JwtTokenUtil;
+import com.emilie.Lib10.Config.Jwt.JwtTokenUtil;
 import com.emilie.Lib10.Exceptions.AddressNotFoundException;
 import com.emilie.Lib10.Exceptions.UserAlreadyExistException;
 import com.emilie.Lib10.Models.Dtos.UserDto;

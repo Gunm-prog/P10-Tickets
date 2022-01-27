@@ -1,7 +1,7 @@
 package com.emilie.Lib10.Controllers;
 
 
-import com.emilie.Lib10.Config.JwtTokenUtil;
+import com.emilie.Lib10.Config.Jwt.JwtTokenUtil;
 import com.emilie.Lib10.Exceptions.ImpossibleDeleteUserException;
 import com.emilie.Lib10.Exceptions.UserNotFoundException;
 import com.emilie.Lib10.Models.Dtos.UserDto;

@@ -1,4 +1,4 @@
-package com.emilie.Lib10.Config;
+package com.emilie.Lib10.Config.Jwt;
 
 
 import org.springframework.security.core.AuthenticationException;

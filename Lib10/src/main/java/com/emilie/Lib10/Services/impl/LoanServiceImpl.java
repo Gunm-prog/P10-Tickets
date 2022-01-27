@@ -180,12 +180,14 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public List<LoanDto> findDelay() {
-        List<Loan> loans=loanRepository.searchDelay();
+        List<Loan> loans=loanRepository.searchAllDelay();
+
         List<LoanDto> loanDtos=new ArrayList<>();
         for (Loan loan : loans) {
             LoanDto loanDto=loanToLoanDto( loan );
             loanDtos.add( loanDto );
         }
+
         return loanDtos;
     }
 

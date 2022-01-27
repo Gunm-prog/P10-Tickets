@@ -20,6 +20,8 @@ public interface UserService {
 
     UserDto findByEmail(String email) throws UserNotFoundException;
 
+    List<UserDto> findUsersWithDelayedLoans();
+
     List<UserDto> findAll();
 
     boolean deleteById(Long id) throws UserNotFoundException;

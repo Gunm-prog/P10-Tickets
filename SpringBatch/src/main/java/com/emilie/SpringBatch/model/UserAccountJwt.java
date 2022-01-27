@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserAccountJwt {
 
-    private String username="lily@hotmail.com";
-    private String password="password";
+    private String username="moi@moi.moi";
+    private String password="Zokori61";
 
 
 }

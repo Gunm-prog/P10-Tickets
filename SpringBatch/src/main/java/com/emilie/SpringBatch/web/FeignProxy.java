@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name= "feignClient", url="localhost:8181")
+@FeignClient(name= "feignClient", url="localhost:8081")
 public interface FeignProxy {
 
     @PostMapping("/authenticate")
@@ -18,7 +18,7 @@ public interface FeignProxy {
     List<Loan> getLoanDelayLoan(@RequestHeader("Authorization") String accessToken);
 
     @PostMapping("api/v1/loans/sendRecoveryMails/{id}")
-    void callRecoveryMailSender(@RequestHeader("Authorization") String accessToken, @PathVariable(value="id") Long loanId);
+    void callRecoveryMailSender(@RequestHeader("Authorization") String accessToken);
 
 
 }

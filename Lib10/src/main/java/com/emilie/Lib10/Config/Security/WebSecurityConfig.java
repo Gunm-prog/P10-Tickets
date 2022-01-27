@@ -1,5 +1,8 @@
-package com.emilie.Lib10.Config;
+package com.emilie.Lib10.Config.Security;
 
+import com.emilie.Lib10.Config.Jwt.JwtAuthenticationEntryPoint;
+import com.emilie.Lib10.Config.Jwt.JwtProperties;
+import com.emilie.Lib10.Config.Jwt.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

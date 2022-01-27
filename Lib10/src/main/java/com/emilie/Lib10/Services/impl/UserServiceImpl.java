@@ -126,6 +126,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserDto> findUsersWithDelayedLoans(){
+        List<User> userList=userRepository.findUsersWithDelayedLoans();
+        List<UserDto> userDtoList = new ArrayList<>();
+        for(User user : userList){
+            userDtoList.add(userToUserDto(user));
+        }
+        return userDtoList;
+    }
+
+    @Override
     public List<UserDto> findAll() {
         List<User> users=userRepository.findAll();
         List<UserDto> userDtos=new ArrayList<>();

@@ -1,4 +1,4 @@
-package com.emilie.Lib10.Config;
+package com.emilie.Lib10.Config.Jwt;
 
 public class JwtProperties {
 

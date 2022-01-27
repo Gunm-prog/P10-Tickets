@@ -1,0 +1,39 @@
+<!DOCTYPE html >
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+
+    <head>
+       <!-- <title th:text="${subject}"> subject </title>-->
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'/>
+        <!-- use the font -->
+        <style>
+                body {
+                    font-family: 'Roboto', sans-serif;
+                    font-size: 12px;
+                }
+            </style>
+    </head>
+    <body>
+        <h1>Dunkirk City Libraries</h1>
+        <img src="data:image/png;base64,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" />
+        <h2 th:text="${subject}"> [subject] </h2>
+        <p>yours delayed loans</p>
+        <table>
+            <tr>
+                <th>book</th>
+                <th>start date</th>
+                <th>end date</th>
+            </tr>
+            <tr  th:each="loan : ${delayedLoans}">
+                <td th:text="${loan.copyDto.bookDto.title}">[bookTilte]</td>
+                <td th:text="${#dates.format(loan.loanStartDate, 'dd-MMM-yyyy')}">[startDate]</td>
+                <td th:text="${#dates.format(loan.loanEndDate, 'dd-MMM-yyyy')}">[endDate]</td>
+            </tr>
+        </table>
+      <!--  <p th:text="${'the return date of your loan for the book ' + bookTitle + ' has passed.'}">[bookTilte]</p>
+        <p th:text="${'loaned at ' + startDate}"> [startDate] </p>
+        <p th:text="${'delay since ' + endDate}"> [endDate] </p>-->
+        <p><b>Please return this books as soon as possible</b></p>
+    </body>
+</html>
