@@ -18,7 +18,7 @@ public interface FeignProxy {
     @GetMapping("/api/v1/loans/delayList")
     List<Loan> getLoanDelayLoan(@RequestHeader("Authorization") String accessToken);
 
-    @PostMapping("api/v1/loans/sendRecoveryMails/{id}")
+    @PostMapping("api/v1/loans/sendRecoveryMails")
     void callRecoveryMailSender(@RequestHeader("Authorization") String accessToken);
 
     @GetMapping("api/v1/reservations/all")

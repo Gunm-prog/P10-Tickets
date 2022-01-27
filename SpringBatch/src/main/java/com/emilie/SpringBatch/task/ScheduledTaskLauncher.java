@@ -1,7 +1,5 @@
 package com.emilie.SpringBatch.task;
 
-
-import com.emilie.SpringBatch.Service.JavaMailSenderService;
 import com.emilie.SpringBatch.Service.LoanStatusService;
 import com.emilie.SpringBatch.Service.LoginService;
 import com.emilie.SpringBatch.Service.ReservationServices;
@@ -45,7 +43,8 @@ public class ScheduledTaskLauncher {
      * First, get a security token with batch account,
      * then run the mail task.
      */
-    @Scheduled(cron="0 0 1 * * ?")
+    /*@Scheduled(cron="0 0 1 * * ?")*/
+    @Scheduled(cron="*/10 * * * * *")
     public void runScheduledRecoveryTask() {
         try{
             String accessToken=loginService.authenticateBatch();
@@ -53,6 +52,20 @@ public class ScheduledTaskLauncher {
             loanStatusService.sendRecoveryMails(accessToken);
 
             log.info( "recovery mails successfully send" );
+
+            //Expired reservation task
+
+            List<Reservation> expiredResaList = reservationServices.getExpiredReservation(accessToken);
+
+            if(expiredResaList.isEmpty()){
+                log.info( "no expired reservation exist" );
+            }
+
+            for(Reservation expiredReservation : expiredResaList){
+                reservationServices.deleteExpiredReservation(accessToken, expiredReservation);
+                log.info( "expired reservation with id " + expiredReservation.getId() + " deleted" );
+            }
+
         }catch(FeignException e){
             log.warn( e.getMessage(), e );
         }
@@ -65,8 +78,9 @@ public class ScheduledTaskLauncher {
      * First, get a security token with batch account,
      * then run the expired reservation task.
      */
-    @Scheduled(cron="0 0 1 * * ?")
-    public void runScheduledExpiredReservationTask() {
+    /*@Scheduled(cron="0 0 1 * * ?")*/
+
+   /* public void runScheduledExpiredReservationTask() {
         try{
             String accessToken=loginService.authenticateBatch();
 
@@ -84,5 +98,5 @@ public class ScheduledTaskLauncher {
         }catch(FeignException e){
             log.warn( e.getMessage(), e );
         }
-    }
+    }*/
 }

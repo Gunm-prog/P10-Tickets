@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Thread.sleep;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/loans")
@@ -287,6 +289,7 @@ public class LoanController {
 
             for(UserDto userDto : userWithDelayedLoans){
                 javaMailSenderService.sendRecoveryMail( userDto );
+                sleep(500);
             }
 
             return new ResponseEntity<>( "recovery emails send", HttpStatus.OK );
