@@ -23,6 +23,12 @@
                 My Loans
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" id="reservations-tab" data-toggle="tab" href="#reservations" role="tab" aria-controls="reservations"
+               aria-selected="false">
+                My Reservations
+            </a>
+        </li>
     </ul>
     <div class="tab-content overflow-70h" id="myTabContent">
         <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
@@ -145,6 +151,21 @@
 
                 <tr th:if="${#lists.isEmpty(userInfos.loanDtos)}">
                     <td colspan="5" class="text-success"> No loan from your account</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="tab-pane fade" id="reservations" role="tabpanel" aria-labelledby="reservations-tab">
+            <table class="table width90 align-middle">
+                <tr class="tableTitle">
+                    <th>Books</th>
+                    <th>expected return</th>
+                    <th>your reserved position </th>
+                </tr>
+                <tr th:each="reservation:${userInfos.reservationDtos}">
+                    <td th:text="${reservation.bookDto.title}"> [bookTitle]</td>
+                    <td th:text="${#dates.format(reservation.minExpectedReturnDate, 'dd-MMM-yyyy')}"> [expectedReturnDate]</td>
+                    <td th:text="${reservation.userPosition}"> [userPosition]</td>
                 </tr>
             </table>
         </div>

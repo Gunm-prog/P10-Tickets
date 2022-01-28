@@ -4,6 +4,7 @@ package com.emilie.Lib10WebClient.Entities;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -18,6 +19,6 @@ public class User {
     private String firstName;
     private Address addressDto;
     private Set<Loan> loanDtos;
-
+    private List<Reservation> reservationDtos;
 
 }

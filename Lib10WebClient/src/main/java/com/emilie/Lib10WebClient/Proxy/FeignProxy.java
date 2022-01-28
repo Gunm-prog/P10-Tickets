@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-@FeignClient(name="bookFeignClient", url="localhost:8181")
+@FeignClient(name="bookFeignClient", url="localhost:8081")
 public interface FeignProxy {
 
 
