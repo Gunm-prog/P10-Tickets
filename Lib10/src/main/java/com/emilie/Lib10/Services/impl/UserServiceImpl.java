@@ -172,6 +172,20 @@ public class UserServiceImpl implements UserService {
 
         userDto.setAddressDto( addressDto );
 
+        List<ReservationDto> rsvDtoList = new ArrayList<>();
+        if (user.getReservations() != null) {
+            for (Reservation reservation : user.getReservations()) {
+                ReservationDto reservationDto = makeReservationDto(reservation);
+
+                //just userId into userDto for the reservation
+                UserDto partialUserDto = new UserDto();
+                partialUserDto.setUserId(user.getId());
+                reservationDto.setUserDto(partialUserDto);
+
+                rsvDtoList.add(reservationDto);
+            }
+        }
+        userDto.setReservationDtos(rsvDtoList);
 
         return userDto;
     }
@@ -321,6 +335,9 @@ public class UserServiceImpl implements UserService {
         reservationDto.setId( reservation.getId());
         reservationDto.setReservationStartDate( reservation.getReservationStartDate() );
         reservationDto.setReservationEndDate( reservation.getReservationEndDate() );
+
+        reservationDto.setBookDto(makeBookDto(reservation.getBook()));
+
         return reservationDto;
     }
 

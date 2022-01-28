@@ -8,6 +8,7 @@ import com.emilie.Lib10.Models.Entities.Reservation;
 import javassist.NotFoundException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ReservationService {
@@ -34,4 +35,10 @@ public interface ReservationService {
     void deleteById (Long id) throws ReservationNotFoundException;
 
     void haveAccess(UserDto loggedUser, ReservationDto reservationDto) throws UnauthorizedException;
+
+    int getUserPosition(BookDto bookDto, UserDto userDto);
+    Date getMinExpectedReturnDate(BookDto bookDto);
+    int getMaxReservationForBook(BookDto bookDto);
+
+    ReservationDto addAdditionnalData(ReservationDto reservationDto);
 }

@@ -221,6 +221,21 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    public int getUserPosition(BookDto bookDto, UserDto userDto){
+        return reservationRepository.getUserPosition(bookDto.getBookId(), userDto.getUserId());
+    }
+
+    @Override
+    public Date getMinExpectedReturnDate(BookDto bookDto){
+        return reservationRepository.getMinExpectedReturnDate(bookDto.getBookId());
+    }
+
+    @Override
+    public int getMaxReservationForBook(BookDto bookDto){
+        return reservationRepository.getMaxReservationForBook(bookDto.getBookId());
+    }
+
+    @Override
     public ReservationDto haveActiveReservationForUser(UserDto userDto, BookDto bookDto) throws NotFoundException {
         Optional<Reservation> OptionalReservation = reservationRepository.findActiveReservationForUserByBookId( userDto.getUserId(), bookDto.getBookId() );
         if(!OptionalReservation.isPresent()){
@@ -228,6 +243,14 @@ public class ReservationServiceImpl implements ReservationService {
         }
 
         return reservationToReservationDto( OptionalReservation.get() );
+    }
+
+    public ReservationDto addAdditionnalData(ReservationDto reservationDto){
+        //additionnal infos for a reservationDto
+        reservationDto.setUserPosition(this.getUserPosition(reservationDto.getBookDto(), reservationDto.getUserDto()));
+        reservationDto.setMinExpectedReturnDate(this.getMinExpectedReturnDate(reservationDto.getBookDto()));
+        reservationDto.setMaxNmbReservation(this.getMaxReservationForBook(reservationDto.getBookDto()));
+        return reservationDto;
     }
 
     private ReservationDto reservationToReservationDto (Reservation reservation){
@@ -247,12 +270,18 @@ public class ReservationServiceImpl implements ReservationService {
 
         reservationDto.setBookDto( makeBookDto(reservation.getBook()) );
 
+        //additionnal infos for a reservationDto
+        reservationDto = this.addAdditionnalData(reservationDto);
+       /* reservationDto.setUserPosition(this.getUserPosition(reservationDto.getBookDto(), reservationDto.getUserDto()));
+        reservationDto.setMinExpectedReturnDate(this.getMinExpectedReturnDate(reservationDto.getBookDto()));
+        reservationDto.setMaxNmbReservation(this.getMaxReservationForBook(reservationDto.getBookDto()));*/
+
         return reservationDto;
     }
 
     private Reservation reservationDtoToReservation (ReservationDto reservationDto){
 
-        System.out.println( reservationDto );
+  //      System.out.println( reservationDto );
 
         Reservation reservation = new Reservation();
         reservation.setId(reservationDto.getId());

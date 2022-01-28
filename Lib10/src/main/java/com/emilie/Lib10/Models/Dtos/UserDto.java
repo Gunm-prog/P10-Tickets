@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -22,6 +23,7 @@ public class UserDto implements Serializable {
     private Set<LoanDto> loanDtos;
     private CopyDto CopyDto;
     private AddressDto addressDto=null;
+    private List<ReservationDto> reservationDtos;
 
 }
 

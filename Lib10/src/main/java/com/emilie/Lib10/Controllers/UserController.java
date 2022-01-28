@@ -4,8 +4,10 @@ package com.emilie.Lib10.Controllers;
 import com.emilie.Lib10.Config.Jwt.JwtTokenUtil;
 import com.emilie.Lib10.Exceptions.ImpossibleDeleteUserException;
 import com.emilie.Lib10.Exceptions.UserNotFoundException;
+import com.emilie.Lib10.Models.Dtos.ReservationDto;
 import com.emilie.Lib10.Models.Dtos.UserDto;
 import com.emilie.Lib10.Models.Entities.UserPrincipal;
+import com.emilie.Lib10.Services.contract.ReservationService;
 import com.emilie.Lib10.Services.contract.UserService;
 import com.emilie.Lib10.Services.impl.UserDetailsServiceImpl;
 import io.swagger.annotations.ApiOperation;
@@ -15,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -29,13 +32,16 @@ public class UserController {
 
     private final JwtTokenUtil jwtTokenUtil;
 
+    private final ReservationService reservationService;
+
 
     @Autowired
-    public UserController(UserService userService, UserDetailsServiceImpl userDetailsServiceImpl, JwtTokenUtil jwtTokenUtil) {
+    public UserController(UserService userService, UserDetailsServiceImpl userDetailsServiceImpl, JwtTokenUtil jwtTokenUtil, ReservationService reservationService) {
         this.userService=userService;
         this.userDetailsServiceImpl=userDetailsServiceImpl;
         this.jwtTokenUtil=jwtTokenUtil;
 
+        this.reservationService = reservationService;
     }
 
     @ApiOperation(value="Retrieve a user account thanks to its Id, if the user is registered in database")
@@ -43,7 +49,15 @@ public class UserController {
     public ResponseEntity<?> findById(@PathVariable(value="id") Long id) throws UserNotFoundException {
         try {
             UserDto userDto=userService.findById( id );
-            userDto.setPassword( "" );//todo ajout recent si debud needed
+            userDto.setPassword( "" );
+
+            //add complementary data reservation
+            List<ReservationDto> completedReservationList = new ArrayList<>();
+            for(ReservationDto reservationDto : userDto.getReservationDtos()){
+                completedReservationList.add(reservationService.addAdditionnalData(reservationDto));
+            }
+            userDto.setReservationDtos(completedReservationList);
+
             return new ResponseEntity<UserDto>( userDto, HttpStatus.OK );
         } catch (UserNotFoundException e) {
             log.error( e.getMessage() );
@@ -65,6 +79,14 @@ public class UserController {
         try {
             UserDto userDto=userService.getLoggedUser();
             userDto.setPassword( "" );
+
+            //add complementary data reservation
+            List<ReservationDto> completedReservationList = new ArrayList<>();
+            for(ReservationDto reservationDto : userDto.getReservationDtos()){
+                completedReservationList.add(reservationService.addAdditionnalData(reservationDto));
+            }
+            userDto.setReservationDtos(completedReservationList);
+
             return new ResponseEntity<UserDto>( userDto, HttpStatus.OK );
         } catch (UserNotFoundException e) {
             log.error( e.getMessage() );

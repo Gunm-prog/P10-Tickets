@@ -1,6 +1,7 @@
 package com.emilie.Lib10.Models.Entities;
 
 
+import com.emilie.Lib10.Exceptions.MaxResaAtteintException;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -47,5 +48,9 @@ public class Reservation implements Serializable {
     @Column(name="isActive", nullable=false)
     private boolean isActive;
 
+    public int userPosition;
 
+    public int getMaxReservation(){
+        return book.getCopies().size() * 2;
+    }
 }
