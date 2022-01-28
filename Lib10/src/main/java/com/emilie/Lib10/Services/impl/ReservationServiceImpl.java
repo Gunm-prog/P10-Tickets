@@ -236,6 +236,11 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    public int getNmbReservationForBook(BookDto bookDto){
+        return reservationRepository.getNmbReservationForBook(bookDto.getBookId());
+    }
+
+    @Override
     public ReservationDto haveActiveReservationForUser(UserDto userDto, BookDto bookDto) throws NotFoundException {
         Optional<Reservation> OptionalReservation = reservationRepository.findActiveReservationForUserByBookId( userDto.getUserId(), bookDto.getBookId() );
         if(!OptionalReservation.isPresent()){
@@ -250,6 +255,7 @@ public class ReservationServiceImpl implements ReservationService {
         reservationDto.setUserPosition(this.getUserPosition(reservationDto.getBookDto(), reservationDto.getUserDto()));
         reservationDto.setMinExpectedReturnDate(this.getMinExpectedReturnDate(reservationDto.getBookDto()));
         reservationDto.setMaxNmbReservation(this.getMaxReservationForBook(reservationDto.getBookDto()));
+        reservationDto.setNmbReservation(this.getNmbReservationForBook(reservationDto.getBookDto()));
         return reservationDto;
     }
 

@@ -160,12 +160,27 @@
                 <tr class="tableTitle">
                     <th>Books</th>
                     <th>expected return</th>
-                    <th>your reserved position </th>
+                    <th>your position / pending </th>
+                    <th>can pikup</th>
+                    <th></th>
                 </tr>
-                <tr th:each="reservation:${userInfos.reservationDtos}">
+                <tr th:if="${not #lists.isEmpty(userInfos.reservationDtos)}" th:each="reservation:${userInfos.reservationDtos}">
                     <td th:text="${reservation.bookDto.title}"> [bookTitle]</td>
                     <td th:text="${#dates.format(reservation.minExpectedReturnDate, 'dd-MMM-yyyy')}"> [expectedReturnDate]</td>
-                    <td th:text="${reservation.userPosition}"> [userPosition]</td>
+                    <td th:text="${reservation.userPosition +' / '+ reservation.nmbReservation}"> [userPosition]</td>
+                    <td>
+                        <p th:if="${reservation.isActive == true}" class="text-success">yes</p>
+                        <p th:if="${reservation.isActive == false}" class="text-warning">not yet</p>
+                    </td>
+
+                    <td>
+                        <a class="nav-link"
+                           th:href="@{/cancelReservation/{id}(id=${reservation.id})}">cancel</a>
+                    </td>
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(userInfos.reservationDtos)}">
+                    <td colspan="5" class="text-success"> No reservations from your account</td>
                 </tr>
             </table>
         </div>

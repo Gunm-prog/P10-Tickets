@@ -25,7 +25,7 @@ public class ReservationDto implements Serializable{
 //    private CopyDto copyDto;
 
     private Date minExpectedReturnDate;
-    private Date maxExpectedReturnDate;
+ //   private Date maxExpectedReturnDate;
     private int maxNmbReservation;
     private int nmbReservation;
     private int userPosition;

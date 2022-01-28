@@ -56,7 +56,9 @@ public interface FeignProxy {
     ResponseEntity<?> extendLoan(@PathVariable(value="id") Long id,
                                  @RequestHeader(JwtProperties.HEADER) String accessToken);
 
-
+    @DeleteMapping("api/v1/reservations/cancel/{id}")
+    ResponseEntity<?> cancelReservation(@RequestHeader(JwtProperties.HEADER) String accessToken,
+                                        @PathVariable(value="id") Long id);
 }
 
 

@@ -42,9 +42,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             "AND r.isActive = true")
     Optional<Reservation> findActiveReservationForUserByBookId(@Param("userId") Long userId, @Param("bookId") Long bookId);
 
-    @Query(value="SELECT COUNT(r) FROM Reservation r " +
+    @Query(value="SELECT (COUNT(r)+1) FROM Reservation r " +
             "WHERE r.book.id = :bookId " +
-            "AND r.reservationStartDate = (SELECT MIN(r1.reservationStartDate) " +
+            "AND r.reservationStartDate < (SELECT r1.reservationStartDate " +
             " FROM Reservation r1" +
             "   WHERE r1.book.id = :bookId " +
             "   AND r1.user.id = :userId )")
@@ -57,4 +57,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query(value="SELECT (COUNT(c)*2) FROM Copy c " +
             "WHERE c.book.bookId = :bookId ")
     int getMaxReservationForBook(@Param("bookId") Long bookId);
+
+    @Query(value="SELECT COUNT(r) FROM Reservation r " +
+            "WHERE r.book.bookId = :bookId ")
+    int getNmbReservationForBook(@Param("bookId") Long bookId);
 }

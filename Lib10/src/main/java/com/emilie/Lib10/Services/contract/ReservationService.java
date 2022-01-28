@@ -39,6 +39,7 @@ public interface ReservationService {
     int getUserPosition(BookDto bookDto, UserDto userDto);
     Date getMinExpectedReturnDate(BookDto bookDto);
     int getMaxReservationForBook(BookDto bookDto);
+    int getNmbReservationForBook(BookDto bookDto);
 
     ReservationDto addAdditionnalData(ReservationDto reservationDto);
 }
