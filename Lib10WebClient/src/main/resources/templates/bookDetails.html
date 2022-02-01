@@ -23,7 +23,7 @@
             </figure>
         </div>
 
-        <div>
+        <div th:if="${not book.isAvailable or #lists.size(book.reservations) != 0}">
             <p class="orange_txt">not available for pick up</p>
             <p th:text="${#lists.size(book.reservations) + '/' + book.maxReservation + ' reservations pending'}"> [number_reservation]</p>
             <p th:if="${#lists.size(book.reservations) != 0}" th:text="${'next expected return ' + #dates.format(book.reservations[0].minExpectedReturnDate, 'dd-MMM-yyyy')}"></p>
