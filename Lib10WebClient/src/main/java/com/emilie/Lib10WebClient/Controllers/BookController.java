@@ -4,6 +4,7 @@ package com.emilie.Lib10WebClient.Controllers;
 import com.emilie.Lib10WebClient.Entities.Book;
 import com.emilie.Lib10WebClient.Entities.Copy;
 import com.emilie.Lib10WebClient.Entities.Library;
+import com.emilie.Lib10WebClient.Entities.Reservation;
 import com.emilie.Lib10WebClient.Proxy.FeignProxy;
 import com.emilie.Lib10WebClient.Security.JwtProperties;
 import com.emilie.Lib10WebClient.Security.JwtTokenUtils;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -38,7 +40,7 @@ public class BookController {
     @GetMapping("/searchCopies")
     public String BookSearch(@CookieValue(value=JwtProperties.HEADER, required=false) String accessToken, Model model) {
         if (accessToken != null) {
-            int userId=JwtTokenUtils.getUserIdFromJWT( accessToken );
+            Long userId=JwtTokenUtils.getUserIdFromJWT( accessToken );
             model.addAttribute( "currentUserId", userId );
             model.addAttribute( "userFirstname", JwtTokenUtils.getFirstnameFromJWT( accessToken ) );
             model.addAttribute( "userLastname", JwtTokenUtils.getLastnameFromJWT( accessToken ) );
@@ -54,7 +56,7 @@ public class BookController {
     public String BookSearchResult(@CookieValue(value=JwtProperties.HEADER, required=false) String accessToken,
                                    @ModelAttribute(COPY_ATT) Copy copyInfo, Model model) {
         if (accessToken != null) {
-            int userId=JwtTokenUtils.getUserIdFromJWT( accessToken );
+            Long userId=JwtTokenUtils.getUserIdFromJWT( accessToken );
             model.addAttribute( "currentUserId", userId );
             model.addAttribute( "userFirstname", JwtTokenUtils.getFirstnameFromJWT( accessToken ) );
             model.addAttribute( "userLastname", JwtTokenUtils.getLastnameFromJWT( accessToken ) );
@@ -66,7 +68,7 @@ public class BookController {
         String lastName=!copyInfo.getBookDto().getAuthorDto().getLastName().equals( "" ) ? copyInfo.getBookDto().getAuthorDto().getLastName() : null;
         List<Book> books=feignProxy.searchBooks( libraryId, title, isbn, firstName, lastName );
 
-
+        //add copy availability stats in libraries for each book
         for (Book book : books) {
             for (Copy copy : book.getCopyDtos()) {
                 boolean isAlreadyListed=false;
@@ -91,6 +93,16 @@ public class BookController {
                 }
                 lib.setNbCopies( lib.getNbCopies() + 1 );
             }
+
+            //check if usser logged and if he have already reserved the book
+            if (accessToken != null) {
+                book.getReservations().forEach( r -> {
+                    if (r.getUserDto().getUserId().equals( model.getAttribute( "currentUserId" ) )){
+                      //  booksAlreadyReserved.add( r.getBookDto() );
+                        book.setReservedByCurrentUser( true );
+                    }
+                } );
+            }
         }
 
         model.addAttribute( "books", books );
@@ -102,12 +114,47 @@ public class BookController {
     @GetMapping("/details/{id}")
     public String getById(@CookieValue(value=JwtProperties.HEADER, required=false) String accessToken, @PathVariable("id") Long id, Model model) {
         if (accessToken != null) {
-            int userId=JwtTokenUtils.getUserIdFromJWT( accessToken );
+            Long userId=JwtTokenUtils.getUserIdFromJWT( accessToken );
             model.addAttribute( "currentUserId", userId );
             model.addAttribute( "userFirstname", JwtTokenUtils.getFirstnameFromJWT( accessToken ) );
             model.addAttribute( "userLastname", JwtTokenUtils.getLastnameFromJWT( accessToken ) );
         }
         Book book=feignProxy.getBookById( id );
+
+        //add copy availability stats in libraries for each book
+            for (Copy copy : book.getCopyDtos()) {
+                boolean isAlreadyListed=false;
+                int libKey=0;
+                for (int i=0; i < book.getLibraries().size(); i++) {
+                    if (book.getLibraries().get( i ).getLibraryId().equals( copy.getLibraryDto().getLibraryId() )) {
+                        isAlreadyListed=true;
+                        libKey=i;
+                    }
+                }
+                if (!isAlreadyListed) {
+                    Library library1=new Library();
+                    library1.setLibraryId( copy.getLibraryDto().getLibraryId() );
+                    library1.setName( copy.getLibraryDto().getName() );
+                    book.getLibraries().add( library1 );
+                    libKey=book.getLibraries().lastIndexOf( library1 );
+                }
+
+                Library lib=book.getLibraries().get( libKey );
+                if (copy.isAvailable()) {
+                    lib.setNbAvailableCopies( lib.getNbAvailableCopies() + 1 );
+                }
+                lib.setNbCopies( lib.getNbCopies() + 1 );
+            }
+
+            //check if usser logged and if he have already reserved the book
+            if (accessToken != null) {
+                book.getReservations().forEach( r -> {
+                    if (r.getUserDto().getUserId().equals( model.getAttribute( "currentUserId" ) )){
+                        //  booksAlreadyReserved.add( r.getBookDto() );
+                        book.setReservedByCurrentUser( true );
+                    }
+                } );
+            }
 
         model.addAttribute( "book", book );
 

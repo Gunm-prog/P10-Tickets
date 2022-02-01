@@ -3,10 +3,7 @@ package com.emilie.Lib10WebClient.Entities;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -20,7 +17,11 @@ public class Book {
     private Set<Copy> copies= new HashSet<>();
     private List<Library> libraries = new ArrayList<>();
     private List<Copy> copyDtos = new ArrayList<>();
+    private List<Reservation> reservations = new ArrayList<>();
 
+    private boolean isAvailable;
+    private int maxReservation;
+    private boolean reservedByCurrentUser;
 
     @Override
     public String toString() {
@@ -28,6 +29,8 @@ public class Book {
                 "id=" + bookId +
                 ", title='" + title + '\'' +
                 ", isbn='" + isbn + '\'' +
+                ", isAvailable='" + isAvailable + '\'' +
+                ", maxReservation='" + maxReservation + '\'' +
                 ", summary='" + summary + '\'' +
                 ", author=" + authorDto +
                 ", copies=" + copies +

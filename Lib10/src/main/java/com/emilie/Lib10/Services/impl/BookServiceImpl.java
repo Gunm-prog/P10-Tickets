@@ -146,17 +146,26 @@ public class BookServiceImpl implements BookService {
         return bookDto;
     }
 
+    /**
+     * check if one copy of the book is Available.
+     * @param book
+     * @return
+     */
+    @Override
+    public boolean bookIsAvailable(Book book) {
+        boolean result = false;
 
- /*   @Override
-    public BookDto findByAuthor(Author author) {
-        Optional<Book> optionalBook=bookRepository.findByAuthor( author );
-        if (!optionalBook.isPresent()) {
-            throw new BookNotFoundException( "book for author " + author.getAuthorId() + " not found" );
-        }
-        Book book=optionalBook.get();
-        return this.bookToBookDto( book );
-    }*/
+            Iterator<Copy> i = book.getCopies().iterator();
+            while (i.hasNext() && !result){
+                if(i.next().isAvailable()){ result = true; }
+            }
 
+        return result;
+    }
+
+    public int getMaxReservationForBook(Book book){
+        return book.getCopies().size()*2;
+    }
 
     private BookDto bookToBookDto(Book book) {
         BookDto bookDto=new BookDto();
@@ -179,9 +188,17 @@ public class BookServiceImpl implements BookService {
         }
         bookDto.setAuthorDto( makeAuthorDto( book.getAuthor() ) );
 
+        List<ReservationDto> reservationDtoList = new ArrayList<>();
+        for(Reservation reservation : book.getReservationList() ){
+            reservationDtoList.add(makeReservationsDto(reservation));
+        }
+        bookDto.setReservations( reservationDtoList );
+
+        bookDto.setAvailable( this.bookIsAvailable( book ) );
+        bookDto.setMaxReservation( this.getMaxReservationForBook( book ) );
+
         return bookDto;
     }
-
     private Book bookDtoToBook(BookDto bookDto) {
         Book book=new Book();
         book.setBookId( bookDto.getBookId() );
@@ -198,7 +215,6 @@ public class BookServiceImpl implements BookService {
             book.setCopies( copies );
 
         }
-        /*Author author=new Author();*/
 
         book.setAuthor( makeAuthor( bookDto.getAuthorDto() ) );
 
@@ -279,5 +295,37 @@ public class BookServiceImpl implements BookService {
         return address;
     }
 
+    private ReservationDto makeReservationsDto(Reservation reservation){
+
+        ReservationDto reservationDto = new ReservationDto();
+        reservationDto.setId( reservation.getId() );
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId( reservation.getUser().getId());
+        reservationDto.setUserDto( userDto );
+
+        BookDto bookDto = new BookDto();
+        bookDto.setBookId( reservation.getBook().getBookId() );
+        reservationDto.setBookDto( bookDto );
+
+        reservationDto.setActive( reservation.isActive() );
+        reservationDto.setReservationEndDate( reservation.getReservationEndDate() );
+        reservationDto.setReservationStartDate( reservation.getReservationStartDate() );
+
+        reservationDto.setUserPosition( getUserPosition( reservation ) );
+
+        return reservationDto;
+    }
+
+    public int getUserPosition(Reservation reservation){
+
+        int res = 0;
+        for(Reservation checkedReservation : reservation.getBook().getReservationList()){
+            if(checkedReservation.getId().equals( reservation.getId() )){
+                res = reservation.getBook().getReservationList().indexOf( checkedReservation );
+            }
+        }
+        return res+1;
+    }
 
 }

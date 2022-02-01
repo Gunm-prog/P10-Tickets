@@ -23,7 +23,6 @@ public class Reservation implements Serializable{
     private int userPosition;
     private int nmbReservation;
     private int maxNmbReservation;
-//    private CopyDto copyDto;
 
 
 }

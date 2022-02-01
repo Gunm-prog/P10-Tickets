@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -41,4 +43,6 @@ public class Book implements Serializable {
     @OneToMany(mappedBy="book")
     private Set<Copy> copies;
 
+    @OneToMany(mappedBy="book")
+    private List<Reservation> reservationList;
 }

@@ -182,6 +182,10 @@ public class UserServiceImpl implements UserService {
                 partialUserDto.setUserId(user.getId());
                 reservationDto.setUserDto(partialUserDto);
 
+                reservationDto.setNmbReservation(
+                        reservation.getBook().getReservationList().size()
+                );
+
                 rsvDtoList.add(reservationDto);
             }
         }
@@ -335,8 +339,10 @@ public class UserServiceImpl implements UserService {
         reservationDto.setId( reservation.getId());
         reservationDto.setReservationStartDate( reservation.getReservationStartDate() );
         reservationDto.setReservationEndDate( reservation.getReservationEndDate() );
+        reservationDto.setActive(reservation.isActive());
 
         reservationDto.setBookDto(makeBookDto(reservation.getBook()));
+        reservationDto.setUserPosition( getUserPosition( reservation ) );
 
         return reservationDto;
     }
@@ -349,5 +355,15 @@ public class UserServiceImpl implements UserService {
         return reservation;
     }
 
+    public int getUserPosition(Reservation reservation){
+
+        int res = 0;
+        for(Reservation checkedReservation : reservation.getBook().getReservationList()){
+            if(checkedReservation.getId().equals( reservation.getId() )){
+                res = reservation.getBook().getReservationList().indexOf( checkedReservation );
+            }
+        }
+        return res+1;
+    }
 
 }

@@ -6,7 +6,9 @@ import com.emilie.Lib10.Exceptions.BookAlreadyExistException;
 import com.emilie.Lib10.Exceptions.BookNotFoundException;
 import com.emilie.Lib10.Exceptions.ImpossibleDeleteBookException;
 import com.emilie.Lib10.Models.Dtos.BookDto;
+import com.emilie.Lib10.Models.Dtos.ReservationDto;
 import com.emilie.Lib10.Services.contract.BookService;
+import com.emilie.Lib10.Services.contract.ReservationService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -24,11 +27,13 @@ public class BookController {
 
     private final BookService bookService;
 
+    private final ReservationService reservationService;
 
     @Autowired
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, ReservationService reservationService) {
         this.bookService=bookService;
 
+        this.reservationService=reservationService;
     }
 
 
@@ -38,6 +43,12 @@ public class BookController {
             throws BookNotFoundException {
         try {
             BookDto bookDto=bookService.findById( id );
+
+            bookDto.getReservations().forEach( r -> {
+                        r.setMinExpectedReturnDate( reservationService.getMinExpectedReturnDate( bookDto ));
+                    }
+            );
+
             return new ResponseEntity<BookDto>( bookDto, HttpStatus.OK );
         } catch (BookNotFoundException e) {
             log.error( e.getMessage() );
@@ -63,6 +74,15 @@ public class BookController {
 
         try {
             List<BookDto> bookDtos=bookService.searchBooks( libraryId, title, isbn, firstName, lastName );
+
+            for(BookDto bookDto : bookDtos){
+                bookDto.getReservations().forEach( r -> {
+                            r.setMinExpectedReturnDate( reservationService.getMinExpectedReturnDate( bookDto ));
+
+                        }
+                );
+            }
+
             return new ResponseEntity<List<BookDto>>( bookDtos, HttpStatus.OK );
         } catch (Exception e) {
             log.warn( e.getMessage(), e );
@@ -176,6 +196,12 @@ public class BookController {
             throws BookNotFoundException {
         try {
             BookDto bookDto=bookService.findByTitle( title );
+
+            bookDto.getReservations().forEach( r -> {
+                        r.setMinExpectedReturnDate( reservationService.getMinExpectedReturnDate( bookDto ));
+                    }
+            );
+
             return new ResponseEntity<BookDto>( bookDto, HttpStatus.OK );
         } catch (BookNotFoundException e) {
             log.error( e.getMessage() );

@@ -4,6 +4,7 @@ package com.emilie.Lib10.Services.contract;
 import com.emilie.Lib10.Exceptions.BookAlreadyExistException;
 import com.emilie.Lib10.Exceptions.BookNotFoundException;
 import com.emilie.Lib10.Models.Dtos.BookDto;
+import com.emilie.Lib10.Models.Entities.Book;
 
 import java.util.List;
 
@@ -25,5 +26,6 @@ public interface BookService {
 
     List<BookDto> searchBooks(Long libraryId, String title, String isbn, String firstName, String lastName);
 
-
+    boolean bookIsAvailable(Book book);
+    int getMaxReservationForBook(Book book);
 }

@@ -61,8 +61,8 @@ public class JwtTokenUtils {
         return JWT.decode( token ).getSubject();
     }
 
-    public static Integer getUserIdFromJWT(String token) {
-        Integer userId=JWT.decode( token ).getClaim( "userId" ).asInt();
+    public static Long getUserIdFromJWT(String token) {
+        Long userId=JWT.decode( token ).getClaim( "userId" ).asLong();
         return userId;
     }
 

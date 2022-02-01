@@ -16,8 +16,6 @@ import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
@@ -35,10 +33,6 @@ public class ReservationServiceImpl implements ReservationService {
         this.userRepository=userRepository;
         this.bookRepository = bookRepository;
     }
-
-
-   /* @Override
-    public ReservationDto (ReservationDto reservationDto) createReservation(){}*/
 
     @Override
     public List<ReservationDto> findAll() {
@@ -60,24 +54,6 @@ public class ReservationServiceImpl implements ReservationService {
         Reservation reservation=optionalReservation.get();
         return reservationToReservationDto( reservation );
     }
-
-
-    /*
-    TODO recupere le nb de copies qui existent pour ce livre (bookId)
-        cette valeur sera à multiplier par 2 (nb copies à multiplier par 2) cf maxResa(nb max de resa autorisées)
-                 if  il faudra autoriser la création d'une réservation uniquement si maxResa < nb reservations de la liste récupérée
-        l.105
-                else  si la resa est impossible, throw renvoyer une exception la liste d'attente est complète!
-        si on peut faire la resa (donc création resa dans le if)
-        on va instancier une nouvelle instance de la classe resa à qui on va donner l'user qui est dans le resaDto qu'on a reçu
-        on va aussi lui donner le book qui se trouve dans le resaDto qu'on a reçu
-        Et en plus on va lui donner la date du jour courante
-        On peut donc persister la resa en utilisant resa.repository.save
-        methode doit return une resaDto
-
-        todo: une reservation ne peut être faite que si le book est indisponible.
-        todo: un user ne peut pas reserver un book qu'il a déjà emprunté.
-    */
 
     /**
      * @return ReservationDto
@@ -109,12 +85,16 @@ public class ReservationServiceImpl implements ReservationService {
             }
         }
 
-        //check if the book have a copy available and throw exception if it's found.
-        for( Copy copy : book.getCopies() ){
-            if (copy.isAvailable()) {
-                throw new UnauthorizedException( "a copy for this book is available, reservation isn't enabled" );
+        //if the book have not yet reservation
+        if(book.getReservationList().isEmpty()){
+            //check if the book have a copy available and throw exception if it's found.
+            for( Copy copy : book.getCopies() ){
+                if (copy.isAvailable()) {
+                    throw new UnauthorizedException( "a copy for this book is available, reservation isn't enabled" );
+                }
             }
         }
+
 
         //get Reservation List for a specific book
         List<Reservation> reservations=reservationRepository.findByBookId( reservationDto.getBookDto().getBookId() );
@@ -126,11 +106,9 @@ public class ReservationServiceImpl implements ReservationService {
             }
         }
 
-        //  reservations.get( nbOfCopiesByBook );
         int maxResa= book.getCopies().size() * 2;
         if ( reservations.size() < maxResa ) {
             Reservation reservation = new Reservation();
-       //     Reservation reservation = reservationDtoToReservation( reservationDto );
             reservation.setUser( user );
             reservation.setBook( book );
             reservation.setReservationStartDate( LocalDateTime.now() );
@@ -201,11 +179,8 @@ public class ReservationServiceImpl implements ReservationService {
         Optional<Reservation> optionalReservation=reservationRepository.findById( id );
         if (!optionalReservation.isPresent()) {
             throw new ReservationNotFoundException( "reservation " + id + " not found " );
-       /* } else if (!optionalReservation.get().isFinished()) {
-            throw new ImpossibleDeleteReservationException( "reservation " + id + " is out of reservation list" );*/
         }
 
-     //   if(reservation.getUser() !=)
             reservationRepository.deleteById( id );
     }
 
@@ -221,23 +196,13 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public int getUserPosition(BookDto bookDto, UserDto userDto){
-        return reservationRepository.getUserPosition(bookDto.getBookId(), userDto.getUserId());
-    }
-
-    @Override
     public Date getMinExpectedReturnDate(BookDto bookDto){
         return reservationRepository.getMinExpectedReturnDate(bookDto.getBookId());
     }
 
     @Override
-    public int getMaxReservationForBook(BookDto bookDto){
-        return reservationRepository.getMaxReservationForBook(bookDto.getBookId());
-    }
-
-    @Override
     public int getNmbReservationForBook(BookDto bookDto){
-        return reservationRepository.getNmbReservationForBook(bookDto.getBookId());
+        return bookDto.getReservations().size();
     }
 
     @Override
@@ -250,13 +215,14 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationToReservationDto( OptionalReservation.get() );
     }
 
-    public ReservationDto addAdditionnalData(ReservationDto reservationDto){
-        //additionnal infos for a reservationDto
-        reservationDto.setUserPosition(this.getUserPosition(reservationDto.getBookDto(), reservationDto.getUserDto()));
-        reservationDto.setMinExpectedReturnDate(this.getMinExpectedReturnDate(reservationDto.getBookDto()));
-        reservationDto.setMaxNmbReservation(this.getMaxReservationForBook(reservationDto.getBookDto()));
-        reservationDto.setNmbReservation(this.getNmbReservationForBook(reservationDto.getBookDto()));
-        return reservationDto;
+    public int getUserPosition(Reservation reservation){
+        int res = 0;
+        for(Reservation checkedReservation : reservation.getBook().getReservationList()){
+            if(checkedReservation.getId().equals( reservation.getId() )){
+                res = reservation.getBook().getReservationList().indexOf( checkedReservation );
+            }
+        }
+        return res;
     }
 
     private ReservationDto reservationToReservationDto (Reservation reservation){
@@ -277,17 +243,15 @@ public class ReservationServiceImpl implements ReservationService {
         reservationDto.setBookDto( makeBookDto(reservation.getBook()) );
 
         //additionnal infos for a reservationDto
-        reservationDto = this.addAdditionnalData(reservationDto);
-       /* reservationDto.setUserPosition(this.getUserPosition(reservationDto.getBookDto(), reservationDto.getUserDto()));
+        reservationDto.setUserPosition( this.getUserPosition( reservation ) );
+        reservationDto.setNmbReservation( this.getNmbReservationForBook( reservationDto.getBookDto() ) );
+
         reservationDto.setMinExpectedReturnDate(this.getMinExpectedReturnDate(reservationDto.getBookDto()));
-        reservationDto.setMaxNmbReservation(this.getMaxReservationForBook(reservationDto.getBookDto()));*/
 
         return reservationDto;
     }
 
     private Reservation reservationDtoToReservation (ReservationDto reservationDto){
-
-  //      System.out.println( reservationDto );
 
         Reservation reservation = new Reservation();
         reservation.setId(reservationDto.getId());
@@ -355,6 +319,8 @@ public class ReservationServiceImpl implements ReservationService {
         bookDto.setIsbn( book.getIsbn() );
         bookDto.setSummary( book.getSummary() );
         bookDto.setAuthorDto(makeAuthorDto(book.getAuthor()));
+
+        bookDto.setMaxReservation( book.getCopies().size()*2 );
 
         return bookDto;
     }
@@ -434,8 +400,6 @@ public class ReservationServiceImpl implements ReservationService {
         }
 
         localDateTime=localDateTime.plusDays( numberOfDays );
-     //   Instant instant=localDate.atStartOfDay( ZoneId.systemDefault() ).toInstant();
-     //   Date date=Date.from( instant );
         return localDateTime;
     }
 

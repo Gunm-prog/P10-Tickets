@@ -8,7 +8,7 @@
 <body>
 <div th:replace="fragments/header :: header"></div>
 <h2></h2>
-<section class="section-bookDetails container align-middle bg-light">
+<section class="overflow-90h section-bookDetails container align-middle bg-light">
     <div class="card col-sm-9 forOne-card">
         <div class="card-body">
             <img class="bookCover float-start" th:src="@{${'/image/covers/' + book.bookId +'.png'}}" alt="bookImage"/>
@@ -22,6 +22,53 @@
                 </blockquote>
             </figure>
         </div>
+
+        <div>
+            <p class="orange_txt">not available for pick up</p>
+            <p th:text="${#lists.size(book.reservations) + '/' + book.maxReservation + ' reservations pending'}"> [number_reservation]</p>
+            <p th:if="${#lists.size(book.reservations) != 0}" th:text="${'next expected return ' + #dates.format(book.reservations[0].minExpectedReturnDate, 'dd-MMM-yyyy')}"></p>
+        </div>
+
+        <div class="reservationBox orange_txt"
+             th:if="${(#lists.size(book.reservations) != 0 and #lists.size(book.reservations) < book.maxReservation)
+                or not book.isAvailable}"
+        >
+            <a class="nav-link"
+               th:if="${currentUserId != null and not book.reservedByCurrentUser}"
+               th:href="@{/newReservation/{id}(id=${book.bookId})}"
+            >
+                >> Reserve
+            </a>
+            <p class="orange_txt" th:if="${currentUserId != null and book.reservedByCurrentUser}"> already reserved </p>
+        </div>
+    </div>
+
+    <div class="overflow-auto">
+        <table class="table width90">
+            <tr>
+                <th>Library</th>
+                <th>Available</th>
+                <th>Number of Copies</th>
+            </tr>
+            <tr th:each="library: ${book.libraries}">
+                <td>
+                    <p class="strong"><a class="nav-link" th:text="${library.name}"
+                                         th:href="@{/libraries/{id}(id=${library.libraryId})}">Library
+                        Name</a>
+                    </p>
+                </td>
+                <td>
+
+                    <p th:if="${library.NbAvailableCopies == 0}" th:text="${library.NbAvailableCopies}"
+                       class="text-danger">NbAvailableCopies</p>
+                    <p th:if="${library.NbAvailableCopies > 0}" th:text="${library.NbAvailableCopies}"
+                       class="text-success">NbAvailableCopies</p>
+                </td>
+                <td>
+                    <p th:text="${library.NbCopies}"> NbCopies</p>
+                </td>
+            </tr>
+        </table>
     </div>
 </section>
 </body>

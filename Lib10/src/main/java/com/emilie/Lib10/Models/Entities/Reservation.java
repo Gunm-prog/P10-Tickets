@@ -3,6 +3,7 @@ package com.emilie.Lib10.Models.Entities;
 
 import com.emilie.Lib10.Exceptions.MaxResaAtteintException;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -25,6 +26,7 @@ public class Reservation implements Serializable {
     @Column(name="reservation_id")
     private Long id;
 
+    @JsonIgnoreProperties("reservations")
     @ManyToOne
     @JoinColumn(name="book_id", nullable=false)
     private Book book;
@@ -32,10 +34,6 @@ public class Reservation implements Serializable {
     @ManyToOne
     @JoinColumn(name="user_id", nullable=false)
     private User user;
-
-    /*@ManyToOne
-    @JoinColumn(name="copy_id", nullable=false)
-    private Copy copy;*/
 
     @Column(name="start_date", nullable=false)
     @JsonFormat(pattern="yyyy-MM-dd HH:MM:SS")
@@ -47,10 +45,4 @@ public class Reservation implements Serializable {
 
     @Column(name="isActive", nullable=false)
     private boolean isActive;
-
-    public int userPosition;
-
-    public int getMaxReservation(){
-        return book.getCopies().size() * 2;
-    }
 }

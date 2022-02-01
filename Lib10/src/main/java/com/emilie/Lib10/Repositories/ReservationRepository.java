@@ -58,7 +58,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             "WHERE c.book.bookId = :bookId ")
     int getMaxReservationForBook(@Param("bookId") Long bookId);
 
-    @Query(value="SELECT COUNT(r) FROM Reservation r " +
-            "WHERE r.book.bookId = :bookId ")
-    int getNmbReservationForBook(@Param("bookId") Long bookId);
+  /*  @Query(value="SELECT COUNT(r) FROM Reservation r " +
+            "WHERE r.book.bookId = :bookId ")*/
+ //   int getNmbReservationForBook(@Param("bookId") Long bookId);
 }

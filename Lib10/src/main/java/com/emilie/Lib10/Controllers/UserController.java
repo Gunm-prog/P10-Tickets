@@ -17,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -52,11 +51,9 @@ public class UserController {
             userDto.setPassword( "" );
 
             //add complementary data reservation
-            List<ReservationDto> completedReservationList = new ArrayList<>();
             for(ReservationDto reservationDto : userDto.getReservationDtos()){
-                completedReservationList.add(reservationService.addAdditionnalData(reservationDto));
+                reservationDto.setMinExpectedReturnDate( reservationService.getMinExpectedReturnDate( reservationDto.getBookDto() ) );
             }
-            userDto.setReservationDtos(completedReservationList);
 
             return new ResponseEntity<UserDto>( userDto, HttpStatus.OK );
         } catch (UserNotFoundException e) {
@@ -80,12 +77,9 @@ public class UserController {
             UserDto userDto=userService.getLoggedUser();
             userDto.setPassword( "" );
 
-            //add complementary data reservation
-            List<ReservationDto> completedReservationList = new ArrayList<>();
             for(ReservationDto reservationDto : userDto.getReservationDtos()){
-                completedReservationList.add(reservationService.addAdditionnalData(reservationDto));
+                reservationDto.setMinExpectedReturnDate( reservationService.getMinExpectedReturnDate( reservationDto.getBookDto() ) );
             }
-            userDto.setReservationDtos(completedReservationList);
 
             return new ResponseEntity<UserDto>( userDto, HttpStatus.OK );
         } catch (UserNotFoundException e) {

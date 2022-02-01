@@ -35,7 +35,7 @@ public class LibraryController {
     public String library(@CookieValue(value=JwtProperties.HEADER, required=false) String accessToken,
                           @PathVariable("id") Long id, Model model) {
         if (accessToken != null) {
-            int userId=JwtTokenUtils.getUserIdFromJWT( accessToken );
+            Long userId=JwtTokenUtils.getUserIdFromJWT( accessToken );
             model.addAttribute( "currentUserId", userId );
             model.addAttribute( "userFirstname", JwtTokenUtils.getFirstnameFromJWT( accessToken ) );
             model.addAttribute( "userLastname", JwtTokenUtils.getLastnameFromJWT( accessToken ) );
@@ -49,7 +49,7 @@ public class LibraryController {
     @GetMapping("/list")
     public String libraryList(@CookieValue(value=JwtProperties.HEADER, required=false) String accessToken, Model model) {
         if (accessToken != null) {
-            int userId=JwtTokenUtils.getUserIdFromJWT( accessToken );
+            Long userId=JwtTokenUtils.getUserIdFromJWT( accessToken );
             model.addAttribute( "currentUserId", userId );
             model.addAttribute( "userFirstname", JwtTokenUtils.getFirstnameFromJWT( accessToken ) );
             model.addAttribute( "userLastname", JwtTokenUtils.getLastnameFromJWT( accessToken ) );

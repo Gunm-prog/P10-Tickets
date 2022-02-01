@@ -139,13 +139,18 @@
                         <a class="nav-link" th:text="${loan.copyDto.libraryDto.name}"
                            th:href="@{/libraries/{id}(id=${loan.copyDto.libraryDto.libraryId})}">Library Name</a>
                     </td>
+
+                    <!-- extend btn -->
                     <td>
                         <form action="#" th:action="@{'/extendLoan/{id}' (id=${loan.id})}" method="post"
-                              th:if="${loan.returned == false && loan.extended == false}">
+                              th:if="${loan.returned == false
+                              && loan.extended == false
+                              and loan.loanEndDate.after(#dates.createNow())}">
                             <input type="submit" value="Extend loan"/>
                         </form>
                         <p th:if="${loan.returned == true}" class="text-success">returned</p>
                         <p th:if="${loan.returned == false}" class="text-warning">not returned</p>
+                        <p class="red_txt" th:if="${loan.returned == false && loan.loanEndDate.before(#dates.createNow())}"> overdue </p>
                     </td>
                 </tr>
 
@@ -165,17 +170,29 @@
                     <th></th>
                 </tr>
                 <tr th:if="${not #lists.isEmpty(userInfos.reservationDtos)}" th:each="reservation:${userInfos.reservationDtos}">
-                    <td th:text="${reservation.bookDto.title}"> [bookTitle]</td>
+                    <td>
+                        <a class="nav-link"
+                           th:href="@{/books/details/{id}(id=${reservation.bookDto.bookId})}"
+                           th:text="${reservation.bookDto.title}"
+                        >
+                            [bookTitle]
+                        </a>
+                    </td>
                     <td th:text="${#dates.format(reservation.minExpectedReturnDate, 'dd-MMM-yyyy')}"> [expectedReturnDate]</td>
                     <td th:text="${reservation.userPosition +' / '+ reservation.nmbReservation}"> [userPosition]</td>
                     <td>
-                        <p th:if="${reservation.isActive == true}" class="text-success">yes</p>
-                        <p th:if="${reservation.isActive == false}" class="text-warning">not yet</p>
+                        <p th:if="${reservation.active}" class="text-success">
+                            <a class="nav-link"
+                               th:href="@{/books/details/{id}(id=${reservation.bookDto.bookId})}"
+                            >
+                                see availability
+                            </a>
+                        </p>
+                        <p th:if="${not reservation.active}" class="text-warning">not yet</p>
                     </td>
 
                     <td>
-                        <a class="nav-link"
-                           th:href="@{/cancelReservation/{id}(id=${reservation.id})}">cancel</a>
+                        <a class="nav-link" th:href="@{/cancelReservation/{id}(id=${reservation.id})}">cancel</a>
                     </td>
                 </tr>
 

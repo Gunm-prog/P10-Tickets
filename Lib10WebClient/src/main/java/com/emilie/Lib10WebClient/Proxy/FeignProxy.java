@@ -1,10 +1,7 @@
 package com.emilie.Lib10WebClient.Proxy;
 
 
-import com.emilie.Lib10WebClient.Entities.Book;
-import com.emilie.Lib10WebClient.Entities.Library;
-import com.emilie.Lib10WebClient.Entities.User;
-import com.emilie.Lib10WebClient.Entities.UserAccountLogin;
+import com.emilie.Lib10WebClient.Entities.*;
 import com.emilie.Lib10WebClient.Security.JwtProperties;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -56,9 +53,15 @@ public interface FeignProxy {
     ResponseEntity<?> extendLoan(@PathVariable(value="id") Long id,
                                  @RequestHeader(JwtProperties.HEADER) String accessToken);
 
+    /* === Reservation ===*/
+
     @DeleteMapping("api/v1/reservations/cancel/{id}")
     ResponseEntity<?> cancelReservation(@RequestHeader(JwtProperties.HEADER) String accessToken,
                                         @PathVariable(value="id") Long id);
+
+    @PostMapping("api/v1/reservations/new")
+    ResponseEntity<?> createReservation(@RequestHeader(JwtProperties.HEADER) String accessToken,
+                                        @RequestBody Reservation reservation);
 }
 
 
