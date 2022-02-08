@@ -25,7 +25,7 @@ public class Library implements Serializable {
     @Column(name="name", nullable=false)
     private String name;
 
-    @Column(name="phoneNumber", length=10, nullable=false)
+    @Column(name="phoneNumber", length=20, nullable=false)
     private String phoneNumber;
 
     @Embedded

@@ -111,12 +111,12 @@ public class BookController {
 
     @ApiOperation(value="Register a new book in database")
     @PostMapping("/newBook")
-    public ResponseEntity<String> save(@RequestBody BookDto bookDto)
+    public ResponseEntity<?> save(@RequestBody BookDto bookDto)
             throws BookAlreadyExistException, AuthorNotFoundException {
         try {
             BookDto newBookDto=bookService.save( bookDto );
             log.info( "Book " + newBookDto.getBookId() + " has been created" );
-            return new ResponseEntity<String>( "Book " + newBookDto.getBookId() + " has been created", HttpStatus.CREATED );
+            return new ResponseEntity<BookDto>( newBookDto, HttpStatus.CREATED );
         } catch (AuthorNotFoundException e) {
             log.error( e.getMessage() );
             return ResponseEntity
