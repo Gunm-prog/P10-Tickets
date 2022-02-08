@@ -73,6 +73,7 @@ public class LibraryServiceImpl implements LibraryService {
         Library library=optionalLibrary.get();
         library.setName( libraryDto.getName() );
         library.setPhoneNumber( libraryDto.getPhoneNumber() );
+        library.setAddress( makeAddress( libraryDto.getAddressDto() ) );
         library=libraryRepository.save( library );
         return libraryToLibraryDto( library );
     }
