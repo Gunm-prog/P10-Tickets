@@ -104,6 +104,7 @@ public class JwtAuthenticationController {
             String hashPassword=bCryptPasswordEncoder.encode( userDto.getPassword() );
             userDto.setPassword( hashPassword );
             UserDto userDto1=userServiceImpl.save( userDto );
+            userDto1.setPassword( "" );
             log.info( "Employee " + userDto1.getUserId() + " has been created" );
             return new ResponseEntity<UserDto>( userDto1, HttpStatus.CREATED );
         } catch (AddressNotFoundException e) {
@@ -136,6 +137,7 @@ public class JwtAuthenticationController {
             userDto.setRoles( "CUSTOMER" );
 
             UserDto userDto1=userServiceImpl.save( userDto );
+            userDto1.setPassword( "" );
             log.info( "Customer " + userDto1.getUserId() + " has been created" );
             return new ResponseEntity<UserDto>( userDto1, HttpStatus.CREATED );
         } catch (AddressNotFoundException e) {

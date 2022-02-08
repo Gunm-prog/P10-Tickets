@@ -36,5 +36,14 @@ public class Copy implements Serializable {
     @JoinColumn(name="library_id", nullable=false)
     private Library library;
 
+    @Override
+    public String toString() {
+        return "Copy{" +
+                "id=" + id +
+                ", available=" + available +
+                ", book=" + book.getBookId() +
+                ", library=" + library.getLibraryId() +
+                '}';
+    }
 }
 

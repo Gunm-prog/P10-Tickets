@@ -127,11 +127,17 @@ public class CopyServiceImpl implements CopyService {
         Optional<Copy> optionalCopy=copyRepository.findById( id );
         if (!optionalCopy.isPresent()) {
             throw new CopyNotFoundException( "Copy " + id + " not found" );
-        } else if (!optionalCopy.get().isAvailable()) {
-            throw new ImpossibleDeleteCopyException( "This copy " + id + " have existing loan" );
-        }
-        copyRepository.deleteById( id );
+        } else {
+            Copy copy = optionalCopy.get();
+            if (!copy.isAvailable()) {
+                throw new ImpossibleDeleteCopyException( "This copy " + id + " have existing loan" );
+            }
 
+        //    copy.getBook().getCopies().remove( copy );
+
+
+            copyRepository.deleteById( id );
+        }
     }
 
 
@@ -247,5 +253,6 @@ public class CopyServiceImpl implements CopyService {
 
         return book;
     }
+
 
 }

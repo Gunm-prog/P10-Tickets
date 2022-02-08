@@ -66,12 +66,12 @@ public class AuthorController {
 
 
     @PostMapping("/newAuthor")
-    public ResponseEntity<String> save(@RequestBody AuthorDto authorDto)
+    public ResponseEntity<?> save(@RequestBody AuthorDto authorDto)
             throws AuthorAlreadyExistException {
         try {
             AuthorDto newAuthorDto=authorsService.save( authorDto );
             log.info( "Author " + newAuthorDto.getAuthorId() + " has been created" );
-            return new ResponseEntity<String>( "Author " + newAuthorDto.getAuthorId() + " has been created", HttpStatus.CREATED );
+            return new ResponseEntity<AuthorDto>( newAuthorDto, HttpStatus.CREATED );
         } catch (AuthorAlreadyExistException e) {
             log.error( e.getMessage() );
             return ResponseEntity

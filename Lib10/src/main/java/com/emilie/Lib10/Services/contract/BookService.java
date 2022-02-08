@@ -27,5 +27,6 @@ public interface BookService {
     List<BookDto> searchBooks(Long libraryId, String title, String isbn, String firstName, String lastName);
 
     boolean bookIsAvailable(Book book);
+    void isNewBookValid(BookDto bookDto);
     int getMaxReservationForBook(Book book);
 }

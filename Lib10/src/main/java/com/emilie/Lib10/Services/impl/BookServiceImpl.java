@@ -1,16 +1,15 @@
 package com.emilie.Lib10.Services.impl;
 
 
+import com.emilie.Lib10.Exceptions.*;
 import com.emilie.Lib10.Repositories.AuthorsRepository;
 import com.emilie.Lib10.Repositories.BookRepository;
 import com.emilie.Lib10.Services.contract.BookService;
-import com.emilie.Lib10.Exceptions.AuthorNotFoundException;
-import com.emilie.Lib10.Exceptions.BookAlreadyExistException;
-import com.emilie.Lib10.Exceptions.BookNotFoundException;
-import com.emilie.Lib10.Exceptions.ImpossibleDeleteBookException;
 import com.emilie.Lib10.Models.Dtos.*;
 import com.emilie.Lib10.Models.Entities.*;
+import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -89,6 +88,9 @@ public class BookServiceImpl implements BookService {
         if (optionalBook.isPresent()) {
             throw new BookAlreadyExistException( "book " + bookDto.getTitle() + " already exists" );
         }
+        if(bookDto.getAuthorDto() == null){
+            throw new AuthorNotFoundException( "author is required" );
+        }
         Optional<Author> optionalAuthor=authorsRepository.findById( bookDto.getAuthorDto().getAuthorId() );
         if (!optionalAuthor.isPresent()) {
             throw new AuthorNotFoundException( "author " + bookDto.getAuthorDto().getAuthorId() + " not found" );
@@ -123,15 +125,21 @@ public class BookServiceImpl implements BookService {
         Optional<Book> optionalBook=bookRepository.findById( id );
         if (!optionalBook.isPresent()) {
             throw new BookNotFoundException( "book " + id + " not found" );
-        } else if (optionalBook.get().getCopies().size() > 0) {
-            throw new ImpossibleDeleteBookException( "This book " + id + " have existing copy" );
+        } else {
+            Book book=optionalBook.get();
+
+            if (book.getCopies().size() > 0) {
+                System.out.println( book );
+                throw new ImpossibleDeleteBookException( "This book " + id + " have existing copy" );
+            }
+            try {
+
+                bookRepository.deleteById( id );
+            } catch (Exception e) {
+                return false;
+            }
+            return true;
         }
-        try {
-            bookRepository.deleteById( id );
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
     }
 
 
@@ -163,6 +171,21 @@ public class BookServiceImpl implements BookService {
         return result;
     }
 
+    @Override
+    public void isNewBookValid(BookDto bookDto) {
+        Optional<Book> optionalBook=bookRepository.findByTitle( bookDto.getTitle() );
+        if(bookDto.getAuthorDto() == null){
+            throw new AuthorNotFoundException( "author " + bookDto.getAuthorDto().getAuthorId() + " not found" );
+        }
+        if (optionalBook.isPresent()) {
+            throw new BookAlreadyExistException( "book " + bookDto.getTitle() + " already exists" );
+        }
+        Optional<Author> optionalAuthor=authorsRepository.findById( bookDto.getAuthorDto().getAuthorId() );
+        if (!optionalAuthor.isPresent()) {
+            throw new AuthorNotFoundException( "author " + bookDto.getAuthorDto().getAuthorId() + " not found" );
+        }
+    }
+
     public int getMaxReservationForBook(Book book){
         return book.getCopies().size()*2;
     }
@@ -189,8 +212,10 @@ public class BookServiceImpl implements BookService {
         bookDto.setAuthorDto( makeAuthorDto( book.getAuthor() ) );
 
         List<ReservationDto> reservationDtoList = new ArrayList<>();
-        for(Reservation reservation : book.getReservationList() ){
-            reservationDtoList.add(makeReservationsDto(reservation));
+        if(book.getReservationList() != null){
+            for(Reservation reservation : book.getReservationList() ){
+                reservationDtoList.add(makeReservationsDto(reservation));
+            }
         }
         bookDto.setReservations( reservationDtoList );
 
