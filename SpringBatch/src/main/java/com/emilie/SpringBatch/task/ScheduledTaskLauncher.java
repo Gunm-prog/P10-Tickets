@@ -47,8 +47,8 @@ public class ScheduledTaskLauncher {
     @Scheduled(cron="*/10 * * * * *")
     public void runScheduledRecoveryTask() {
         try{
-            String accessToken=loginService.authenticateBatch();
-
+            List<String> dataResponse=loginService.authenticateBatch();
+            String accessToken = dataResponse.get(0);
             loanStatusService.sendRecoveryMails(accessToken);
 
             log.info( "recovery mails successfully send" );

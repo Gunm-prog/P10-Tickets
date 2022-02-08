@@ -2,13 +2,11 @@
 package com.emilie.Lib10.Services.impl;
 
 
+import com.emilie.Lib10.Exceptions.*;
 import com.emilie.Lib10.Repositories.BookRepository;
 import com.emilie.Lib10.Repositories.CopyRepository;
 import com.emilie.Lib10.Repositories.LibraryRepository;
 import com.emilie.Lib10.Services.contract.LibraryService;
-import com.emilie.Lib10.Exceptions.ImpossibleDeleteLibraryException;
-import com.emilie.Lib10.Exceptions.LibraryAlreadyExistException;
-import com.emilie.Lib10.Exceptions.LibraryNotFoundException;
 import com.emilie.Lib10.Models.Dtos.*;
 import com.emilie.Lib10.Models.Entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,10 +57,8 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     public LibraryDto save(LibraryDto libraryDto) throws LibraryAlreadyExistException {
-        Optional<Library> optionalLibrary=libraryRepository.findByName( libraryDto.getName() );
-        if (optionalLibrary.isPresent()) {
-            throw new LibraryAlreadyExistException( "library already exists" );
-        }
+        isNewLibraryValid(libraryDto);
+
         Library library=libraryDtoToLibrary( libraryDto );
         library=libraryRepository.save( library );
         return libraryToLibraryDto( library );
@@ -97,6 +93,16 @@ public class LibraryServiceImpl implements LibraryService {
         return true;
     }
 
+    @Override
+    public void isNewLibraryValid(LibraryDto libraryDto) {
+        Optional<Library> optionalLibrary=libraryRepository.findByName( libraryDto.getName() );
+        if (optionalLibrary.isPresent()) {
+            throw new LibraryAlreadyExistException( "library already exists" );
+        }
+        if (libraryDto.getAddressDto() == null) {
+            throw new AddressNotFoundException( "Address not found" );
+        }
+    }
 
     @Override
     public Set<CopyDto> findCopiesByLibraryId(Long id) {

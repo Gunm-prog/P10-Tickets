@@ -21,6 +21,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @CrossOrigin
 @Slf4j
@@ -46,7 +49,7 @@ public class JwtAuthenticationController {
 
 
     @RequestMapping(value="/authenticate", method=RequestMethod.POST)
-    public ResponseEntity<String> createAuthenticationToken(@RequestBody UserJwtDto userJwtDto)
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody UserJwtDto userJwtDto)
             throws UsernameNotFoundException, DisabledException, BadCredentialsException {
 
         try {
@@ -54,7 +57,13 @@ public class JwtAuthenticationController {
 
             UserPrincipal userPrincipal=userDetailsServiceImpl.loadUserByUsername( userJwtDto.getUsername() );
 
-            return new ResponseEntity<String>( jwtTokenUtil.generateToken( userPrincipal ), HttpStatus.OK );
+            List<String> dataResponse = new ArrayList<>();
+            dataResponse.add( jwtTokenUtil.generateToken( userPrincipal ) );
+            
+            ResponseEntity<?> testResponse = new ResponseEntity<>( HttpStatus.OK );
+
+           // return new ResponseEntity<String>( jwtTokenUtil.generateToken( userPrincipal ), HttpStatus.OK );
+            return new ResponseEntity<List<String>>( dataResponse, HttpStatus.OK );
         } catch (UsernameNotFoundException e) {
             log.error( e.getMessage() );
             return ResponseEntity
@@ -87,7 +96,7 @@ public class JwtAuthenticationController {
 
 
     @PostMapping(value="/register/employee")
-    public ResponseEntity<String> registerEmployee(@RequestBody UserDto userDto)
+    public ResponseEntity<?> registerEmployee(@RequestBody UserDto userDto)
             throws UserAlreadyExistException, AddressNotFoundException {
         try {
             userDto.setActive( true );
@@ -96,7 +105,7 @@ public class JwtAuthenticationController {
             userDto.setPassword( hashPassword );
             UserDto userDto1=userServiceImpl.save( userDto );
             log.info( "Employee " + userDto1.getUserId() + " has been created" );
-            return new ResponseEntity<String>( "Employee " + userDto1.getUserId() + " has been created", HttpStatus.CREATED );
+            return new ResponseEntity<UserDto>( userDto1, HttpStatus.CREATED );
         } catch (AddressNotFoundException e) {
             log.error( e.getMessage() );
             return ResponseEntity
@@ -117,7 +126,7 @@ public class JwtAuthenticationController {
     }
 
     @PostMapping(value="/register/customer")
-    public ResponseEntity<String> registerCustomer(@RequestBody UserDto userDto)
+    public ResponseEntity<?> registerCustomer(@RequestBody UserDto userDto)
             throws UserAlreadyExistException, AddressNotFoundException {
         try {
             String hashPassword=bCryptPasswordEncoder.encode( userDto.getPassword() );
@@ -128,7 +137,7 @@ public class JwtAuthenticationController {
 
             UserDto userDto1=userServiceImpl.save( userDto );
             log.info( "Customer " + userDto1.getUserId() + " has been created" );
-            return new ResponseEntity<String>( "Customer " + userDto1.getUserId() + " has been created", HttpStatus.CREATED );
+            return new ResponseEntity<UserDto>( userDto1, HttpStatus.CREATED );
         } catch (AddressNotFoundException e) {
             log.error( e.getMessage() );
             return ResponseEntity

@@ -150,7 +150,6 @@ public class BookController {
             if (accessToken != null) {
                 book.getReservations().forEach( r -> {
                     if (r.getUserDto().getUserId().equals( model.getAttribute( "currentUserId" ) )){
-                        //  booksAlreadyReserved.add( r.getBookDto() );
                         book.setReservedByCurrentUser( true );
                     }
                 } );

@@ -13,7 +13,7 @@ import java.util.List;
 public interface FeignProxy {
 
     @PostMapping("/authenticate")
-    String login(@RequestBody UserAccountJwt userAccountJwt);
+    List<String> login(@RequestBody UserAccountJwt userAccountJwt);
 
     @GetMapping("/api/v1/loans/delayList")
     List<Loan> getLoanDelayLoan(@RequestHeader("Authorization") String accessToken);

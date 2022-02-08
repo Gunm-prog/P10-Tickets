@@ -44,7 +44,7 @@ public interface FeignProxy {
     String updateUser(@RequestHeader(JwtProperties.HEADER) String accessToken, @RequestBody User user);
 
     @PostMapping("/authenticate")
-    String login(@RequestBody UserAccountLogin accountDto);
+    List<String> login(@RequestBody UserAccountLogin accountDto);
 
     @GetMapping("/api/v1/users/userAccount")
     User getLoggedUser(@RequestHeader(JwtProperties.HEADER) String accessToken);

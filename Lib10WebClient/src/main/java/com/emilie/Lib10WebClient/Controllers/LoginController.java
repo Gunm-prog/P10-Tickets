@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 
 /**
@@ -82,8 +83,8 @@ public class LoginController {
                             HttpServletResponse response) {
 
         try {
-            String jwtToken=proxy.login( userAccountLogin );
-            Cookie cookie=JwtTokenUtils.generateCookie( jwtToken );
+            List<String> dataResponse=proxy.login( userAccountLogin );
+            Cookie cookie=JwtTokenUtils.generateCookie( dataResponse.get( 0 ) );
             cookie.setMaxAge( 3600 );
             response.addCookie( cookie );
 

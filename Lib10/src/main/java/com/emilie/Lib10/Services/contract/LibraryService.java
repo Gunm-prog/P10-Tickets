@@ -25,5 +25,7 @@ public interface LibraryService {
 
     Set<CopyDto> findCopiesByLibraryId(Long id);
 
+    void isNewLibraryValid(LibraryDto libraryDto);
+
 }
 

@@ -2,11 +2,13 @@
 package com.emilie.Lib10.Controllers;
 
 
+import com.emilie.Lib10.Exceptions.AddressNotFoundException;
 import com.emilie.Lib10.Exceptions.ImpossibleDeleteLibraryException;
 import com.emilie.Lib10.Exceptions.LibraryAlreadyExistException;
 import com.emilie.Lib10.Exceptions.LibraryNotFoundException;
 import com.emilie.Lib10.Models.Dtos.CopyDto;
 import com.emilie.Lib10.Models.Dtos.LibraryDto;
+import com.emilie.Lib10.Models.Dtos.UserDto;
 import com.emilie.Lib10.Services.contract.LibraryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,11 +78,17 @@ public class LibraryController {
     }
 
     @PostMapping("/newLibrary")
-    public ResponseEntity<String> save(@RequestBody LibraryDto libraryDto)
+    public ResponseEntity<?> save(@RequestBody LibraryDto libraryDto)
             throws LibraryAlreadyExistException {
         try {
-            libraryService.save( libraryDto );
-            return ResponseEntity.status( HttpStatus.CREATED ).build();
+            LibraryDto newLibDto = libraryService.save( libraryDto );
+            log.info( "Library " + newLibDto.getLibraryId() + " has been created" );
+            return new ResponseEntity<LibraryDto>( newLibDto, HttpStatus.CREATED );
+        } catch (AddressNotFoundException e) {
+            log.error( e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.NOT_FOUND )
+                    .body( e.getMessage() );
         } catch (LibraryAlreadyExistException e) {
             log.error( e.getMessage() );
             return ResponseEntity
