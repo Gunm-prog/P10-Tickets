@@ -7,7 +7,9 @@ import com.emilie.Lib10.Services.contract.CopyService;
 import com.emilie.Lib10.Exceptions.*;
 import com.emilie.Lib10.Models.Dtos.*;
 import com.emilie.Lib10.Models.Entities.*;
+import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.support.ExceptionMessage;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -72,6 +74,12 @@ public class CopyServiceImpl implements CopyService {
 
     @Override
     public CopyDto save(CopyDto copyDto) throws BookNotFoundException, LibraryNotFoundException {
+        if(copyDto.getBookDto() == null){
+            throw new BookNotFoundException("book param is required");
+        }
+        if(copyDto.getLibraryDto() == null){
+            throw new LibraryNotFoundException("library param is required");
+        }
         Optional<Book> optionalBook=bookRepository.findById( copyDto.getBookDto().getBookId() );
         if (!optionalBook.isPresent()) {
             throw new BookNotFoundException( "book " + copyDto.getBookDto().getBookId() + " not found" );

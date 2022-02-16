@@ -166,7 +166,7 @@ public class BookController {
             throws BookNotFoundException, ImpossibleDeleteBookException {
         try {
             bookService.deleteById( id );
-            log.info( "the book " + id + " have been deleted" );
+            log.info( "book " + id + " have been deleted" );
             return ResponseEntity
                     .status( HttpStatus.OK )
                     .body( "the book " + id + " have been deleted" );

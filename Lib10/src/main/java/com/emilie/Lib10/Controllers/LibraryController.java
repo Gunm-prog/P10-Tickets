@@ -125,6 +125,7 @@ public class LibraryController {
             throws LibraryNotFoundException, ImpossibleDeleteLibraryException {
         try {
             libraryService.deleteById( id );
+            log.info( "Library " + id + " has been deleted" );
             return ResponseEntity.status( HttpStatus.OK ).build();
         } catch (LibraryNotFoundException e) {
             log.error( e.getMessage() );

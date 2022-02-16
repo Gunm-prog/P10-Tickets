@@ -37,8 +37,9 @@ public class ReservationController {
     @PostMapping("/new")
     public ResponseEntity<?> save(@RequestBody ReservationDto reservationDto) {
         try {
+            //check the reservationDto validity
+            reservationService.isValid(reservationDto);
 
-            System.out.println(reservationDto);
             //get user form jwt
             UserDto loggedUser = userService.getLoggedUser();
             reservationService.haveAccess( loggedUser, reservationDto );

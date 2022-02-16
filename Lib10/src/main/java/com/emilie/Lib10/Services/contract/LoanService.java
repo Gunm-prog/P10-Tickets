@@ -1,8 +1,6 @@
 package com.emilie.Lib10.Services.contract;
 
-import com.emilie.Lib10.Exceptions.LoanAlreadyExistsException;
-import com.emilie.Lib10.Exceptions.LoanNotFoundException;
-import com.emilie.Lib10.Exceptions.UnauthorizedException;
+import com.emilie.Lib10.Exceptions.*;
 import com.emilie.Lib10.Models.Dtos.LoanDto;
 import com.emilie.Lib10.Models.Dtos.UserDto;
 
@@ -29,4 +27,6 @@ public interface LoanService {
     LoanDto returnLoan(Long loanId) throws LoanNotFoundException;
 
     void haveAccess(UserDto loggedUser, LoanDto loanDto) throws UnauthorizedException;
+
+    void isValid(LoanDto loanDto)throws CopyNotFoundException, UserNotFoundException, BookNotFoundException;
 }

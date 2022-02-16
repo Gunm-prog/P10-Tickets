@@ -97,9 +97,10 @@ public class LoanController {
 
     @ApiOperation(value="Create loan and save it in database")
     @PostMapping("/newLoan")
-    public ResponseEntity<String> save(@RequestBody LoanDto loanDto)
+    public ResponseEntity<?> save(@RequestBody LoanDto loanDto)
             throws UserNotFoundException, CopyNotFoundException, LoanAlreadyExistsException {
         try {
+            loanService.isValid(loanDto);
 
             UserDto loggedUser = userService.getLoggedUser();
             loanService.haveAccess( loggedUser, loanDto );
@@ -125,7 +126,7 @@ public class LoanController {
 
             LoanDto newLoanDto=loanService.save( loanDto );
             log.info( "Loan " + newLoanDto.getId() + " have been created" );
-            return new ResponseEntity<>( "loan " + newLoanDto.getId() + " has been created", HttpStatus.CREATED );
+            return new ResponseEntity<>( newLoanDto, HttpStatus.CREATED );
         } catch (LoanAlreadyExistsException e) {
             log.error( e.getMessage() );
             return ResponseEntity
@@ -283,8 +284,6 @@ public class LoanController {
     public ResponseEntity<?> sendRecoveryMail(){
 
         try{
-          // List<LoanDto> delayLoanList = loanService.findDelay();
-         //   LoanDto delayedLoan = loanService.findById( id );
             List<UserDto> userWithDelayedLoans = userService.findUsersWithDelayedLoans();
 
             for(UserDto userDto : userWithDelayedLoans){

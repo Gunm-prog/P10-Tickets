@@ -88,12 +88,12 @@ public class CopyController {
 
     @ApiOperation(value="Create a copy and save it in database")
     @PostMapping("/newCopy")
-    public ResponseEntity<String> save(@RequestBody CopyDto copyDto)
+    public ResponseEntity<?> save(@RequestBody CopyDto copyDto)
             throws BookNotFoundException, LibraryNotFoundException {
         try {
             CopyDto newCopyDto=copyService.save( copyDto );
             log.info( "Copy " + newCopyDto.getId() + " has been created" );
-            return new ResponseEntity<>( "Copy " + newCopyDto.getId() + " has been created", HttpStatus.CREATED );
+            return new ResponseEntity<>( newCopyDto, HttpStatus.CREATED );
         } catch (BookNotFoundException | LibraryNotFoundException e) {
             log.error( e.getMessage() );
             return ResponseEntity
@@ -134,7 +134,7 @@ public class CopyController {
             throws CopyNotFoundException, ImpossibleExtendLoanException {
         try {
             copyService.deleteById( id );
-            log.info( "Copy " + id + "has been deleted" );
+            log.info( "Copy " + id + " has been deleted" );
             return ResponseEntity
                     .status( HttpStatus.OK )
                     .body( "the copy " + id + " have been deleted" );

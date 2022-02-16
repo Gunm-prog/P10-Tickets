@@ -196,6 +196,15 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    public void isValid(ReservationDto reservationDto) throws UserNotFoundException, BookNotFoundException {
+        if(reservationDto.getUserDto() == null){
+            throw new UserNotFoundException( "user param is required" );
+        }else if(reservationDto.getBookDto() == null){
+            throw new BookNotFoundException( "book param is required" );
+        }
+    }
+
+    @Override
     public Date getMinExpectedReturnDate(BookDto bookDto){
         return reservationRepository.getMinExpectedReturnDate(bookDto.getBookId());
     }

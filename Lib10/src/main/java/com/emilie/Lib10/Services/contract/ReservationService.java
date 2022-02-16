@@ -32,6 +32,7 @@ public interface ReservationService {
     void deleteById (Long id) throws ReservationNotFoundException;
 
     void haveAccess(UserDto loggedUser, ReservationDto reservationDto) throws UnauthorizedException;
+    void isValid(ReservationDto reservationDto) throws UserNotFoundException, BookNotFoundException;
 
     Date getMinExpectedReturnDate(BookDto bookDto);
     int getNmbReservationForBook(BookDto bookDto);

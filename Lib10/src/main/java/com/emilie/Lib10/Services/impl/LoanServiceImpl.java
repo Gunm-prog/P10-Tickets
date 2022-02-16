@@ -218,6 +218,18 @@ public class LoanServiceImpl implements LoanService {
         }
     }
 
+    @Override
+    public void isValid(LoanDto loanDto) throws CopyNotFoundException, UserNotFoundException, BookNotFoundException{
+        if(loanDto.getUserDto() == null){
+            throw new UserNotFoundException("user param is required");
+        }
+        if(loanDto.getCopyDto() == null){
+            throw new CopyNotFoundException("copy param is required");
+        }else if(loanDto.getCopyDto().getBookDto() == null){
+            throw new BookNotFoundException("book param in copy param is required");
+        }
+    }
+
     private LoanDto loanToLoanDto(Loan loan) {
         LoanDto loanDto=new LoanDto();
         loanDto.setId( loan.getId() );
