@@ -44,6 +44,7 @@ public class ReservationController {
             UserDto loggedUser = userService.getLoggedUser();
             reservationService.haveAccess( loggedUser, reservationDto );
 
+            Thread.sleep(1000);
             reservationDto = reservationService.create(reservationDto);
             log.info( "Reservation " + reservationDto.getId() + " have been created" );
 

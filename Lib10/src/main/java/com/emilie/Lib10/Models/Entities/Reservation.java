@@ -1,17 +1,15 @@
 package com.emilie.Lib10.Models.Entities;
 
 
-import com.emilie.Lib10.Exceptions.MaxResaAtteintException;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name="reservation")
@@ -36,7 +34,7 @@ public class Reservation implements Serializable {
     private User user;
 
     @Column(name="start_date", nullable=false)
-    @JsonFormat(pattern="yyyy-MM-dd HH:MM:SS")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime reservationStartDate;
 
     @Column(name="end_date")

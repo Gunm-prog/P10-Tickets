@@ -128,8 +128,10 @@ public class BookServiceImpl implements BookService {
         } else {
             Book book=optionalBook.get();
 
+            if (book.getReservationList().size() > 0) {
+                throw new ImpossibleDeleteBookException( "This book " + id + " have existing reservation" );
+            }
             if (book.getCopies().size() > 0) {
-                System.out.println( book );
                 throw new ImpossibleDeleteBookException( "This book " + id + " have existing copy" );
             }
             try {
