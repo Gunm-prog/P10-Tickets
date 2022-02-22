@@ -1,11 +1,7 @@
 package com.emilie.Lib10.Models.Entities;
 
-import com.emilie.Lib10.Models.Entities.Copy;
-import com.emilie.Lib10.Models.Entities.Loan;
-import com.emilie.Lib10.Models.Entities.User;
 import org.junit.jupiter.api.Test;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -57,7 +53,7 @@ public class LoanUnitTest {
     }
 
     @Test
-    void loanRetrunedUT() {
+    void loanReturnedUT() {
         loanUnderTest.setReturned( true );
         assertThat( loanUnderTest.isReturned() ).isInstanceOf( Boolean.class );
         loanUnderTest.setReturned( false );

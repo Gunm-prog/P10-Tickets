@@ -6,8 +6,6 @@ import com.emilie.Lib10.Models.Entities.*;
 import com.emilie.Lib10.Repositories.BookRepository;
 import com.emilie.Lib10.Repositories.CopyRepository;
 import com.emilie.Lib10.Repositories.LibraryRepository;
-import com.emilie.Lib10.Services.impl.BookServiceImpl;
-import com.emilie.Lib10.Services.impl.CopyServiceImpl;
 import com.emilie.Lib10.Services.impl.LibraryServiceImpl;
 import org.junit.jupiter.api.Test;
 

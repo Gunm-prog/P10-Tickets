@@ -64,6 +64,15 @@ public class LoanServiceImpl implements LoanService {
             throws UserNotFoundException,
                    CopyNotFoundException,
                    LoanAlreadyExistsException {
+        if(loanDto == null){
+            throw new LoanNotFoundException("loanDto id param is required");
+        }
+        if(loanDto.getUserDto() == null || loanDto.getUserDto().getUserId() == null){
+            throw new UserNotFoundException("user id param is required");
+        }
+        if(loanDto.getCopyDto() == null || loanDto.getCopyDto().getId() == null){
+            throw new CopyNotFoundException("copy id param is required");
+        }
 
         Optional<User> optionalUser=userRepository.findById( loanDto.getUserDto().getUserId() );
         if (!optionalUser.isPresent()) {
@@ -137,8 +146,6 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public LoanDto extendLoan(Long loanId) throws LoanNotFoundException, ImpossibleExtendLoanException {
-
-        //todo controle if userLogged is the loan'user ?
 
         Optional<Loan> optionalLoan=loanRepository.findById( loanId );
         if (!optionalLoan.isPresent()) {
