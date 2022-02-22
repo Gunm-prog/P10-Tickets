@@ -1,4 +1,4 @@
-package com.emilie.Lib10.Models;
+package com.emilie.Lib10.Models.Entities;
 
 import com.emilie.Lib10.Models.Entities.Book;
 import com.emilie.Lib10.Models.Entities.Reservation;
@@ -36,14 +36,16 @@ public class ReservationUnitTest {
 
     @Test
     void reservationStartDateUT() {
-        reservationUnderTest.setReservationStartDate( LocalDateTime.now() );
-        assertThat( reservationUnderTest.getReservationStartDate() ).isEqualToIgnoringNanos( LocalDateTime.now() );
+        LocalDateTime d = LocalDateTime.now();
+        reservationUnderTest.setReservationStartDate( d );
+        assertThat( reservationUnderTest.getReservationStartDate() ).isEqualTo( d );
     }
 
     @Test
     void reservationEndDateUT() {
-        reservationUnderTest.setReservationEndDate( LocalDateTime.now() );
-        assertThat( reservationUnderTest.getReservationEndDate() ).isEqualToIgnoringNanos( LocalDateTime.now() );
+        LocalDateTime d = LocalDateTime.now();
+        reservationUnderTest.setReservationEndDate( d );
+        assertThat( reservationUnderTest.getReservationEndDate() ).isEqualTo( d );
     }
 
     @Test

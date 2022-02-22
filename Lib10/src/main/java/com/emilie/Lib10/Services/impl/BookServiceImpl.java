@@ -42,13 +42,13 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> searchBooks(Long libraryId, String title, String isbn, String firstName, String lastName) {
-
         List<Book> books;
         if (libraryId != null) {
             books=bookRepository.searchBooksByLibrary( libraryId, title, isbn, firstName, lastName );
         } else {
             books=bookRepository.searchBooks( title, isbn, firstName, lastName );
         }
+
         List<BookDto> bookDtos=new ArrayList<>();
         for (Book book : books) {
             BookDto bookDto=bookToBookDto( book );
@@ -175,17 +175,19 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void isNewBookValid(BookDto bookDto) {
-        Optional<Book> optionalBook=bookRepository.findByTitle( bookDto.getTitle() );
         if(bookDto.getAuthorDto() == null){
-            throw new AuthorNotFoundException( "author " + bookDto.getAuthorDto().getAuthorId() + " not found" );
+            throw new AuthorNotFoundException( "author param is required" );
         }
-        if (optionalBook.isPresent()) {
-            throw new BookAlreadyExistException( "book " + bookDto.getTitle() + " already exists" );
-        }
+
         Optional<Author> optionalAuthor=authorsRepository.findById( bookDto.getAuthorDto().getAuthorId() );
         if (!optionalAuthor.isPresent()) {
             throw new AuthorNotFoundException( "author " + bookDto.getAuthorDto().getAuthorId() + " not found" );
         }
+        Optional<Book> optionalBook=bookRepository.findByTitle( bookDto.getTitle() );
+        if (optionalBook.isPresent()) {
+            throw new BookAlreadyExistException( "book " + bookDto.getTitle() + " already exists" );
+        }
+
     }
 
     public int getMaxReservationForBook(Book book){

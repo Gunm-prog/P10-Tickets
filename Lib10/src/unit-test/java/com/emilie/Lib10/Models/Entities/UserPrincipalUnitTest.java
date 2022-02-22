@@ -1,4 +1,4 @@
-package com.emilie.Lib10.Models;
+package com.emilie.Lib10.Models.Entities;
 
 import com.emilie.Lib10.Models.Entities.User;
 import com.emilie.Lib10.Models.Entities.UserPrincipal;

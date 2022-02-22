@@ -104,6 +104,16 @@ public class CopyServiceImpl implements CopyService {
     @Override
     public CopyDto update(CopyDto copyDto)
             throws CopyNotFoundException, BookNotFoundException, LibraryNotFoundException {
+        if(copyDto.getId() == null){
+            throw new CopyNotFoundException("copy id param is required");
+        }
+        if(copyDto.getBookDto() == null){
+            throw new BookNotFoundException("book param is required");
+        }
+        if(copyDto.getLibraryDto() == null){
+            throw new LibraryNotFoundException("library param is required");
+        }
+
         Optional<Copy> optionalCopy=copyRepository.findById( copyDto.getId() );
         if (!optionalCopy.isPresent()) {
             throw new CopyNotFoundException( "copy " + copyDto.getId() + " not found" );
@@ -132,9 +142,13 @@ public class CopyServiceImpl implements CopyService {
     @Override
     public void deleteById(Long id)
             throws CopyNotFoundException, ImpossibleExtendLoanException {
+        if(id == null){
+            throw new CopyNotFoundException("copy id param is required");
+        }
+
         Optional<Copy> optionalCopy=copyRepository.findById( id );
         if (!optionalCopy.isPresent()) {
-            throw new CopyNotFoundException( "Copy " + id + " not found" );
+            throw new CopyNotFoundException( "copy " + id + " not found" );
         } else {
             Copy copy = optionalCopy.get();
             if (!copy.isAvailable()) {

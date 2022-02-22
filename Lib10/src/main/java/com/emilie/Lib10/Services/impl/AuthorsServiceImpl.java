@@ -48,8 +48,12 @@ public class AuthorsServiceImpl implements AuthorsService {
         if (!optionalAuthor.isPresent()) {
             throw new AuthorNotFoundException( "Author not found" );
         }
+  //      System.out.println( optionalAuthor.get() );
+
         Author author=optionalAuthor.get();
+
         return authorToAuthorDto( author );
+   //     return authorToAuthorDto( new Author() );
     }
 
 
@@ -82,7 +86,7 @@ public class AuthorsServiceImpl implements AuthorsService {
     }
 
     @Override
-    public boolean deleteById(Long id)
+    public void deleteById(Long id)
             throws AuthorNotFoundException, ImpossibleDeleteAuthorException {
         Optional<Author> optionalAuthor=authorsRepository.findById( id );
         if (!optionalAuthor.isPresent()) {
@@ -93,18 +97,22 @@ public class AuthorsServiceImpl implements AuthorsService {
         try {
             authorsRepository.deleteById( id );
         } catch (Exception e) {
-            return false;
+     //      return false;
         }
-        return true;
+    //    return true;
     }
 
 
 
     private AuthorDto authorToAuthorDto(Author author) {
         AuthorDto authorDto=new AuthorDto();
-        authorDto.setAuthorId( author.getAuthorId() );
+        if( author.getAuthorId() != null ){
+            authorDto.setAuthorId( author.getAuthorId() );
+        }
+
         authorDto.setFirstName( author.getFirstName() );
         authorDto.setLastName( author.getLastName() );
+
 
         Set<BookDto> bookDtos=new HashSet<>();
         if (author.getBooks() != null) {
@@ -123,13 +131,17 @@ public class AuthorsServiceImpl implements AuthorsService {
         authorDto.setBookDtos( bookDtos );
 
 
+
         return authorDto;
     }
 
 
     private Author authorDtoToAuthor(AuthorDto authorDto) {
         Author author=new Author();
-        author.setAuthorId( authorDto.getAuthorId() );
+        if(authorDto.getAuthorId() != null ){
+            author.setAuthorId( authorDto.getAuthorId() );
+        }
+
         author.setFirstName( authorDto.getFirstName() );
         author.setLastName( authorDto.getLastName() );
 

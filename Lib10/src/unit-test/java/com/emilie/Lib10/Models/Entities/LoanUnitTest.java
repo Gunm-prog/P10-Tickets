@@ -1,4 +1,4 @@
-package com.emilie.Lib10.Models;
+package com.emilie.Lib10.Models.Entities;
 
 import com.emilie.Lib10.Models.Entities.Copy;
 import com.emilie.Lib10.Models.Entities.Loan;
@@ -36,14 +36,16 @@ public class LoanUnitTest {
 
     @Test
     void loanStartDateUT() {
-        loanUnderTest.setLoanStartDate( new Date() );
-        assertThat( loanUnderTest.getLoanStartDate() ).isEqualToIgnoringMillis( Calendar.getInstance().getTime() );
+        Date d = new Date();
+        loanUnderTest.setLoanStartDate( d );
+        assertThat( loanUnderTest.getLoanStartDate() ).isEqualTo( d );
     }
 
     @Test
     void loanEndDateUT() {
-        loanUnderTest.setLoanEndDate( new Date() );
-        assertThat( loanUnderTest.getLoanEndDate() ).isEqualToIgnoringMillis( Calendar.getInstance().getTime() );
+        Date d = new Date();
+        loanUnderTest.setLoanEndDate( d );
+        assertThat( loanUnderTest.getLoanEndDate() ).isEqualTo( d );
     }
 
     @Test

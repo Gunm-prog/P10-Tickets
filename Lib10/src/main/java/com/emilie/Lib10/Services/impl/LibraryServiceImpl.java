@@ -66,6 +66,10 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     public LibraryDto update(LibraryDto libraryDto) throws LibraryNotFoundException {
+        if(libraryDto == null || libraryDto.getLibraryId() == null){
+            throw new LibraryNotFoundException("library id param is required");
+        }
+
         Optional<Library> optionalLibrary=libraryRepository.findById( libraryDto.getLibraryId() );
         if (!optionalLibrary.isPresent()) {
             throw new LibraryNotFoundException( "library not found" );
