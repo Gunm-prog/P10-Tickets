@@ -28,7 +28,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final BookRepository bookRepository;
 
     @Autowired
-    public ReservationServiceImpl(ReservationRepository reservationRepository, UserRepository userRepository, BookRepository bookRepository, CopyRepository copyRepository) {
+    public ReservationServiceImpl(ReservationRepository reservationRepository, UserRepository userRepository, BookRepository bookRepository ) {
         this.reservationRepository=reservationRepository;
         this.userRepository=userRepository;
         this.bookRepository = bookRepository;
@@ -112,7 +112,7 @@ public class ReservationServiceImpl implements ReservationService {
             reservation.setUser( user );
             reservation.setBook( book );
             reservation.setReservationStartDate( LocalDateTime.now() );
-            reservationRepository.save( reservation );
+            reservation = reservationRepository.save( reservation );
 
           //  return reservation;
             return reservationToReservationDto( reservation );
@@ -155,7 +155,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         reservation.setReservationEndDate( makePeriodLocalDateTime( 2, null) );
         reservation.setActive( true );
-        reservationRepository.save(reservation);
+        reservation = reservationRepository.save(reservation);
         return reservationToReservationDto( reservation );
     }
 
@@ -231,7 +231,7 @@ public class ReservationServiceImpl implements ReservationService {
                 res = reservation.getBook().getReservationList().indexOf( checkedReservation );
             }
         }
-        return res;
+        return res+1;
     }
 
     private ReservationDto reservationToReservationDto (Reservation reservation){
@@ -241,19 +241,14 @@ public class ReservationServiceImpl implements ReservationService {
         reservationDto.setReservationEndDate( reservation.getReservationEndDate() );
         reservationDto.setActive(reservation.isActive());
 
-        User user = reservation.getUser();
-        UserDto userDto = new UserDto();
-        userDto.setUserId( user.getId() );
-        userDto.setFirstName( user.getFirstName() );
-        userDto.setLastName( user.getLastName() );
-        userDto.setEmail( user.getEmail() );
-        reservationDto.setUserDto( userDto );
+        reservationDto.setUserDto( userToUserDto( reservation.getUser() ) );
 
         reservationDto.setBookDto( makeBookDto(reservation.getBook()) );
 
         //additionnal infos for a reservationDto
         reservationDto.setUserPosition( this.getUserPosition( reservation ) );
-        reservationDto.setNmbReservation( this.getNmbReservationForBook( reservationDto.getBookDto() ) );
+
+        reservationDto.setNmbReservation( reservation.getBook().getReservationList().size() );
 
         reservationDto.setMinExpectedReturnDate(this.getMinExpectedReturnDate(reservationDto.getBookDto()));
 
@@ -268,12 +263,7 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.setReservationEndDate( reservationDto.getReservationEndDate() );
         reservation.setActive(reservationDto.isActive());
 
-        User user = new User();
-        user.setId( reservationDto.getUserDto().getUserId() );
-        user.setFirstName( reservationDto.getUserDto().getFirstName());
-        user.setLastName( reservationDto.getUserDto().getLastName() );
-        user.setEmail( reservationDto.getUserDto().getEmail() );
-        reservation.setUser( user );
+        reservation.setUser( userDtoToUser( reservationDto.getUserDto() ) );
 
         reservation.setBook( makeBook(reservationDto.getBookDto()) );
 

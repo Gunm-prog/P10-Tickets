@@ -6,7 +6,6 @@ import com.emilie.Lib10.Models.Entities.*;
 import com.emilie.Lib10.Repositories.CopyRepository;
 import com.emilie.Lib10.Repositories.LoanRepository;
 import com.emilie.Lib10.Repositories.UserRepository;
-import com.emilie.Lib10.Services.impl.CopyServiceImpl;
 import com.emilie.Lib10.Services.impl.LoanServiceImpl;
 import org.junit.jupiter.api.Test;
 
@@ -687,7 +686,7 @@ public class LoanServiceImplUnitTest {
     }
 
     @Test
-    void loan_haveAccess_WhenUnautorized_UT() {
+    void loan_haveAccess_WhenUnauthorized_UT() {
         //bad userId
         UserDto mockedUserDto = getMockedUserDto(5);
         when( mockedUserDto.getRoles() ).thenReturn( "CUSTOMER" );

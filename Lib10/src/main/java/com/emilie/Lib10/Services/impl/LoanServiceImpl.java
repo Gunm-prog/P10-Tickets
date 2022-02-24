@@ -245,13 +245,14 @@ public class LoanServiceImpl implements LoanService {
         loanDto.setExtended( loan.isExtended() );
         loanDto.setReturned( loan.isReturned() );
 
-        User user=loan.getUser();
+        /*User user=loan.getUser();
         UserDto userDto=new UserDto();
         userDto.setUserId( user.getId() );
         userDto.setFirstName( user.getFirstName() );
         userDto.setLastName( user.getLastName() );
         userDto.setEmail( user.getEmail() );
-        loanDto.setUserDto( userDto );
+        loanDto.setUserDto( userDto );*/
+        loanDto.setUserDto( userToUserDto( loan.getUser() ) );
 
         loanDto.setCopyDto( makeCopyDto( loan.getCopy() ) );
 
@@ -267,12 +268,13 @@ public class LoanServiceImpl implements LoanService {
         loan.setExtended( loanDto.isExtended() );
         loan.setReturned( loanDto.isReturned() );
 
-        User user=new User();
+        /*User user=new User();
         user.setId( loanDto.getUserDto().getUserId() );
         user.setFirstName( loanDto.getUserDto().getFirstName() );
         user.setLastName( loanDto.getUserDto().getLastName() );
         user.setEmail( loanDto.getUserDto().getEmail() );
-        loan.setUser( user );
+        loan.setUser( user );*/
+        loan.setUser( userDtoToUser( loanDto.getUserDto() ) );
 
         loan.setCopy( makeCopy( loanDto.getCopyDto() ) );
 
