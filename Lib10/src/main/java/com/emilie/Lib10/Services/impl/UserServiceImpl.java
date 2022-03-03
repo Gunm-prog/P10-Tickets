@@ -20,15 +20,17 @@ import java.util.*;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+ //   @Autowired
+   /* public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository=userRepository;
         this.bCryptPasswordEncoder=bCryptPasswordEncoder;
-    }
+    }*/
 
 
     @Override

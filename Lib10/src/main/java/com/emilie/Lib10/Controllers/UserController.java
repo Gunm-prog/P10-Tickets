@@ -25,23 +25,27 @@ import java.util.List;
 @Slf4j
 public class UserController {
 
-    private final UserService userService;
-
-    private final UserDetailsServiceImpl userDetailsServiceImpl;
-
-    private final JwtTokenUtil jwtTokenUtil;
-
-    private final ReservationService reservationService;
-
+    @Autowired
+    private UserService userService;
 
     @Autowired
-    public UserController(UserService userService, UserDetailsServiceImpl userDetailsServiceImpl, JwtTokenUtil jwtTokenUtil, ReservationService reservationService) {
+    private UserDetailsServiceImpl userDetailsServiceImpl;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    private ReservationService reservationService;
+
+
+  //  @Autowired
+  /*  public UserController(UserService userService, UserDetailsServiceImpl userDetailsServiceImpl, JwtTokenUtil jwtTokenUtil, ReservationService reservationService) {
         this.userService=userService;
         this.userDetailsServiceImpl=userDetailsServiceImpl;
         this.jwtTokenUtil=jwtTokenUtil;
 
         this.reservationService = reservationService;
-    }
+    }*/
 
     @ApiOperation(value="Retrieve a user account thanks to its Id, if the user is registered in database")
     @GetMapping("/{id}")

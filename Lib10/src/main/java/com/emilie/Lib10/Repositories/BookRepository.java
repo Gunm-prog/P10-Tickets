@@ -56,9 +56,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query(value="SELECT book FROM Book book " +
             "WHERE (" +
-            "( LOWER(book.title) LIKE '%' || LOWER(:title) || '%' " +
+                "( LOWER(book.title) LIKE '%' || LOWER(:title) || '%' )" +
             ")")
-    Optional<Book> findByTitle(String title);
+    Optional<Book> findByTitle(@Param("title") String title);
 
     Optional<Book> findByAuthor(Author author);
 
