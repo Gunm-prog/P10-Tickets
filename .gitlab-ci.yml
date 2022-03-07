@@ -1,0 +1,65 @@
+image: pankui/docker-maven-mysql
+
+cache:
+  paths:
+    - "**/.m2/repository"
+
+services:
+  - mysql:latest
+
+variables:
+  MAVEN_CLI_OPTS: "--batch-mode"
+  #config maven pour stocker le repository dans un emplacement connu
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+  MYSQL_ROOT_PASSWORD: root
+  MYSQL_USER: usr_lib10
+  MYSQL_PASSWORD: secret
+  MYSQL_DATABASE: LIB10
+  DB_HOST: mysql
+
+stages:
+  - build
+  - test
+  - integration-test
+
+.init-db: &init-db
+  #connexion et test de connexion
+  #- export PGPASSWORD=$POSTGRES_PASSWORD
+  #- psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 'OK' AS status;"
+
+  #load demo data
+  - mysql -u "MYSQL_USER" -p "MYSQL_DATABASE" < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
+  - mysql -u "MYSQL_USER" -p "MYSQL_DATABASE" < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
+  - mysql -u "MYSQL_USER" -p "MYSQL_DATABASE" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
+
+build:
+  stage: build
+  coverage: '/Total.*?([0–9]{1,3})%/'
+  script:
+    - cd src/
+    - mvn $MAVEN_CLI_OPTS compile
+  artifacts:
+    expire_in: 1 hour
+    paths:
+      - '**/target' # for multi-modules project with directory root as a pom package type
+
+unit-test:
+  stage: test
+  coverage: '/Total.*?([0–9]{1,3})%/'
+  needs:
+    - job: build
+  before_script:
+    - *init-db
+  script:
+    #remet a jour les dates de modif des fichiers .class pour eviter une recompilation
+    - find . -name "*.class" -exec touch {} \+
+    - cd src/
+    - mvn $MAVEN_CLI_OPTS test
+  artifacts:
+    reports:
+      junit:
+        - "**/target/surefire-reports/TEST-*.xml"
+    expire_in: 1 hour
+    paths:
+      - "**/target" # for multi-modules project with directory root as a pom package type
