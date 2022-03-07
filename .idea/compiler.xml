@@ -2,27 +2,28 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="Lib10" />
         <module name="SpringBatch" />
         <module name="WebClient" />
-        <module name="Lib7" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Lib7" target="11" />
-      <module name="Lib7WebClient" target="1.5" />
-      <module name="P10-Tickets" target="11" />
-      <module name="SpringBatch" target="16" />
-      <module name="src" target="1.5" />
-      <module name="WebClient" target="1.5" />
+      <module name="Lib10" target="11" />
+      <module name="P10-Tickets" target="1.5" />
+      <module name="SpringBatch" target="1.8" />
+      <module name="WebClient" target="16" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="Lib7" options="-parameters" />
+      <module name="Lib10" options="-parameters" />
+      <module name="SpringBatch" options="-parameters" />
+      <module name="WebClient" options="-parameters" />
     </option>
   </component>
 </project>

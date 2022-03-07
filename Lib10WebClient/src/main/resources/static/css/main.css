@@ -145,3 +145,21 @@ th, td{
     max-height: 70vh;
     overflow: auto;
 }
+
+.overflow-90h{
+    max-height: 80vh;
+    overflow: auto;
+}
+
+.reservationBox{
+    border: 1px black inset;
+    background-color: white;
+}
+
+.orange_txt{
+    color:orange;
+}
+
+.red_txt{
+    color:red;
+}

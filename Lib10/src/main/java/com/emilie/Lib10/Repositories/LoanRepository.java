@@ -1,0 +1,45 @@
+package com.emilie.Lib10.Repositories;
+
+import com.emilie.Lib10.Models.Entities.Loan;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface LoanRepository extends JpaRepository<Loan, Long> {
+
+    Optional<Loan> findById(Long id);
+
+    Loan save(Loan loan);
+
+    void deleteById(Long id);
+
+    Optional<Loan> findByCopyId(Long id);
+
+    @Query(value="SELECT l FROM Loan l " +
+            "WHERE l.copy.id = :copyId " +
+            "AND l.returned = false")
+    Optional<Loan> findNotReturnedByCopyId(@Param("copyId") Long copyId);
+
+
+    @Query(value="SELECT l FROM Loan l " +
+            "WHERE l.user.id = :userId")
+    List<Loan> findLoansByUserId(@Param("userId") Long userId);
+
+    @Query(value="SELECT DISTINCT loan FROM Loan loan " +
+            "WHERE DATEDIFF(DATE(NOW()), loan.loanEndDate) >= 0 " +
+            "AND loan.returned = false " +
+            "ORDER BY loan.user")
+    List<Loan> searchAllDelay();
+
+    @Query(value="SELECT loan FROM Loan loan " +
+            "WHERE DATEDIFF(DATE(NOW()), loan.loanEndDate) >= 0 " +
+            "AND loan.returned = false " +
+            "AND loan.user.id = :userId")
+    List<Loan> searchDelayByUser(@Param("userId") Long userId);
+
+}

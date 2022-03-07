@@ -29,6 +29,29 @@
                     <p class="card-text" th:text="${ book.authorDto.firstName + ' ' + book.authorDto.lastName}">
                         Author</p>
                     <a class="nav-link" th:href="@{/books/details/{id}(id=${book.bookId})}">Summary</a>
+
+                    <div th:if="${not book.isAvailable or #lists.size(book.reservations) != 0}">
+                        <p class="orange_txt"> not available for pick up </p>
+                        <p th:text="${#lists.size(book.reservations) + '/' + book.maxReservation + ' reservations pending'}">[number_reservation]</p>
+                        <p th:if="${#lists.size(book.reservations) != 0}" th:text="${'next expected return ' + #dates.format(book.reservations[0].minExpectedReturnDate, 'dd-MMM-yyyy')}">[expectedReturnDate]</p>
+
+                        <div class="reservationBox orange_txt"
+                             th:if="${currentUserId != null
+                             and ((#lists.size(book.reservations) != 0
+                                and #lists.size(book.reservations) < book.maxReservation)
+                            or not book.isAvailable)}"
+                        >
+                            <a class="nav-link"
+                               th:if="${not book.reservedByCurrentUser}"
+                               th:href="@{/newReservation/{id}(id=${book.bookId})}"
+                            >
+                                >> Reserve
+                            </a>
+
+                            <p class="orange_txt" th:if="${book.reservedByCurrentUser}"> already reserved</p>
+                        </div>
+                    </div>
+
                 </td>
                 <td>
                     <div class="height-30vh overflow-auto">

@@ -22,4 +22,9 @@ public class LoanStatusService {
     public List<Loan> getDelay(String accessToken) {
         return feignProxy.getLoanDelayLoan( accessToken );
     }
+
+    public void sendRecoveryMails(String accessToken){
+        feignProxy.callRecoveryMailSender( accessToken );
+    }
+
 }

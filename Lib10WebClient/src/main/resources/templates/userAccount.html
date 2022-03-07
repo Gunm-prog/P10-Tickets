@@ -23,6 +23,12 @@
                 My Loans
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" id="reservations-tab" data-toggle="tab" href="#reservations" role="tab" aria-controls="reservations"
+               aria-selected="false">
+                My Reservations
+            </a>
+        </li>
     </ul>
     <div class="tab-content overflow-70h" id="myTabContent">
         <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
@@ -133,18 +139,65 @@
                         <a class="nav-link" th:text="${loan.copyDto.libraryDto.name}"
                            th:href="@{/libraries/{id}(id=${loan.copyDto.libraryDto.libraryId})}">Library Name</a>
                     </td>
+
+                    <!-- extend btn -->
                     <td>
                         <form action="#" th:action="@{'/extendLoan/{id}' (id=${loan.id})}" method="post"
-                              th:if="${loan.returned == false && loan.extended == false}">
+                              th:if="${loan.returned == false
+                              && loan.extended == false
+                              and loan.loanEndDate.after(#dates.createNow())}">
                             <input type="submit" value="Extend loan"/>
                         </form>
                         <p th:if="${loan.returned == true}" class="text-success">returned</p>
                         <p th:if="${loan.returned == false}" class="text-warning">not returned</p>
+                        <p class="red_txt" th:if="${loan.returned == false && loan.loanEndDate.before(#dates.createNow())}"> overdue </p>
                     </td>
                 </tr>
 
                 <tr th:if="${#lists.isEmpty(userInfos.loanDtos)}">
                     <td colspan="5" class="text-success"> No loan from your account</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="tab-pane fade" id="reservations" role="tabpanel" aria-labelledby="reservations-tab">
+            <table class="table width90 align-middle">
+                <tr class="tableTitle">
+                    <th>Books</th>
+                    <th>expected return</th>
+                    <th>your position / pending </th>
+                    <th>can pikup</th>
+                    <th></th>
+                </tr>
+                <tr th:if="${not #lists.isEmpty(userInfos.reservationDtos)}" th:each="reservation:${userInfos.reservationDtos}">
+                    <td>
+                        <a class="nav-link"
+                           th:href="@{/books/details/{id}(id=${reservation.bookDto.bookId})}"
+                           th:text="${reservation.bookDto.title}"
+                        >
+                            [bookTitle]
+                        </a>
+                    </td>
+                    <td th:text="${#dates.format(reservation.minExpectedReturnDate, 'dd-MMM-yyyy')}"> [expectedReturnDate]</td>
+                    <td th:text="${reservation.userPosition +' / '+ reservation.nmbReservation}"> [userPosition]</td>
+                    <td>
+                        <p th:if="${reservation.active}" class="text-success">
+                            <a class="nav-link"
+                               th:href="@{/books/details/{id}(id=${reservation.bookDto.bookId})}"
+                            >
+                                see availability
+                            </a>
+                        </p>
+                        <p th:if="${not reservation.active}" class="text-warning">not yet</p>
+                    </td>
+
+                    <td>
+                        <a class="nav-link" th:href="@{/cancelReservation/{id}(id=${reservation.id})}">cancel</a>
+                    </td>
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(userInfos.reservationDtos)}">
+                    <td colspan="5" class="text-success"> No reservations from your account</td>
                 </tr>
             </table>
         </div>
