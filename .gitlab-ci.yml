@@ -1,4 +1,4 @@
-image: pankui/docker-maven-mysql
+image: pankui/docker-maven-mysql-xdf
 
 cache:
   paths:
