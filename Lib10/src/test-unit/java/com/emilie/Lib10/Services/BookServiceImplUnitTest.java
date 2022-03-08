@@ -522,6 +522,7 @@ public class BookServiceImplUnitTest {
         Book mockedBook = getMockedBook(1,false);
 
         when( mockBookRepository.findByTitle( any(String.class) ) ).thenReturn( Optional.of( mockedBook ) );
+        when( mockAuthorRepository.findById( any(Long.class ) ) ).thenReturn( Optional.of( mock( Author.class ) ) );
         bookServiceUnderTest = new BookServiceImpl( mockBookRepository, mockAuthorRepository );
 
         try{
