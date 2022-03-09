@@ -431,7 +431,7 @@
                     <groups>
                         <group>
                             <title>Application</title>
-                            <packages>com.dummy.myerp*</packages>
+                            <packages>com.emilie.Lib10*</packages>
                         </group>
                     </groups>
                 </configuration>
