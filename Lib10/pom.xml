@@ -296,6 +296,40 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <!-- =============================================================== -->
+    <!-- Profiles -->
+    <!-- =============================================================== -->
+    <profiles>
+        <!-- Profile utilisé pour lancer les tests d'intégration de la couche Business -->
+        <profile>
+            <id>test</id>
+            <build>
+                <plugins>
+                    <!-- Ajout du répertoire src/test-business/java en tant que source de test du module -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>add-test-source</id>
+                                <phase>generate-test-sources</phase>
+                                <goals>
+                                    <goal>add-test-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/test-unit/java</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
@@ -392,23 +426,23 @@
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
-                   <!--
+                    <!--
                         Ensures that the code coverage report for integration tests after
                         integration tests have been run.
                     -->
-                    <execution>
+                  <!--  <execution>
                         <id>post-integration-test</id>
                         <phase>post-integration-test</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
                         <configuration>
-                            <!-- Sets the path to the file which contains the execution data. -->
+                            &lt;!&ndash; Sets the path to the file which contains the execution data. &ndash;&gt;
                             <dataFile>${project.build.directory}/coverage-reports/jacoco-it.exec</dataFile>
-                            <!-- Sets the output directory for the code coverage report. -->
+                            &lt;!&ndash; Sets the output directory for the code coverage report. &ndash;&gt;
                             <outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
                         </configuration>
-                    </execution>
+                    </execution>-->
                 </executions>
             </plugin>
         </plugins>
