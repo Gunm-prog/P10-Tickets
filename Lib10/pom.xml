@@ -222,6 +222,7 @@
     </dependencyManagement>
     <build>
         <plugins>
+            <!--
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.2.0</version>
@@ -229,6 +230,7 @@
                 <execution>
                     <id>test-resources</id>
                     <!-- here the phase you need -->
+                    <!--
                     <phase>testResources </phase>
                     <goals>
                         <goal>test-resources</goal>
@@ -238,6 +240,7 @@
                         <resources>          
                             <resource>
                              <!--   <directory>src/non-packaged-resources</directory> -->
+                             <!--
                                 <directory>src/test/java</directory>
                                 <filtering>true</filtering>
                             </resource>
@@ -246,6 +249,7 @@
                 </execution>
                 </executions>
             </plugin>
+            -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
