@@ -392,12 +392,22 @@
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
+                   <!--
+                        Ensures that the code coverage report for integration tests after
+                        integration tests have been run.
+                    -->
                     <execution>
-                        <id>post-unit-test</id>
-                        <phase>test</phase>
+                        <id>post-integration-test</id>
+                        <phase>post-integration-test</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <configuration>
+                            <!-- Sets the path to the file which contains the execution data. -->
+                            <dataFile>${project.build.directory}/coverage-reports/jacoco-it.exec</dataFile>
+                            <!-- Sets the output directory for the code coverage report. -->
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
