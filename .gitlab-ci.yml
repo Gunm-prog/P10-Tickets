@@ -43,7 +43,7 @@ build:
   script:
     - cd Lib10/
     #- mvn $MAVEN_CLI_OPTS compile
-    - mvn $MAVEN_CLI_OPTS verify
+    - mvn verify
   artifacts:
     expire_in: 1 hour
     paths:
