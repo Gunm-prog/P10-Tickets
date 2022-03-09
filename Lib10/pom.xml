@@ -220,61 +220,689 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
     <build>
-        <plugins>
-            <!--
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                <execution>
-                    <id>test-resources</id>
-                    <!-- here the phase you need -->
-                    <!--
-                    <phase>testResources </phase>
-                    <goals>
-                        <goal>test-resources</goal>
-                    </goals>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>2.4.5</version>
                     <configuration>
-                        <outputDirectory>${basedir}/target/testResources/ </outputDirectory>
-                        <resources>          
-                            <resource>
-                             <!--   <directory>src/non-packaged-resources</directory> -->
-                             <!--
-                                <directory>src/test/java</directory>
-                                <filtering>true</filtering>
-                            </resource>
-                        </resources>              
-                    </configuration>            
-                </execution>
+                        <excludes>
+                            <exclude>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                            </exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                    <configuration>
+                        <!--<source>11</source>
+                        <target>11</target>-->
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
+                <!-- ===== Test / Reporting (Unit Test) ===== -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.22.2</version>
+                    <!-- <configuration>
+                         <argLine>@{argLine} -your -extra -arguments</argLine>
+                     </configuration>-->
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.junit.platform</groupId>
+                            <artifactId>junit-platform-surefire-provider</artifactId>
+                            <version>1.2.0</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.junit.jupiter</groupId>
+                            <artifactId>junit-jupiter-engine</artifactId>
+                            <version>5.6.0</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <!- Parent information -->
+<!--<parent>
+<groupId>org.springframework.boot</groupId>
+<artifactId>spring-boot-starter-parent</artifactId>
+<version>2.3.2.RELEASE</version>-->
+<!-- <parent>
+     <groupId>com.manager</groupId>
+     <artifactId>manager</artifactId>
+     <version>0.0.1-SNAPSHOT</version>-->
+<!-- <groupId>org.springframework.boot</groupId>
+ <artifactId>spring-boot-starter-parent</artifactId>
+ <version>2.2.4.RELEASE</version>-->
+<!--<relativePath/> --><!-- lookup parent from repository -->
+<!--        <relativePath>../pom.xml</relativePath>-->
+<!--</parent>
+<groupId>com.emilie</groupId>
+<artifactId>Lib10</artifactId>
+<version>0.0.1-SNAPSHOT</version>-->
+        <!-- <packaging>jar</packaging>-->
+        <!-- General information -->
+<!--<name>Lib10</name>
+<description>Demo project for Spring Boot</description>-->
+        <!--=============================================================-->
+        <!--                           Properties                          -->
+        <!-- ============================================================= -->
+<!--<properties>
+<java.version>11</java.version>
+<spring-cloud.version>Hoxton.SR5</spring-cloud.version>-->
+<!--<spring-cloud.version>2020.0.2</spring-cloud.version>-->
+<!--</properties>-->
+        <!-- ============================================================= -->
+        <!--                           Dependencies                         -->
+<!--        &lt;!&ndash; ============================================================= &ndash;&gt;
+<dependencies>-->
+
+
+<!--
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>-->
+<!---->
+<!--
+<dependency>
+    <groupId>com.auth0</groupId>
+    <artifactId>java-jwt</artifactId>
+    <version>3.10.1</version>
+</dependency>
+-->
+
+<!--<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-tomcat</artifactId>
+    &lt;!&ndash;<scope>provided</scope>&ndash;&gt;
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jdbc</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-rest</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-jdbc</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-validation</artifactId>
+</dependency>-->
+
+<!-- Jaxb for xml serialization/deserialization -->
+<!--<dependency>
+    <groupId>jakarta.xml.bind</groupId>
+    <artifactId>jakarta.xml.bind-api</artifactId>
+    <version>2.3.3</version>
+</dependency>-->
+
+<!-- JWT library for authentication -->
+<!--<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt</artifactId>
+    <version>0.9.1</version>
+</dependency>-->
+
+<!-- Swagger for rest documentation -->
+<!--<dependency>
+    <groupId>org.springdoc</groupId>
+    <artifactId>springdoc-openapi-ui</artifactId>
+    <version>1.4.8</version>
+</dependency>
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-web</artifactId>
+    <scope>compile</scope>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-openfeign</artifactId>
+    <version>3.0.3</version>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.session</groupId>
+    <artifactId>spring-session-jdbc</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-devtools</artifactId>
+    <scope>runtime</scope>
+    <optional>true</optional>
+</dependency>
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <scope>runtime</scope>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-configuration-processor</artifactId>
+    <optional>true</optional>
+</dependency>
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <version>1.18.20</version>
+    <optional>true</optional>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-test</artifactId>
+    <scope>test</scope>
+    <exclusions>
+        <exclusion>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+
+
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-test</artifactId>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>joda-time</groupId>
+    <artifactId>joda-time</artifactId>
+    <version>2.10.6</version>
+</dependency>
+<dependency>
+    <groupId>io.swagger</groupId>
+    <artifactId>swagger-annotations</artifactId>
+    <version>1.5.20</version>
+</dependency>
+<dependency>
+    <groupId>org.jetbrains</groupId>
+    <artifactId>annotations</artifactId>
+    <version>21.0.1</version>
+    <scope>compile</scope>
+</dependency>
+<dependency>
+    <groupId>org.apache.tomcat.embed</groupId>
+    <artifactId>tomcat-embed-core</artifactId>
+</dependency>-->
+<!--<dependency>
+    <groupId>org.testng</groupId>
+    <artifactId>testng</artifactId>
+    <version>RELEASE</version>
+    <scope>test</scope>
+</dependency>-->
+<!--<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context-support</artifactId>
+</dependency>
+<dependency>
+    <groupId>com.sun.mail</groupId>
+    <artifactId>jakarta.mail</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.thymeleaf</groupId>
+    <artifactId>thymeleaf-spring5</artifactId>
+</dependency>
+<dependency>
+    <groupId>nz.net.ultraq.thymeleaf</groupId>
+    <artifactId>thymeleaf-layout-dialect</artifactId>
+    <version>3.0.0</version>
+</dependency>-->
+
+<!-- ========== Test Dependencies ========== -->
+<!--<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter</artifactId>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter-api</artifactId>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.mockito</groupId>
+    <artifactId>mockito-junit-jupiter</artifactId>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.assertj</groupId>
+    <artifactId>assertj-core</artifactId>
+    <scope>test</scope>
+</dependency>-->
+
+<!--<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-test</artifactId>
+    <scope>test</scope>
+</dependency>-->
+<!--
+
+<dependency>
+    <groupId>org.jacoco</groupId>
+    <artifactId>org.jacoco.core</artifactId>
+    <scope>test</scope>
+</dependency>
+-->
+
+<!-- ===== Database (pour les tests) ===== -->
+<!-- Pool de connexion -->
+<!--<dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-dbcp2</artifactId>
+    <scope>test</scope>
+</dependency>-->
+<!-- Drivers JDBC mysql -->
+<!--<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <scope>test</scope>
+</dependency>-->
+<!-- Drivers JDBC PostgreSQL -->
+<!--<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <scope>test</scope>
+</dependency>-->
+<!--
+<dependency>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+</dependency>
+</dependencies>
+-->
+<!--
+<dependencyManagement>
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <version>${spring-cloud.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-test</artifactId>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.jacoco</groupId>
+        <artifactId>org.jacoco.core</artifactId>
+        <version>0.8.3</version>
+        <scope>test</scope>
+    </dependency>
+    &lt;!&ndash; ===== Test unitaires ===== &ndash;&gt;
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.12</version>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+</dependencyManagement>-->
+
+        <!-- =============================================================== -->
+        <!-- Profiles -->
+        <!-- =============================================================== -->
+<!--<profiles>-->
+<!-- Profile utilisé pour lancer les tests d'unitaire de la couche Business -->
+<!--<profile>
+    <id>test</id>
+    <build>
+        <plugins>-->
+            <!-- Ajout du répertoire src/test-unit/java en tant que source de test du module -->
+          <!--  <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>add-test-source</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/test-unit/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
                 </executions>
-            </plugin>
-            -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.4.5</version>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <!--<source>11</source>
-                    <target>11</target>-->
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
             </plugin>
         </plugins>
     </build>
+</profile>
+</profiles>
 
-</project>
+<build>
+<plugins>
+    <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>2.4.5</version>
+        <configuration>
+            <excludes>
+                <exclude>
+                    <groupId>org.projectlombok</groupId>
+                    <artifactId>lombok</artifactId>
+                </exclude>
+            </excludes>
+        </configuration>
+    </plugin>
+    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>-->
+            <!--<source>11</source>
+            <target>11</target>-->
+          <!--  <source>1.8</source>
+            <target>1.8</target>
+        </configuration>
+    </plugin>-->
+
+    <!-- ===== Test / Reporting (Unit Test) ===== -->
+  <!--  <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.2</version>-->
+        <!-- <configuration>
+             <argLine>@{argLine} -your -extra -arguments</argLine>
+         </configuration>-->
+      <!--  <dependencies>
+            <dependency>
+                <groupId>org.junit.platform</groupId>
+                <artifactId>junit-platform-surefire-provider</artifactId>
+                <version>1.2.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>5.6.0</version>
+            </dependency>
+        </dependencies>
+    </plugin>
+-->
+    <!-- ===== Plugin de génération d'un site de documentation du projet ===== -->
+   <!-- <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.6</version>
+        <inherited>true</inherited>
+        <configuration>
+            <locales>fr</locales>
+            <relativizeDecorationLinks>false</relativizeDecorationLinks>
+        </configuration>
+    </plugin>-->
+
+    <!-- ===== Couverture de code avec Jacoco ===== -->
+   <!-- <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.5</version>
+        <executions>
+            <execution>
+                <id>report</id>
+                <phase>verify</phase>
+                <goals>
+                    <goal>report-aggregate</goal>
+                </goals>
+            </execution>
+            <execution>
+                <id>merge</id>
+                <goals>
+                    <goal>merge</goal>
+                </goals>
+                <configuration>
+                    <fileSets>
+                        <fileSet>
+                            <directory>${project.basedir}</directory>
+                            <includes>
+                                <include>**/*.exec</include>
+                            </includes>
+                        </fileSet>
+                    </fileSets>
+                </configuration>
+            </execution>
+            <execution>
+                <id>pre-unit-test</id>
+                <goals>
+                    <goal>prepare-agent</goal>
+                </goals>
+            </execution>-->
+            <!--
+                Ensures that the code coverage report for integration tests after
+                integration tests have been run.
+            -->
+            <!--  <execution>
+                  <id>post-integration-test</id>
+                  <phase>post-integration-test</phase>
+                  <goals>
+                      <goal>report</goal>
+                  </goals>
+                  <configuration>
+                      &lt;!&ndash; Sets the path to the file which contains the execution data. &ndash;&gt;
+                      <dataFile>${project.build.directory}/coverage-reports/jacoco-it.exec</dataFile>
+                      &lt;!&ndash; Sets the output directory for the code coverage report. &ndash;&gt;
+                      <outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
+                  </configuration>
+              </execution>-->
+       <!-- </executions>
+    </plugin>
+</plugins>
+</build>-->
+
+        <!-- =============================================================== -->
+        <!-- Reporting -->
+        <!-- =============================================================== -->
+<!--<reporting>
+<excludeDefaults>true</excludeDefaults>
+<outputDirectory>${project.build.directory}/site</outputDirectory>
+<plugins>-->
+    <!-- ===== Génération du site de documentation de base avec les "rapports génériques" ===== -->
+   <!-- <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>-->
+        <!--<version>2.9</version>-->
+     <!--   <version>3.0.0</version>
+        <configuration>
+            <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+        </configuration>
+        <reportSets>
+            <reportSet>
+                <reports>
+                    <report>index</report>
+                    <report>summary</report>
+                    <report>license</report>
+                    <report>modules</report>
+                    <report>dependencies</report>
+                    <report>dependency-convergence</report>
+                    <report>dependency-management</report>
+                    <report>plugin-management</report>
+                    <report>plugins</report>
+                    <report>project-team</report>
+                    <report>scm</report>
+                </reports>
+            </reportSet>
+        </reportSets>
+    </plugin>
+-->
+    <!-- ===== Création du rapport des tests unitaires (JUnit) ===== -->
+   <!-- <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+        <version>2.20</version>
+        <configuration>
+            <linkXRef>false</linkXRef>
+        </configuration>
+        <reportSets>-->
+            <!-- reportSet par défaut, exécuté dans tous les modules (non-aggregate reports) -->
+          <!--  <reportSet>
+                <reports>-->
+                    <!-- goal "report-only" afin de ne pas relancer les tests unitaires
+                         car normalement ils ont été lancés par la phase compile -->
+        <!--            <report>report-only</report>
+                </reports>
+            </reportSet>
+            <reportSet>-->
+                <!-- reportSet d'agrégation des rapports des sous-modules -->
+        <!--        <id>aggregate</id>-->
+                <!-- don't run aggregate in child modules -->
+           <!--     <inherited>false</inherited>
+                <reports>-->
+                    <!-- goal "report-only" afin de ne pas relancer les tests unitaires
+                         car normalement ils ont été lancés par la phase compile -->
+  <!--                  <report>report-only</report>
+                </reports>
+                <configuration>
+                    <aggregate>true</aggregate>
+                </configuration>
+            </reportSet>
+        </reportSets>
+    </plugin>
+-->
+    <!-- ===== Génération de la Javadoc ===== -->
+   <!-- <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.10.4</version>
+        <configuration>-->
+            <!-- Définition de l'exécutable de javadoc à utiliser si on ne prend pas celui par défaut -->
+            <!--javadocExecutable>/opt/java/jdk8/bin/javadoc</javadocExecutable -->
+         <!--   <quiet>true</quiet>
+            <locale>fr</locale>-->
+            <!-- Définition des "groupes" de javadoc -->
+        <!--    <groups>
+                <group>
+                    <title>Application</title>
+                    <packages>com.emilie.Lib10*</packages>
+                </group>
+            </groups>
+        </configuration>
+        <reportSets>-->
+            <!-- reportSet par défaut, exécuté dans tous les modules (non-aggregate reports) -->
+          <!--  <reportSet>
+                <reports>
+                    <report>javadoc</report>
+                </reports>
+            </reportSet>-->
+            <!-- reportSet d'agrégation des rapports des sous-modules -->
+          <!--  <reportSet>
+                <id>aggregate</id>-->
+                <!-- don't run aggregate in child modules -->
+         <!--       <inherited>false</inherited>
+                <reports>
+                    <report>aggregate</report>
+                </reports>
+            </reportSet>
+        </reportSets>
+    </plugin>-->
+
+    <!-- ===== Création du rapport d'analyse du code par Checkstyle ===== -->
+  <!--  <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>2.17</version>
+        <configuration>
+            <configLocation>src/build/checkstyle.xml</configLocation>
+            <linkXRef>false</linkXRef>
+        </configuration>
+        <reportSets>-->
+            <!-- reportSet par défaut, exécuté dans tous les modules (non-aggregate reports) -->
+      <!--      <reportSet>
+                <reports>
+                    <report>checkstyle</report>
+                </reports>
+            </reportSet>-->
+            <!-- reportSet d'agrégation des rapports des sous-modules -->
+        <!--    <reportSet>
+                <id>checkstyle-aggregate</id>-->
+                <!-- don't run aggregate in child modules -->
+           <!--     <inherited>false</inherited>
+                <configuration>-->
+                    <!-- Skip checktyle execution will only scan the outputFile. -->
+           <!--         <skipExec>true</skipExec>
+                </configuration>
+                <reports>
+                    <report>checkstyle-aggregate</report>
+                </reports>
+            </reportSet>
+        </reportSets>
+    </plugin>
+</plugins>
+</reporting>
+        </project>
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
