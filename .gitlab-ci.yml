@@ -42,8 +42,8 @@ build:
   coverage: '/Total.*?([0–9]{1,3})%/'
   script:
     - cd Lib10/
-    #- mvn $MAVEN_CLI_OPTS compile
-    - mvn verify
+    - mvn $MAVEN_CLI_OPTS compile
+    #- mvn verify
   artifacts:
     expire_in: 1 hour
     paths:
