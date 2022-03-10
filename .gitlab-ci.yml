@@ -73,8 +73,8 @@ api-test:
   needs:
     - job: unit-test
   script:
-    - cd Lib10/
-    - mvn $MAVEN_CLI_OPTS compile
-    - cd ../
+    #- cd Lib10/
+    #- mvn $MAVEN_CLI_OPTS compile
+    #- cd ../
     - newman --version
     - newman run Lib10_testing.postman_collection.json -e localhost.postman_environment.json
