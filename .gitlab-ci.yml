@@ -42,7 +42,7 @@ stages:
 
   #load demo data
   #- mysql -u "MYSQL_USER" -p "MYSQL_DATABASE" < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
-  - echo "SELECT 'OK';" | mysql --user=root -p "${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
+  - echo "SELECT 'CREATE SCHEMA OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
   #- mysql -u "MYSQL_USER" -p "MYSQL_DATABASE" < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
   #- mysql -u "MYSQL_USER" -p "MYSQL_DATABASE" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
  
