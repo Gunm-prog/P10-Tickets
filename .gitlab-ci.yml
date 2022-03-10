@@ -4,9 +4,9 @@ cache:
   paths:
     - "**/.m2/repository"
 
-#services:
- # - name: mysql:8.0
-  #  command: [ "--default-authentication-plugin=mysql_native_password" ]
+services:
+  - name: mysql:8.0
+    command: [ "--default-authentication-plugin=mysql_native_password" ]
 
 variables:
   MAVEN_CLI_OPTS: "--batch-mode"
@@ -36,6 +36,8 @@ stages:
 build:
   stage: build
   coverage: '/Total.*?([0–9]{1,3})%/'
+  before_script:
+    - *init-db
   script:
     - cd Lib10/
     - mvn $MAVEN_CLI_OPTS compile
@@ -68,14 +70,8 @@ api-test:
   image: 
     name: postman/newman:alpine
     entrypoint: [""]
-  services:
-    - name: mysql:8.0
-      command: [ "--default-authentication-plugin=mysql_native_password" ]
   needs:
     - job: unit-test
-  before_script:
-    - *init-db
   script:
       - newman --version
       - newman run Lib10_testing.postman_collection.json
-
