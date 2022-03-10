@@ -65,7 +65,9 @@ unit-test:
 
 api-test:
   stage: test-api
-  image: postman/newman:alpine
+  image: 
+    name: postman/newman:alpine
+    entrypoint: [""]
   needs:
     - job: unit-test
   before_script:
