@@ -16,7 +16,7 @@ variables:
   MYSQL_USER: usr_lib10
   MYSQL_PASSWORD: secret
   MYSQL_DATABASE: LIB10
-  DB_HOST: mysql
+  MYSQL_HOST: mysql
 
 stages:
   - build
