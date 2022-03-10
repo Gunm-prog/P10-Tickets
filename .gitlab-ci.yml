@@ -74,4 +74,4 @@ api-test:
     - job: unit-test
   script:
       - newman --version
-      - newman run Lib10_testing.postman_collection.json
+      - newman run Lib10_testing.postman_collection.json -e localhost.postman_environment.json
