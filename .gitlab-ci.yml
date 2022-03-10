@@ -48,8 +48,8 @@ stages:
  
  # - mysql.server restart
  # - mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
-  - mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
-  - mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
+  - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
+  - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
 
 build:
   stage: build
