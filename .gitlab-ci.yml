@@ -14,7 +14,7 @@ variables:
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
   MYSQL_ROOT_PASSWORD: root
- # MYSQL_USER: usr_lib10
+  MYSQL_USER: root
 #  MYSQL_PASSWORD: secret
   MYSQL_DATABASE: LIB10
   MYSQL_HOST: mysql
