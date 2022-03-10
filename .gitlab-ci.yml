@@ -21,7 +21,7 @@ variables:
 stages:
   - build
   - test
-  - test-api
+ # - test-api
 #  - integration-test
 
 .init-db: &init-db
@@ -76,11 +76,11 @@ unit-test:
     paths:
       - "**/target" # for multi-modules project with directory root as a pom package type
 
-api-test:
-  stage: test-api
-  needs:
-    - job: unit-test
-  before_script:
-    - *init-db
-  script:
+#api-test:
+ # stage: test-api
+  #needs:
+   # - job: unit-test
+  #before_script:
+   # - *init-db
+  #script:
 
