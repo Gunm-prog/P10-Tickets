@@ -74,4 +74,5 @@ api-test:
     - *init-db
   script:
       - newman --version
+      - newman run Lib10_testing.postman_collection.json
 
