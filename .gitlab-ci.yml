@@ -13,8 +13,8 @@ variables:
   #config maven pour stocker le repository dans un emplacement connu
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
-  MYSQL_ROOT_PASSWORD: root
-  MYSQL_USER: root
+  MYSQL_ROOT_PASSWORD: rootPass
+  MYSQL_USER: usr_lib10
 #  MYSQL_PASSWORD: secret
   MYSQL_DATABASE: LIB10
   MYSQL_HOST: mysql
@@ -34,10 +34,11 @@ stages:
 # - mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" -c "SELECT 'OK' AS status;"
 
   #mysql -u root --password="${MYSQL_ROOT_PASSWORD}" -h mysql
+  - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
 
-  - mysql > stop
-  - mysql > ALTER USER 'root'@'mysql' IDENTIFIED WITH mysql_native_password BY 'root'
-  - mysql > start
+  #- mysql > stop
+  #- mysql > ALTER USER 'root'@'mysql' IDENTIFIED WITH mysql_native_password BY 'root'
+  #- mysql > start
 
   #load demo data
   #- mysql -u "MYSQL_USER" -p "MYSQL_DATABASE" < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
