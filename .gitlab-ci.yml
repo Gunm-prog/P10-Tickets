@@ -29,6 +29,8 @@ stages:
   #- export PGPASSWORD=$POSTGRES_PASSWORD
   #- psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 'OK' AS status;"
  # - mysql -h DB_HOST -U MYSQL_USER -d MYSQL_DATABASE -c "SELECT 'OK' AS status;"
+ 
+ #- mysql -u root -p"$MYSQL_ROOT_PASSWORD" -h "${MYSQL_HOST}" -c "SELECT 'OK' AS status;"
 
   #mysql -u root --password="${MYSQL_ROOT_PASSWORD}" -h mysql
 
@@ -37,7 +39,7 @@ stages:
   #- mysql -u root -p "MYSQL_PASSWORD" < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
   #- mysql -u "MYSQL_USER" -p "MYSQL_DATABASE" < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
   #- mysql -u "MYSQL_USER" -p "MYSQL_DATABASE" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
-
+  - mysql -c "ALTER USER 'root'@'mysql' IDENTIFIED WITH mysql_native_password BY 'root'";
   - mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
   - mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
   - mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
