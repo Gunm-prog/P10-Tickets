@@ -20,6 +20,9 @@ variables:
   MYSQL_DATABASE: LIB10
   MYSQL_HOST: mysql
 
+  POSTMAN_COLLECTION : Lib10_testing.postman_collection.json
+  POSTMAN_ENVIRONMENT: localhost.postman_environment.json
+
 stages:
 #  - build
   - test
@@ -90,7 +93,7 @@ api-test:
   needs:
     - job: unit-test
   before_script:
-    - *init-db
+#    - *init-db
     - docker login -u "$CI_REGISTRY_USER" -P "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
     #- cd Lib10/
@@ -98,7 +101,7 @@ api-test:
     #- cd ../
     - docker-compose up
     - newman --version
-    - newman run Lib10_testing.postman_collection.json -e localhost.postman_environment.json
+    - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT}
   artifacts:
     reports:
       junit:
