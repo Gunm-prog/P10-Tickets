@@ -58,7 +58,8 @@ build:
   stage: build
   services: 
     - name: docker:latest
-  coverage: '/Total.*?([0–9]{1,3})%/'
+    - name: mysql:8.0
+      command: [ "--default-authentication-plugin=mysql_native_password" ]
   before_script:
     - *init-db
     - docker login registry.gitlab.com -u Gunm-prog -p ${p10_pat}
