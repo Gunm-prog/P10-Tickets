@@ -37,8 +37,8 @@ stages:
 build:
   stage: build
   coverage: '/Total.*?([0–9]{1,3})%/'
-  before_script:
-    - *init-db
+  #before_script:
+  #  - *init-db
   script:
     - cd Lib10/
     - docker build mvn $MAVEN_CLI_OPTS compile
