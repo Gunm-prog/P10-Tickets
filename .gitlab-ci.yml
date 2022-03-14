@@ -21,7 +21,7 @@ variables:
   MYSQL_HOST: mysql
 
 stages:
-  - build
+#  - build
   - test
   - test-api
 #  - integration-test
@@ -34,32 +34,32 @@ stages:
   - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
   - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
 
-build:
-  stage: build
-  services: 
-    - name: docker:latest
-  coverage: '/Total.*?([0–9]{1,3})%/'
+#build:
+#  stage: build
+ # services: 
+  #  - name: docker:latest
+  #coverage: '/Total.*?([0–9]{1,3})%/'
   #before_script:
   #  - *init-db
-  script:
-    - cd Lib10/
+ # script:
+  #  - cd Lib10/
     #- docker build mvn $MAVEN_CLI_OPTS compile
     #- mvn $MAVEN_CLI_OPTS compile
-    - mvn compile
+   # - mvn compile
     #- mvn verify
-  artifacts:
-    expire_in: 1 hour
-    paths:
-      - '**/target' # for multi-modules project with directory root as a pom package type
+ # artifacts:
+  #  expire_in: 1 hour
+   # paths:
+    #  - '**/target' # for multi-modules project with directory root as a pom package type
 
 unit-test:
   stage: test
   coverage: '/Total.*?([0–9]{1,3})%/'
-  needs:
-    - job: build
+ # needs:
+  #  - job: build
   script:
     #remet a jour les dates de modif des fichiers .class pour eviter une recompilation
-    - find . -name "*.class" -exec touch {} \+
+   # - find . -name "*.class" -exec touch {} \+
     - cd Lib10/
     #- docker build mvn $MAVEN_CLI_OPTS test
     - mvn $MAVEN_CLI_OPTS test
