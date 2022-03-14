@@ -43,8 +43,9 @@ build:
   #  - *init-db
   script:
     - cd Lib10/
-    - docker build mvn $MAVEN_CLI_OPTS compile
+    #- docker build mvn $MAVEN_CLI_OPTS compile
     #- mvn $MAVEN_CLI_OPTS compile
+    - mvn build
     #- mvn verify
   artifacts:
     expire_in: 1 hour
