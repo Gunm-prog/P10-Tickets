@@ -48,7 +48,9 @@ unit-test:
    # - find . -name "*.class" -exec touch {} \+
     - cd Lib10/
     #- docker build mvn $MAVEN_CLI_OPTS test
-    - mvn $MAVEN_CLI_OPTS test
+    
+    ## remove for fast debug next stage
+ #   - mvn $MAVEN_CLI_OPTS test
   artifacts:
     reports:
       junit:
