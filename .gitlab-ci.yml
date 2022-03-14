@@ -1,5 +1,5 @@
-image: aritrasasmal/maven-mysql-java
-#image: zhangpin/docker-maven-mysql-vipkid
+#image: aritrasasmal/maven-mysql-java
+image: zhangpin/docker-maven-mysql-vipkid
 #image: maven
 
 cache:
