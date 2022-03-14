@@ -45,7 +45,7 @@ build:
     - cd Lib10/
     #- docker build mvn $MAVEN_CLI_OPTS compile
     #- mvn $MAVEN_CLI_OPTS compile
-    - mvn build
+    - mvn run
     #- mvn verify
   artifacts:
     expire_in: 1 hour
