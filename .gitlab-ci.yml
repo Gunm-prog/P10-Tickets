@@ -36,7 +36,8 @@ stages:
 
 build:
   stage: build
-  service: docker:latest
+  services: 
+    - name: docker:latest
   coverage: '/Total.*?([0–9]{1,3})%/'
   #before_script:
   #  - *init-db
