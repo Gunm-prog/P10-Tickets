@@ -76,6 +76,9 @@ api-test:
   image: 
     name: postman/newman:alpine
     entrypoint: [""]
+  services:
+    - name: mysql:8.0
+      command: [ "--default-authentication-plugin=mysql_native_password" ]
   needs:
     - job: unit-test
   before_script:
