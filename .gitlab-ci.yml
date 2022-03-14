@@ -51,7 +51,7 @@ unit-test:
     #- docker build mvn $MAVEN_CLI_OPTS test
     
     ## remove for fast debug next stage
- #   - mvn $MAVEN_CLI_OPTS test
+    - mvn $MAVEN_CLI_OPTS test
   artifacts:
     reports:
       junit:
@@ -99,13 +99,13 @@ api-test:
    # - job: build
     - job: unit-test
   before_script:
-#    - *init-db
-    - docker login -u "$CI_REGISTRY_USER" -P "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - *init-db
+  #  - docker login -u "$CI_REGISTRY_USER" -P "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
     #- cd Lib10/
    # - mvn $MAVEN_CLI_OPTS compile
     #- cd ../
-    - docker-compose up
+   # - docker-compose up
     - newman --version
     - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT}
   artifacts:
