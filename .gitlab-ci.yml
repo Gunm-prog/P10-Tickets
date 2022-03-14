@@ -41,6 +41,9 @@ stages:
 
 unit-test:
   stage: test
+  services:
+    - name: postman/newman:alpine
+      entrypoint: [""]
   coverage: '/Total.*?([0–9]{1,3})%/'
  # needs:
   #  - job: build
@@ -53,6 +56,8 @@ unit-test:
    # - mvn $MAVEN_CLI_OPTS compile
     ## remove for fast debug next stage
     - mvn $MAVEN_CLI_OPTS test
+    - newman --version
+    - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT}
   artifacts:
     reports:
       junit:
