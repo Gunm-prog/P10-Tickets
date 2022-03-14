@@ -58,13 +58,13 @@ unit-test:
     - mvn $MAVEN_CLI_OPTS test
     - newman --version
     - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT}
-  artifacts:
-    reports:
-      junit:
-        - "**/target/surefire-reports/TEST-*.xml"
-    expire_in: 1 hour
-    paths:
-      - "**/target" # for multi-modules project with directory root as a pom package type
+ # artifacts:
+  #  reports:
+  #    junit:
+ #       - "**/target/surefire-reports/TEST-*.xml"
+  #  expire_in: 1 hour
+  #  paths:
+   #   - "**/target" # for multi-modules project with directory root as a pom package type
 
 #build:
 #  stage: build
