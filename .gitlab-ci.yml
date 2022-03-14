@@ -27,7 +27,7 @@ variables:
 stages:
 #  - build
   - test
-  - build
+ # - build
   - test-api
 #  - integration-test
 
@@ -60,29 +60,29 @@ unit-test:
     paths:
       - "**/target" # for multi-modules project with directory root as a pom package type
 
-build:
-  stage: build
-  needs:
-    - job: unit-test
-  services: 
+#build:
+#  stage: build
+#  needs:
+ #   - job: unit-test
+ # services: 
     #- name: mysql:8.0
      # command: [ "--default-authentication-plugin=mysql_native_password" ]
-    - name: docker:latest
-  before_script:
-    - *init-db
-    - docker login registry.gitlab.com -u Gunm-prog -p ${p10_pat}
-  script:
-    - cd Lib10/
+#    - name: docker:latest
+#  before_script:
+#    - *init-db
+#    - docker login registry.gitlab.com -u Gunm-prog -p ${p10_pat}
+ # script:
+ #   - cd Lib10/
     #- docker build mvn $MAVEN_CLI_OPTS compile
-    - mvn $MAVEN_CLI_OPTS compile
+ #   - mvn $MAVEN_CLI_OPTS compile
     #- mvn compile
   #  - mvn verify
 #    - docker build -t registry.Gunm-prog/P10-Tickets/t5-templates-db_app:$CI_COMMIT_REF_NAME --build-arg UID=$(id -u).
    # - docker build -t registry.Gunm-prog/P10-Tickets/t5-templates-db_app:$CI_COMMIT_REF_NAME --build-arg UID=$(id -u).
-  artifacts:
-    expire_in: 1 hour
-    paths:
-      - '**/target' # for multi-modules project with directory root as a pom package type
+ # artifacts:
+ #   expire_in: 1 hour
+ #   paths:
+  #    - '**/target' # for multi-modules project with directory root as a pom package type
 
 
 api-test:
@@ -91,12 +91,13 @@ api-test:
     #name: postman/newman:alpine
     #entrypoint: [""]
   services:
-    - name: mysql:8.0
-      command: [ "--default-authentication-plugin=mysql_native_password" ]
+ #   - name: mysql:8.0
+  #    command: [ "--default-authentication-plugin=mysql_native_password" ]
     - name: postman/newman:alpine
       entrypoint: [""]
   needs:
-    - job: build
+   # - job: build
+    - job: unit-test
   before_script:
 #    - *init-db
     - docker login -u "$CI_REGISTRY_USER" -P "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
