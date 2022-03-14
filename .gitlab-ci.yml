@@ -64,9 +64,9 @@ build:
   needs:
     - job: unit-test
   services: 
-    - name: docker:latest
     - name: mysql:8.0
       command: [ "--default-authentication-plugin=mysql_native_password" ]
+    - name: docker:latest
   before_script:
     - *init-db
     - docker login registry.gitlab.com -u Gunm-prog -p ${p10_pat}
@@ -76,7 +76,7 @@ build:
     - mvn $MAVEN_CLI_OPTS compile
     #- mvn compile
   #  - mvn verify
-    - docker build -t registry.Gunm-prog/P10-Tickets/t5-templates-db_app:$CI_COMMIT_REF_NAME --build-arg UID=$(id -u).
+#    - docker build -t registry.Gunm-prog/P10-Tickets/t5-templates-db_app:$CI_COMMIT_REF_NAME --build-arg UID=$(id -u).
    # - docker build -t registry.Gunm-prog/P10-Tickets/t5-templates-db_app:$CI_COMMIT_REF_NAME --build-arg UID=$(id -u).
   artifacts:
     expire_in: 1 hour
