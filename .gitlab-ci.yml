@@ -87,7 +87,7 @@ api-test:
     - *init-db
   script:
     #- cd Lib10/
-    #- mvn $MAVEN_CLI_OPTS compile
+    - mvn $MAVEN_CLI_OPTS compile
     #- cd ../
     - newman --version
     - newman run Lib10_testing.postman_collection.json -e localhost.postman_environment.json
