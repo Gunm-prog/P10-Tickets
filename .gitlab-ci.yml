@@ -60,7 +60,7 @@ unit-test:
 build:
   stage: build
   needs:
-    - job: test
+    - job: unit-test
   services: 
     - name: docker:latest
     - name: mysql:8.0
@@ -93,7 +93,7 @@ api-test:
     - name: postman/newman:alpine
       entrypoint: [""]
   needs:
-    - job: unit-test
+    - job: build
   before_script:
 #    - *init-db
     - docker login -u "$CI_REGISTRY_USER" -P "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
