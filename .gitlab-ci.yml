@@ -24,7 +24,7 @@ variables:
   POSTMAN_ENVIRONMENT: localhost.postman_environment.json
 
 stages:
-  - build
+#  - build
   - test
   - build
   - test-api
