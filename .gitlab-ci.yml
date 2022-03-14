@@ -6,9 +6,9 @@ cache:
   paths:
     - "**/.m2/repository"
 
-#services:
- # - name: mysql:8.0
-  #  command: [ "--default-authentication-plugin=mysql_native_password" ]
+services:
+  - name: mysql:8.0
+    command: [ "--default-authentication-plugin=mysql_native_password" ]
 
 variables:
   MAVEN_CLI_OPTS: "--batch-mode"
@@ -65,8 +65,8 @@ build:
   needs:
     - job: unit-test
   services: 
-    - name: mysql:8.0
-      command: [ "--default-authentication-plugin=mysql_native_password" ]
+    #- name: mysql:8.0
+     # command: [ "--default-authentication-plugin=mysql_native_password" ]
     - name: docker:latest
   before_script:
     - *init-db
