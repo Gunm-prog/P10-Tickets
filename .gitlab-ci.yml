@@ -24,7 +24,7 @@ variables:
   POSTMAN_ENVIRONMENT: localhost.postman_environment.json
 
 stages:
-#  - build
+  - build
   - test
   - build
   - test-api
@@ -59,6 +59,8 @@ unit-test:
 
 build:
   stage: build
+  needs:
+    - job: test
   services: 
     - name: docker:latest
     - name: mysql:8.0
