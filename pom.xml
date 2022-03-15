@@ -167,6 +167,30 @@
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>0.8.5</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.6.0</version>
+                    <executions>
+                        <execution>
+                            <id>integration-tests</id>
+                            <phase>integration-test</phase>
+                            <goals>
+                                <goal>exec</goal>
+                            </goals>
+                            <configuration>
+                                <executable>
+                                    co/poynt/postman/Main
+                                    <!--PATH_TO_NEWMAN_EXECUTABLE-->
+                                </executable>
+                                <commandlineArgs>
+                                    run com.emilie.lib10/Lib10_testing.postman_collection.json -e com.emilie.lib10/localhost.postman_environment.json
+                                    <!--run PATH_TO_COLLECTION_JSON -e PATH_TO_ENVIRONMENT_JSON-->
+                                </commandlineArgs>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
