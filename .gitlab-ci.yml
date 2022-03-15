@@ -30,6 +30,7 @@ variables:
 stages:
 #  - build
   - test
+  - build
   - database-dump
  # - build
   - test-api
@@ -78,17 +79,19 @@ unit-tests:
 
 build:
   stage: build
-script:
-    - cd Lib10/
-    - mvn $MAVEN_CLI_OPTS compile
-environment:
-    name: staging
-    url: https://staging.example.com
+  needs:
+    - job: unit-tests
+  script:
+      - cd Lib10/
+      - mvn $MAVEN_CLI_OPTS compile
+  environment:
+      name: staging
+      url: https://staging.example.com
 
 bdd-dump:
   stage: database-dump
   needs:
-    - job: unit-tests
+    - job: build
   services: 
   #  - mysql
     - name: mysql:8.0
