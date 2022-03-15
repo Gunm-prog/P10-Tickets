@@ -7,9 +7,9 @@ cache:
   paths:
     - "**/.m2/repository"
 
-services:
-  - name: mysql:8.0
-    command: [ "--default-authentication-plugin=mysql_native_password" ]
+#services:
+ # - name: mysql:8.0
+ #   command: [ "--default-authentication-plugin=mysql_native_password" ]
 #  - name: postman/newman:alpine
 #    entrypoint: [""]
 
@@ -100,9 +100,9 @@ unit-test:
 
 api-test:
   stage: test-api
- # services:
- # - name: mysql:8.0
- #   command: [ "--default-authentication-plugin=mysql_native_password" ]
+  services:
+  - name: mysql:8.0
+    command: [ "--default-authentication-plugin=mysql_native_password" ]
  # image: 
     #name: postman/newman:alpine
     #entrypoint: [""]
