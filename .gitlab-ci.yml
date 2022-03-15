@@ -1,6 +1,7 @@
 #image: aritrasasmal/maven-mysql-java
 #image: zhangpin/docker-maven-mysql-vipkid
-image: maven
+image: inaciofeanor/maven-newmans
+#image: maven
 
 cache:
   paths:
@@ -54,8 +55,8 @@ unit-test:
     - mvn $MAVEN_CLI_OPTS test
 
 ##   - mvn $MAVEN_CLI_OPTS compile
-##    - newman --version
-   # - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT}
+    - newman --version
+    - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT}
 ##    - newman run Lib10_testing.postman_collection.json -e localhost.postman_environment.json
     #remet a jour les dates de modif des fichiers .class pour eviter une recompilation
    # - find . -name "*.class" -exec touch {} \+
