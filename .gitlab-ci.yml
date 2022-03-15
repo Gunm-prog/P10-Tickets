@@ -7,9 +7,9 @@ cache:
   paths:
     - "**/.m2/repository"
 
-services:
-  - name: mysql:8.0
-    command: [ "--default-authentication-plugin=mysql_native_password" ]
+#services:
+ # - name: mysql:8.0
+  #  command: [ "--default-authentication-plugin=mysql_native_password" ]
 #  - name: postman/newman:alpine
 #    entrypoint: [""]
 
@@ -55,9 +55,9 @@ unit-test:
     - mvn $MAVEN_CLI_OPTS test
 
 ##   - mvn $MAVEN_CLI_OPTS compile
-    - cd ../
-    - newman --version
-    - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT}
+ #   - cd ../
+ #   - newman --version
+ #   - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT}
 ##    - newman run Lib10_testing.postman_collection.json -e localhost.postman_environment.json
     #remet a jour les dates de modif des fichiers .class pour eviter une recompilation
    # - find . -name "*.class" -exec touch {} \+
@@ -100,12 +100,15 @@ unit-test:
 
 api-test:
   stage: test-api
+  services:
+  - name: mysql:8.0
+    command: [ "--default-authentication-plugin=mysql_native_password" ]
  # image: 
     #name: postman/newman:alpine
     #entrypoint: [""]
-  services:
-    - name: postman/newman:alpine
-      entrypoint: [""]
+#  services:
+ #   - name: postman/newman:alpine
+  #    entrypoint: [""]
   needs:
    # - job: build
     - job: unit-test
@@ -115,12 +118,12 @@ api-test:
   script:
     - newman --version
     - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT}
-  artifacts:
-    reports:
-      junit:
-        - "**/target/surefire-reports/TEST-*.xml"
-    expire_in: 1 hour
-    paths:
-      - "**/target" # for multi-modules project with directory root as a pom package type
+ # artifacts:
+  #  reports:
+   #   junit:
+    #    - "**/target/surefire-reports/TEST-*.xml"
+    #expire_in: 1 hour
+    #paths:
+    #  - "**/target" # for multi-modules project with directory root as a pom package type
 
 
