@@ -68,13 +68,13 @@ unit-tests:
     ## remove for fast debug next stage
   
   ## temporally deseable artifact because gitlab bug (size or timeout)
-artifacts:
-  reports:
-    junit:
-      - "**/target/surefire-reports/TEST-*.xml"
-  expire_in: 1 hour
-  paths:
-    - "**/target" # for multi-modules project with directory root as a pom package type
+  artifacts:
+    reports:
+      junit:
+        - "**/target/surefire-reports/TEST-*.xml"
+    expire_in: 1 hour
+    paths:
+      - "**/target" # for multi-modules project with directory root as a pom package type
 
 
 bdd-dump:
