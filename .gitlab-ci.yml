@@ -81,7 +81,8 @@ bdd-dump:
   stage: database-dump
   needs:
     - job: unit-tests
-  #services: 
+  services: 
+    - mysql
   #  - name: mysql:8.0
   #    command: [ "--default-authentication-plugin=mysql_native_password" ]
   script:
