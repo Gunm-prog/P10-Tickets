@@ -127,7 +127,7 @@ api-test:
 
   #  - docker login -u "$CI_REGISTRY_USER" -P "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - mvn $MAVEN_CLI_OPTS compile
+   # - mvn $MAVEN_CLI_OPTS compile
     - newman --version
     - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT}
  # artifacts:
