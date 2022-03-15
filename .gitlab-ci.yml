@@ -52,6 +52,7 @@ unit-tests:
  # needs:
   #  - job: build
   script:
+    - mvn container ls
     - cd Lib10/
     - mvn $MAVEN_CLI_OPTS test
 
