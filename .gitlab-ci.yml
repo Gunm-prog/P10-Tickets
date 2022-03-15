@@ -1,15 +1,15 @@
-#image: aritrasasmal/maven-mysql-java
+image: aritrasasmal/maven-mysql-java
 #image: zhangpin/docker-maven-mysql-vipkid
-image: inaciofeanor/maven-newmans
+#image: inaciofeanor/maven-newmans
 #image: maven
 
 cache:
   paths:
     - "**/.m2/repository"
 
-services:
-  - name: mysql:8.0
-    command: [ "--default-authentication-plugin=mysql_native_password" ]
+#services:
+ # - name: mysql:8.0
+ #   command: [ "--default-authentication-plugin=mysql_native_password" ]
 #  - name: postman/newman:alpine
 #    entrypoint: [""]
 
@@ -107,9 +107,9 @@ api-test:
  # image: 
     #name: postman/newman:alpine
     #entrypoint: [""]
-#  services:
- #   - name: postman/newman:alpine
-  #    entrypoint: [""]
+  services:
+    - name: postman/newman:alpine
+      entrypoint: [""]
   needs:
    # - job: build
     - job: unit-test
