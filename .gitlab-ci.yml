@@ -52,7 +52,6 @@ unit-tests:
  # needs:
   #  - job: build
   script:
-    - mvn container ls
     - cd Lib10/
     - mvn $MAVEN_CLI_OPTS test
 
@@ -92,6 +91,7 @@ bdd-dump:
     - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
     - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
     - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
+
 
     - mvn clean verify -P test-integration
 #build:
@@ -143,9 +143,13 @@ api-test:
 
   #  - docker login -u "$CI_REGISTRY_USER" -P "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-   # - mvn $MAVEN_CLI_OPTS compile
+    - mvn $MAVEN_CLI_OPTS compile
     - newman --version
     - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT}
+
+  environment:
+    name: staging
+    url: https://staging.example.com
  # artifacts:
   #  reports:
    #   junit:
