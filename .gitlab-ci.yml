@@ -7,9 +7,9 @@ cache:
   paths:
     - "**/.m2/repository"
 
-#services:
- # - name: mysql:8.0
- #   command: [ "--default-authentication-plugin=mysql_native_password" ]
+services:
+  - name: mysql:8.0
+    command: [ "--default-authentication-plugin=mysql_native_password" ]
 #  - name: postman/newman:alpine
 #    entrypoint: [""]
 
@@ -81,9 +81,9 @@ bdd-dump:
   stage: database-dump
   needs:
     - job: unit-tests
-  services: 
-    - name: mysql:8.0
-      command: [ "--default-authentication-plugin=mysql_native_password" ]
+  #services: 
+  #  - name: mysql:8.0
+  #    command: [ "--default-authentication-plugin=mysql_native_password" ]
   script:
     - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
 
@@ -118,14 +118,11 @@ bdd-dump:
 
 api-test:
   stage: test-api
- # services:
- #   - mysql
-  #- name: mysql:8.0
- #   command: [ "--default-authentication-plugin=mysql_native_password" ]
   image: 
     name: postman/newman:alpine
     entrypoint: [""]
  # services:
+   # - mysql
    # - name: mysql:8.0
   #    command: [ "--default-authentication-plugin=mysql_native_password" ]
    # - name: postman/newman_alpine33
