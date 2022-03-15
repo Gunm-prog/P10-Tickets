@@ -9,8 +9,8 @@ cache:
 services:
   - name: mysql:8.0
     command: [ "--default-authentication-plugin=mysql_native_password" ]
-  - name: postman/newman:alpine
-    entrypoint: [""]
+#  - name: postman/newman:alpine
+#    entrypoint: [""]
 
 variables:
   MAVEN_CLI_OPTS: "--batch-mode"
