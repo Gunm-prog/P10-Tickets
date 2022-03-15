@@ -1,6 +1,6 @@
 #image: aritrasasmal/maven-mysql-java
 #image: zhangpin/docker-maven-mysql-vipkid
-image: maven:3.8.4-jdk-11
+image: maven
 
 cache:
   paths:
@@ -9,6 +9,8 @@ cache:
 services:
   - name: mysql:8.0
     command: [ "--default-authentication-plugin=mysql_native_password" ]
+  - name: postman/newman:alpine
+    entrypoint: [""]
 
 variables:
   MAVEN_CLI_OPTS: "--batch-mode"
@@ -41,9 +43,9 @@ stages:
 
 unit-test:
   stage: test
-  services:
-    - name: postman/newman:alpine
-      entrypoint: [""]
+ # services:
+ #   - name: postman/newman:alpine
+  #    entrypoint: [""]
   coverage: '/Total.*?([0–9]{1,3})%/'
  # needs:
   #  - job: build
