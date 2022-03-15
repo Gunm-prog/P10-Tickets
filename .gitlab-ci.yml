@@ -1,6 +1,6 @@
 #image: aritrasasmal/maven-mysql-java
 #image: zhangpin/docker-maven-mysql-vipkid
-image: maven
+image: maven:3.8.4-jdk-11
 
 cache:
   paths:
