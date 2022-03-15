@@ -76,6 +76,14 @@ unit-tests:
     paths:
       - "**/target" # for multi-modules project with directory root as a pom package type
 
+build:
+  stage: build
+script:
+    - cd Lib10/
+    - mvn $MAVEN_CLI_OPTS compile
+environment:
+    name: staging
+    url: https://staging.example.com
 
 bdd-dump:
   stage: database-dump
@@ -143,13 +151,10 @@ api-test:
 
   #  - docker login -u "$CI_REGISTRY_USER" -P "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - mvn $MAVEN_CLI_OPTS compile
+  #  - mvn $MAVEN_CLI_OPTS compile
     - newman --version
     - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT}
 
-  environment:
-    name: staging
-    url: https://staging.example.com
  # artifacts:
   #  reports:
    #   junit:
