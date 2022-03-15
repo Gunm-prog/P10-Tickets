@@ -82,9 +82,9 @@ bdd-dump:
   needs:
     - job: unit-tests
   services: 
-    - mysql
-  #  - name: mysql:8.0
-  #    command: [ "--default-authentication-plugin=mysql_native_password" ]
+  #  - mysql
+    - name: mysql:8.0
+      command: [ "--default-authentication-plugin=mysql_native_password" ]
   script:
     - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
 
