@@ -65,13 +65,15 @@ unit-test:
     
    # - mvn $MAVEN_CLI_OPTS compile
     ## remove for fast debug next stage
-  artifacts:
-    reports:
-      junit:
-        - "**/target/surefire-reports/TEST-*.xml"
-    expire_in: 1 hour
-    paths:
-      - "**/target" # for multi-modules project with directory root as a pom package type
+  
+  ## temporally deseable artifact because gitlab bug (size or timeout)
+ # artifacts:
+  #  reports:
+  #    junit:
+  #      - "**/target/surefire-reports/TEST-*.xml"
+  #  expire_in: 1 hour
+  #  paths:
+   #   - "**/target" # for multi-modules project with directory root as a pom package type
 
 #build:
 #  stage: build
