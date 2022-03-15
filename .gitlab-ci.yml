@@ -55,6 +55,7 @@ unit-test:
     - mvn $MAVEN_CLI_OPTS test
 
 ##   - mvn $MAVEN_CLI_OPTS compile
+    - cd ../
     - newman --version
     - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT}
 ##    - newman run Lib10_testing.postman_collection.json -e localhost.postman_environment.json
