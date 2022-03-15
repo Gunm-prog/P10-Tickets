@@ -24,8 +24,8 @@ variables:
   MYSQL_DATABASE: LIB10
   MYSQL_HOST: mysql
 
-  POSTMAN_COLLECTION : Lib10_testing.postman_collection.json
-  POSTMAN_ENVIRONMENT: localhost.postman_environment.json
+  POSTMAN_COLLECTION : postmanTests.postman_collection.json
+  POSTMAN_ENVIRONMENT: postmanTests.postman_environment.json
 
 stages:
 #  - build
