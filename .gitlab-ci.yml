@@ -50,11 +50,11 @@ unit-test:
  # needs:
   #  - job: build
   script:
-##    - cd Lib10/
-##    - mvn $MAVEN_CLI_OPTS test
+    - cd Lib10/
+    - mvn $MAVEN_CLI_OPTS test
 
 ##   - mvn $MAVEN_CLI_OPTS compile
-    - newman --version
+##    - newman --version
    # - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT}
 ##    - newman run Lib10_testing.postman_collection.json -e localhost.postman_environment.json
     #remet a jour les dates de modif des fichiers .class pour eviter une recompilation
