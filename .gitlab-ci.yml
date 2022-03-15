@@ -108,7 +108,7 @@ api-test:
     #name: postman/newman:alpine
     #entrypoint: [""]
   services:
-    - name: postman/newman:alpine
+    - name: postman/newman_alpine33
       entrypoint: [""]
   needs:
    # - job: build
