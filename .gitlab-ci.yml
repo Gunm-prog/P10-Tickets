@@ -101,8 +101,9 @@ unit-test:
 api-test:
   stage: test-api
   services:
-  - name: mysql:8.0
-    command: [ "--default-authentication-plugin=mysql_native_password" ]
+    - mysql
+  #- name: mysql:8.0
+ #   command: [ "--default-authentication-plugin=mysql_native_password" ]
  # image: 
     #name: postman/newman:alpine
     #entrypoint: [""]
