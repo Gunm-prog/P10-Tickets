@@ -50,7 +50,8 @@ build-image:
   services: 
     - docker:dind
   script:
-    - docker login $CI_REGISTRY -u Gunm-prog -p ${p10_pat}
+    - docker login $CI_REGISTRY -u Gunm-prog --password-stdin
+    #- docker login $CI_REGISTRY -u Gunm-prog -p ${p10_pat}
     - docker build -t $CI_REGISTRY_IMAGE
     - docker push $CI_REGISTRY_IMAGE
 
