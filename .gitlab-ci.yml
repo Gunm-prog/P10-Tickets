@@ -50,6 +50,7 @@ build-image:
   services: 
     - docker:dind
   script:
+    - cd Lib10/
     - echo ${p10_pat} | docker login $CI_REGISTRY -u Gunm-prog --password-stdin
     #- docker login $CI_REGISTRY -u Gunm-prog -p ${p10_pat}
 
