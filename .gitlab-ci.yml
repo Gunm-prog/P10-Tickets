@@ -29,10 +29,10 @@ variables:
 
 stages:
   - buildImage
+  - database-dump
   - testImage
   - test
-  - build
-  - database-dump
+ # - build
  # - build
   - test-api
 #  - integration-test
@@ -62,7 +62,7 @@ build-image:
 test_image:
   stage: testImage
   needs:
-    - job: build-image
+    - job: bdd-dump
   image: $CI_REGISTRY_IMAGE
   script:
     - mvn $MAVEN_CLI_OPTS test
@@ -74,7 +74,7 @@ unit-tests:
   #    entrypoint: [""]
   coverage: '/Total.*?([0–9]{1,3})%/'
   needs:
-    - job: build-image
+    - job: test_image
   script:
     - cd Lib10/
     - mvn $MAVEN_CLI_OPTS test
@@ -100,28 +100,28 @@ unit-tests:
     paths:
       - "**/target" # for multi-modules project with directory root as a pom package type
 
-build:
-  stage: build
-  needs:
-    - job: test_image
-  script:
-      - cd Lib10/
-      - mvn $MAVEN_CLI_OPTS compile
-  environment:
-      name: staging
-      url: https://staging.example.com
-  artifacts:
-    reports:
-      junit:
-        - "**/target/surefire-reports/TEST-*.xml"
-    expire_in: 1 hour
-    paths:
-      - "**/target" # for multi-modules project with directory root as a pom package type
+#build:
+ # stage: build
+ # needs:
+ #   - job: test_image
+ # script:
+ #     - cd Lib10/
+ #     - mvn $MAVEN_CLI_OPTS compile
+ # environment:
+ #     name: staging
+ #     url: https://staging.example.com
+ # artifacts:
+ #   reports:
+ #     junit:
+ #       - "**/target/surefire-reports/TEST-*.xml"
+ #   expire_in: 1 hour
+ #   paths:
+ #     - "**/target" # for multi-modules project with directory root as a pom package type
 
 bdd-dump:
   stage: database-dump
   needs:
-    - job: build
+    - job: build-image
   services: 
   #  - mysql
     - name: mysql:8.0
