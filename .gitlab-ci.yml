@@ -28,7 +28,7 @@ variables:
   POSTMAN_ENVIRONMENT: postmanTests.postman_environment.json
 
 stages:
-#  - build
+  - build-image
   - test
   - build
   - database-dump
@@ -43,6 +43,14 @@ stages:
  # - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
  # - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
  # - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
+
+build-image:
+  image: docker
+  services: docker:dind
+  script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE
+    - docker push $CI_REGISTRY_IMAGE
 
 unit-tests:
   stage: test
@@ -139,15 +147,15 @@ bdd-dump:
 
 api-test:
   stage: test-api
- # image: 
- #   name: postman/newman:alpine
- #   entrypoint: [""]
-  services:
+  image: 
+    name: postman/newman:alpine
+    entrypoint: [""]
+  #services:
    # - mysql
    # - name: mysql:8.0
   #    command: [ "--default-authentication-plugin=mysql_native_password" ]
-    - name: postman/newman_alpine33
-      entrypoint: [""]
+ #   - name: postman/newman_alpine33
+ #     entrypoint: [""]
   needs:
    # - job: build
     - job: bdd-dump
@@ -162,7 +170,7 @@ api-test:
   #  - docker login -u "$CI_REGISTRY_USER" -P "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
   #  - mvn $MAVEN_CLI_OPTS compile
-    - mvn $MAVEN_CLI_OPTS run
+  #  - mvn $MAVEN_CLI_OPTS run
     - newman --version
     - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT}
 
