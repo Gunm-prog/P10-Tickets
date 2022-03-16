@@ -52,6 +52,8 @@ build-image:
   script:
     - echo ${p10_pat} | docker login $CI_REGISTRY -u Gunm-prog --password-stdin
     #- docker login $CI_REGISTRY -u Gunm-prog -p ${p10_pat}
+
+    # mvn spring-boot:build-image ?? docker inclu dans mvn ? 
     - docker build -t $CI_REGISTRY_IMAGE .
     - docker push $CI_REGISTRY_IMAGE
 
