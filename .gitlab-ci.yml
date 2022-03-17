@@ -64,6 +64,8 @@ test_image:
   needs:
     - job: bdd-dump
   image: $CI_REGISTRY_IMAGE
+  services:
+      - mysql
   script:
     - docker container ls
     - mvn $MAVEN_CLI_OPTS test
