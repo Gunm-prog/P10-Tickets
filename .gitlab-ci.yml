@@ -81,7 +81,7 @@ build-image:
   #  - name: mysql:8.0
   #    command: [ "--default-authentication-plugin=mysql_native_password" ]
   before_script:
-    - *init-db
+   # - *init-db
     - *docker-login
   script:
     - cd Lib10/
