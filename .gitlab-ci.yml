@@ -75,7 +75,7 @@ build-image:
   needs:
     - job: unit-tests
   #image: docker
-  image: zhangpin/docker-maven-mysql-vipkid
+  image: actency/docker-mysql
   services: 
     - name: docker:dind
     - name: mysql:8.0
