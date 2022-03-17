@@ -74,12 +74,12 @@ build-image:
   stage: buildImage
   needs:
     - job: unit-tests
-  #image: docker
-  image: actency/docker-mysql
+  image: docker
+ # image: actency/docker-mysql
   services: 
     - name: docker:dind
-    - name: mysql:8.0
-      command: [ "--default-authentication-plugin=mysql_native_password" ]
+  #  - name: mysql:8.0
+  #    command: [ "--default-authentication-plugin=mysql_native_password" ]
   before_script:
     - *init-db
     - *docker-login
