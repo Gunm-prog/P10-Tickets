@@ -59,6 +59,7 @@ unit-tests:
   coverage: '/Total.*?([0–9]{1,3})%/'
   script:
     - cd Lib10/
+    - mvn -v
     - mvn $MAVEN_CLI_OPTS test
   artifacts:
     reports:
