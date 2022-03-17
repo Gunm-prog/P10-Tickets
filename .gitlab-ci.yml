@@ -59,6 +59,8 @@ build-image:
     - docker build -t $CI_REGISTRY_IMAGE .
     - docker push $CI_REGISTRY_IMAGE
 
+    - docker $CI_REGISTRY_IMAGE mvn $MAVEN_CLI_OPTS test
+
 test_image:
   stage: testImage
   needs:
