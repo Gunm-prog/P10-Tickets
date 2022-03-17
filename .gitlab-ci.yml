@@ -87,6 +87,10 @@ build-image:
     - docker images
     - docker ps
 
+## test run
+    - docker run --rm -it $DOCKER_CI_IMAGE:latest
+    - docker ps
+
 bdd-dump:
   stage: database-dump
   needs:
