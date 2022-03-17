@@ -65,7 +65,8 @@ build-image:
     - docker build -t $DOCKER_CI_IMAGE .
     - docker push $DOCKER_CI_IMAGE
 
-    - docker $DOCKER_CI_IMAGE mvn $MAVEN_CLI_OPTS test
+    - docker images
+    - docker ps
 
 test_image:
   stage: testImage
