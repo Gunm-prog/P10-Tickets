@@ -73,7 +73,7 @@ unit-tests:
 build-image:
   stage: buildImage
   needs:
-    -job: unit-tests
+    - job: unit-tests
   image: docker
   services: 
     - docker:dind
