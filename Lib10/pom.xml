@@ -281,7 +281,7 @@
                         <configuration>
                             <sources>
                                 <source>src/test-unit/java</source>
-                                <source>src/test-integration/java</source>
+                              <!--  <source>src/test-integration/java</source> -->
                             </sources>
                         </configuration>
                     </execution>
