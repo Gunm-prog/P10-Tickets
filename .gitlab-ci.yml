@@ -27,6 +27,8 @@ variables:
   POSTMAN_COLLECTION : postmanTests.postman_collection.json
   POSTMAN_ENVIRONMENT: postmanTests.postman_environment.json
 
+  DOCKER_CI_IMAGE: "$CI_REGISTRY_IMAGE:ci-$CI_COMMIT_SHORT_SHA"
+
 stages:
   - buildImage
   - database-dump
@@ -36,6 +38,9 @@ stages:
  # - build
   - test-api
 #  - integration-test
+
+.docker-login: &docker-login
+    - echo ${p10_pat} | docker login $CI_REGISTRY -u Gunm-prog --password-stdin
 
 #.init-db: &init-db
   #connexion et test de connexion
@@ -50,26 +55,28 @@ build-image:
   image: docker
   services: 
     - docker:dind
+  before_script:
+    - *docker-login
   script:
     - cd Lib10/
-    - echo ${p10_pat} | docker login $CI_REGISTRY -u Gunm-prog --password-stdin
-    #- docker login $CI_REGISTRY -u Gunm-prog -p ${p10_pat}
+  #  - echo ${p10_pat} | docker login $CI_REGISTRY -u Gunm-prog --password-stdin
 
     # mvn spring-boot:build-image ?? docker inclu dans mvn ? 
-    - docker build -t $CI_REGISTRY_IMAGE .
-    - docker push $CI_REGISTRY_IMAGE
+    - docker build -t $DOCKER_CI_IMAGE .
+    - docker push $DOCKER_CI_IMAGE
 
-    - docker $CI_REGISTRY_IMAGE mvn $MAVEN_CLI_OPTS test
+    - docker $DOCKER_CI_IMAGE mvn $MAVEN_CLI_OPTS test
 
 test_image:
   stage: testImage
   needs:
     - job: bdd-dump
-  image: $CI_REGISTRY_IMAGE
+  image: $DOCKER_CI_IMAGE
   services:
       - name: mysql:8.0
         command: [ "--default-authentication-plugin=mysql_native_password" ]
   before_script:
+    - *docker-login
     - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
 
     - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
