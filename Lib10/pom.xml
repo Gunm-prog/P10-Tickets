@@ -287,6 +287,43 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.3.2</version>
+                <executions>
+                    <!-- npm install -->
+                    <execution>
+                        <id>npm-install</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>npm</executable>
+                            <commandlineArgs>
+                                install
+                            </commandlineArgs>
+                        </configuration>
+                    </execution>
+                    <!-- Integration Testing-->
+                    <execution>
+                        <id>integration-tests</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>node_modules/newman/bin/newman.js</executable>
+                            <commandlineArgs>
+                                <!-- run target/test/integration/oauth.postman_collection.json -e target/test/integration/oauth.postman_environment.json-->
+                                run target/test-classes/com.emilie.lib10/Lib10_testing.postman_collection.json -e target/test-classes/com.emilie.lib10/localhost.postman_environment.json
+                            </commandlineArgs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>
