@@ -88,7 +88,8 @@ build-image:
     - docker ps
 
 ## test run
-    - docker run --rm -it $DOCKER_CI_IMAGE:latest
+    #- docker run --rm -it $DOCKER_CI_IMAGE:latest
+    - docker run --rm $DOCKER_CI_IMAGE:latest
     - docker ps
 
 bdd-dump:
