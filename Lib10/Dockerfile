@@ -6,8 +6,9 @@
 
 #
 # Build stage
-#
-FROM maven:3.6.0-jdk-11-slim AS build
+# maven:3.6.3-jdk-8-openj9
+#FROM maven:3.6.0-jdk-11-slim AS build
+FROM maven:3.6.3-jdk-8-openj9 AS build
 COPY src /src
 COPY pom.xml pom.xml
 RUN mvn -f pom.xml clean package
