@@ -24,7 +24,7 @@ ENTRYPOINT ["java","-jar","/usr/local/lib/app.jar"]
 #
 #Create MySQL Image test database
 #
-FROM mysql
+FROM mysql:8.0
 ENV MYSQL_ROOT_PASSWORD rootPass
 #ADD 01_create_schema.sql /docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
 #ADD 02_create_tables.sql /docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
