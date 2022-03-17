@@ -30,10 +30,11 @@ variables:
   DOCKER_CI_IMAGE: "$CI_REGISTRY_IMAGE:ci-$CI_COMMIT_SHORT_SHA"
 
 stages:
+  - test
   - buildImage
   - database-dump
-  - testImage
-  - test
+#  - testImage
+#  - test
  # - build
  # - build
   - test-api
@@ -50,68 +51,15 @@ stages:
  # - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
  # - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
 
-build-image:
-  stage: buildImage
-  image: docker
-  services: 
-    - docker:dind
-  before_script:
-    - *docker-login
-  script:
-    - cd Lib10/
-  #  - echo ${p10_pat} | docker login $CI_REGISTRY -u Gunm-prog --password-stdin
-
-    # mvn spring-boot:build-image ?? docker inclu dans mvn ? 
-    - docker build -t $DOCKER_CI_IMAGE .
-    - docker push $DOCKER_CI_IMAGE
-
-    - docker images
-    - docker ps
-
-test_image:
-  stage: testImage
-  needs:
-    - job: bdd-dump
-  image: $DOCKER_CI_IMAGE
-  services:
-      - name: mysql:8.0
-        command: [ "--default-authentication-plugin=mysql_native_password" ]
-  before_script:
-    - *docker-login
-    - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
-
-    - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
-    - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
-    - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
-  script:
-    - docker container ls
-    - mvn $MAVEN_CLI_OPTS test
-
 unit-tests:
   stage: test
  # services:
  #   - name: postman/newman:alpine
   #    entrypoint: [""]
   coverage: '/Total.*?([0–9]{1,3})%/'
-  needs:
-    - job: test_image
   script:
     - cd Lib10/
     - mvn $MAVEN_CLI_OPTS test
-
-##   - mvn $MAVEN_CLI_OPTS compile
- #   - cd ../
- #   - newman --version
- #   - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT}
-##    - newman run Lib10_testing.postman_collection.json -e localhost.postman_environment.json
-    #remet a jour les dates de modif des fichiers .class pour eviter une recompilation
-   # - find . -name "*.class" -exec touch {} \+
-    #- docker build mvn $MAVEN_CLI_OPTS test
-    
-   # - mvn $MAVEN_CLI_OPTS compile
-    ## remove for fast debug next stage
-  
-  ## temporally deseable artifact because gitlab bug (size or timeout)
   artifacts:
     reports:
       junit:
@@ -119,6 +67,62 @@ unit-tests:
     expire_in: 1 hour
     paths:
       - "**/target" # for multi-modules project with directory root as a pom package type
+
+
+
+build-image:
+  stage: buildImage
+  needs:
+    -job: unit-tests
+  image: docker
+  services: 
+    - docker:dind
+  before_script:
+    - *docker-login
+  script:
+    - cd Lib10/
+    - docker build -t $DOCKER_CI_IMAGE .
+    - docker push $DOCKER_CI_IMAGE
+#temp
+    - docker images
+    - docker ps
+
+bdd-dump:
+  stage: database-dump
+  needs:
+    - job: build-image
+  services: 
+  #  - mysql
+    - name: mysql:8.0
+      command: [ "--default-authentication-plugin=mysql_native_password" ]
+  script:
+    - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
+
+    - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
+    - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
+    - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
+
+
+    - mvn clean verify -P test-integration
+
+#test_image:
+  #stage: testImage
+ # needs:
+ #   - job: bdd-dump
+ # image: $DOCKER_CI_IMAGE
+ # services:
+ #     - name: mysql:8.0
+ #       command: [ "--default-authentication-plugin=mysql_native_password" ]
+ # before_script:
+ #   - *docker-login
+ #   - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
+
+ #   - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
+ #   - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
+ #   - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
+#  script:
+#    - docker container ls
+#    - mvn $MAVEN_CLI_OPTS test
 
 #build:
  # stage: build
@@ -138,23 +142,6 @@ unit-tests:
  #   paths:
  #     - "**/target" # for multi-modules project with directory root as a pom package type
 
-bdd-dump:
-  stage: database-dump
-  needs:
-    - job: build-image
-  services: 
-  #  - mysql
-    - name: mysql:8.0
-      command: [ "--default-authentication-plugin=mysql_native_password" ]
-  script:
-    - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
-
-    - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
-    - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
-    - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
-
-
-    - mvn clean verify -P test-integration
 #build:
 #  stage: build
 #  needs:
