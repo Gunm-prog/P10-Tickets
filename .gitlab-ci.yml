@@ -43,13 +43,13 @@ stages:
 .docker-login: &docker-login
     - echo ${p10_pat} | docker login $CI_REGISTRY -u Gunm-prog --password-stdin
 
-#.init-db: &init-db
+.init-db: &init-db
   #connexion et test de connexion
- # - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
+  - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
 
- # - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
- # - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
- # - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
+  - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
+  - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
+  - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
 
 unit-tests:
   stage: test
@@ -76,8 +76,11 @@ build-image:
     - job: unit-tests
   image: docker
   services: 
-    - docker:dind
+    - name: docker:dind
+    - name: mysql:8.0
+      command: [ "--default-authentication-plugin=mysql_native_password" ]
   before_script:
+    - *init-db
     - *docker-login
   script:
     - cd Lib10/
