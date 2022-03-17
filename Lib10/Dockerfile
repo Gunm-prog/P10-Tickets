@@ -20,3 +20,13 @@ FROM maven:3.6.3-jdk-8-openj9
 COPY --from=build /target/Lib10-0.0.1-SNAPSHOT.jar /usr/local/lib/app.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/usr/local/lib/app.jar"]
+
+#
+#Create MySQL Image test database
+#
+FROM mysql
+ENV MYSQL_ROOT_PASSWORD rootPass
+ADD 01_create_schema.sql /docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
+ADD 02_create_tables.sql /docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
+ADD 21_insert_data_demo.sql /docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
+EXPOSE 3306
