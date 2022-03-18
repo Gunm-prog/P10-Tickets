@@ -321,7 +321,7 @@
                 <version>3.0.0</version>
                 <executions>
                 <!-- npm install -->
-                <execution>
+    <!--           <execution>
                     <id>npm-install</id>
                     <phase>test</phase>
                     <goals>
@@ -334,6 +334,7 @@
                     </commandlineArgs>
                     </configuration>
                 </execution>
+    -->
                 <!-- Integration Testing-->
                 <execution>
                     <id>integration-tests</id>
