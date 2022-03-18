@@ -30,8 +30,9 @@ variables:
   DOCKER_CI_IMAGE: "$CI_REGISTRY_IMAGE:ci-$CI_COMMIT_SHORT_SHA"
 
 stages:
-  - test
+ # - test
   - buildImage
+  - test
   - database-dump
 #  - testImage
 #  - test
@@ -51,30 +52,8 @@ stages:
   - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
   - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
 
-unit-tests:
-  stage: test
- # services:
- #   - name: postman/newman:alpine
-  #    entrypoint: [""]
-  coverage: '/Total.*?([0–9]{1,3})%/'
-  script:
-    - cd Lib10/
-    - mvn -v
-    - mvn $MAVEN_CLI_OPTS test
-  artifacts:
-    reports:
-      junit:
-        - "**/target/surefire-reports/TEST-*.xml"
-    expire_in: 1 hour
-    paths:
-      - "**/target" # for multi-modules project with directory root as a pom package type
-
-
-
 build-image:
   stage: buildImage
-  needs:
-    - job: unit-tests
   image: docker
  # image: actency/docker-mysql
   services: 
@@ -94,13 +73,34 @@ build-image:
 
 ## test run
     #- docker run --rm -it $DOCKER_CI_IMAGE:latest
-    - docker run --rm $DOCKER_CI_IMAGE
+#    - docker run --rm $DOCKER_CI_IMAGE
     - docker ps
+
+unit-tests:
+  stage: test
+  needs:
+    - job: build-image
+  image: $DOCKER_CI_IMAGE
+ # services:
+ #   - name: postman/newman:alpine
+  #    entrypoint: [""]
+  coverage: '/Total.*?([0–9]{1,3})%/'
+  script:
+    - cd Lib10/
+    - mvn -v
+    - mvn $MAVEN_CLI_OPTS test
+  artifacts:
+    reports:
+      junit:
+        - "**/target/surefire-reports/TEST-*.xml"
+    expire_in: 1 hour
+    paths:
+      - "**/target" # for multi-modules project with directory root as a pom package type
 
 bdd-dump:
   stage: database-dump
   needs:
-    - job: build-image
+    - job: unit-tests
   services: 
   #  - mysql
     - name: mysql:8.0
