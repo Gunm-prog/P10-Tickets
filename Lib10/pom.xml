@@ -338,7 +338,8 @@
                 <!-- Integration Testing-->
                 <execution>
                     <id>integration-tests</id>
-                    <phase>install</phase>
+                    <!-- <phase>install</phase> -->
+                    <phase>test</phase>
                     <goals>
                     <goal>exec</goal>
                     </goals>
