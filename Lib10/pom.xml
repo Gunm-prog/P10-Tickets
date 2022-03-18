@@ -310,7 +310,7 @@
                     <npmVersion>2.15.9</npmVersion>
                     
                     <!-- optional: where to download node and npm from. Defaults to https://nodejs.org/dist/ -->
-                    <downloadRoot>http://myproxy.example.org/nodejs/</downloadRoot>
+                  <!--  <downloadRoot>http://myproxy.example.org/nodejs/</downloadRoot> -->
                 </configuration>
             </plugin>
 
