@@ -69,12 +69,19 @@ build-image:
     - docker push $DOCKER_CI_IMAGE
 #temp
     - docker images
-    - docker ps
+#    - docker ps
 
 ## test run
     #- docker run --rm -it $DOCKER_CI_IMAGE:latest
 #    - docker run --rm $DOCKER_CI_IMAGE
-    - docker ps
+ #   - docker ps
+  artifacts:
+    reports:
+      junit:
+        - "**/target/surefire-reports/TEST-*.xml"
+    expire_in: 1 hour
+    paths:
+      - "**/target" # for multi-modules project with directory root as a pom package type
 
 unit-tests:
   stage: test
@@ -113,7 +120,7 @@ bdd-dump:
     - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
 
 
-    - mvn clean verify -P test-integration
+  #  - mvn clean verify -P test-integration
 
 #test_image:
   #stage: testImage
