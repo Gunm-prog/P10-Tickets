@@ -32,6 +32,7 @@ variables:
 stages:
  # - test
   - buildImage
+  - bla
 #  - test
   - database-dump
 #  - testImage
@@ -82,6 +83,17 @@ build-image:
     expire_in: 1 hour
     paths:
       - "target" # for multi-modules project with directory root as a pom package type
+
+bla:
+  stage: bla
+  needs: 
+    - job: build-image
+  image: docker
+  services: 
+    - name: $DOCKER_CI_IMAGE
+      alias: lib10-api
+  script:
+    - docker ps
 
 #unit-tests:
 #  stage: test
