@@ -1,4 +1,4 @@
-image: aritrasasmal/maven-mysql-java
+#image: aritrasasmal/maven-mysql-java
 #image: zhangpin/docker-maven-mysql-vipkid
 #image: inaciofeanor/maven-newmans
 #image: maven
