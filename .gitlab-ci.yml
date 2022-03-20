@@ -68,7 +68,7 @@ build-image:
     - docker build -t $DOCKER_CI_IMAGE .
     - docker push $DOCKER_CI_IMAGE
 #temp
-    - docker images
+#    - docker images
 #    - docker ps
 
 ## test run
@@ -88,9 +88,9 @@ unit-tests:
   needs:
     - job: build-image
   image: $DOCKER_CI_IMAGE
-  services:
-    - name: postman/newman:alpine
-      entrypoint: [""]
+ # services:
+ #   - name: postman/newman:alpine
+ #     entrypoint: [""]
   coverage: '/Total.*?([0–9]{1,3})%/'
   script:
   #  - cd Lib10/
