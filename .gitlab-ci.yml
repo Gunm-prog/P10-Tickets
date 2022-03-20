@@ -74,7 +74,7 @@ build-image:
 ## test run
     #- docker run --rm -it $DOCKER_CI_IMAGE:latest
     - docker run --rm $DOCKER_CI_IMAGE
- #   - docker ps
+    - docker ps
   artifacts:
     reports:
       junit:
