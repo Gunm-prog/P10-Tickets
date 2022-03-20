@@ -96,7 +96,8 @@ unit-tests:
   script:
    # - cd Lib10/
     - mvn -v
-    - mvn $MAVEN_CLI_OPTS test
+  #  - mvn $MAVEN_CLI_OPTS test
+    - $DOCKER_CI_IMAGE test
   artifacts:
     reports:
       junit:
