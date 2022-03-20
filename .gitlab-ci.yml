@@ -32,7 +32,7 @@ variables:
 stages:
  # - test
   - buildImage
-  - test
+#  - test
   - database-dump
 #  - testImage
 #  - test
@@ -110,7 +110,8 @@ build-image:
 bdd-dump:
   stage: database-dump
   needs:
-    - job: unit-tests 
+   # - job: unit-tests 
+   - job: buildImage
   #  - job: build-image
   image: #$DOCKER_CI_IMAGE
     name: postman/newman:alpine
