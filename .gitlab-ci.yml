@@ -238,7 +238,7 @@ api-test:
   #  - mvn $MAVEN_CLI_OPTS compile
   #  - mvn $MAVEN_CLI_OPTS run
     - newman --version
-    - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var "host=localhost:8081:8080"
+    - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var "host=localhost:8081"
 
  # artifacts:
   #  reports:
