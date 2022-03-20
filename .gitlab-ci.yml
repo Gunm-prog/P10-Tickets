@@ -111,7 +111,7 @@ bdd-dump:
   stage: database-dump
   needs:
    # - job: unit-tests 
-   - job: buildImage
+   - job: build-image
   #  - job: build-image
   image: #$DOCKER_CI_IMAGE
     name: postman/newman:alpine
