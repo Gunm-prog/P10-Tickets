@@ -89,15 +89,14 @@ unit-tests:
     - job: build-image
   image: $DOCKER_CI_IMAGE
   services:
-    - maven
- #   - name: postman/newman:alpine
-  #    entrypoint: [""]
+    - name: postman/newman:alpine
+      entrypoint: [""]
   coverage: '/Total.*?([0–9]{1,3})%/'
   script:
-   # - cd Lib10/
-    - mvn -v
+  #  - cd Lib10/
+  #  - mvn -v
   #  - mvn $MAVEN_CLI_OPTS test
-    - $DOCKER_CI_IMAGE test
+    - docker $DOCKER_CI_IMAGE test
   artifacts:
     reports:
       junit:
@@ -109,7 +108,9 @@ unit-tests:
 bdd-dump:
   stage: database-dump
   needs:
-    - job: unit-tests
+    - job: unit-tests 
+  #  - job: build-image
+  image: $DOCKER_CI_IMAGE
   services: 
   #  - mysql
     - name: mysql:8.0
@@ -121,7 +122,7 @@ bdd-dump:
     - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
     - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
 
-
+    - docker $DOCKER_CI_IMAGE test-integration
   #  - mvn clean verify -P test-integration
 
 #test_image:
