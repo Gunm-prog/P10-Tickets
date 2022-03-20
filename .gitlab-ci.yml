@@ -237,6 +237,7 @@ api-test:
   script:
   #  - mvn $MAVEN_CLI_OPTS compile
   #  - mvn $MAVEN_CLI_OPTS run
+    - *docker-login
     - newman --version
     - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var "host=localhost:8081"
 
