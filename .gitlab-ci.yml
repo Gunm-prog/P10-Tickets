@@ -93,6 +93,8 @@ bla:
     - name: $DOCKER_CI_IMAGE
       alias: lib10-api
   script:
+    - docker images
+    - lib10-api
     - docker ps
 
 #unit-tests:
@@ -238,6 +240,7 @@ api-test:
   #  - mvn $MAVEN_CLI_OPTS compile
   #  - mvn $MAVEN_CLI_OPTS run
   #  - newman --version
+    - echo lib10-api
     - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var "host=lib10-api:8081"
 
  # artifacts:
