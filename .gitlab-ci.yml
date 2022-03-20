@@ -125,15 +125,15 @@ bdd-dump:
    # - job: unit-tests 
    - job: build-image
   #  - job: build-image
-  image: #$DOCKER_CI_IMAGE
-    name: postman/newman:alpine
-    entrypoint: [""]
+  #image: #$DOCKER_CI_IMAGE
+   # name: postman/newman:alpine
+   # entrypoint: [""]
   services: 
   #  - mysql
     - name: mysql:8.0
       command: [ "--default-authentication-plugin=mysql_native_password" ]
-    - name: $DOCKER_CI_IMAGE
-      alias: lib10-api
+  #  - name: $DOCKER_CI_IMAGE
+  #    alias: lib10-api
   script:
     - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
 
@@ -141,8 +141,8 @@ bdd-dump:
     - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
     - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
 
-    - newman --version
-    - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var "host=lib10-api:8080:80"
+  #  - newman --version
+  #  - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var "host=lib10-api:8080:80"
   #  - docker $DOCKER_CI_IMAGE test-integration
   #  - mvn clean verify -P test-integration
 
