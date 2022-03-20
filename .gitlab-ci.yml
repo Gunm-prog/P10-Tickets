@@ -87,8 +87,10 @@ unit-tests:
   stage: test
   needs:
     - job: build-image
-  image: $DOCKER_CI_IMAGE
- # services:
+  image: docker
+  services:
+    - name: $DOCKER_CI_IMAGE
+      alias: lib10-api
  #   - name: postman/newman:alpine
  #     entrypoint: [""]
   coverage: '/Total.*?([0–9]{1,3})%/'
@@ -96,7 +98,7 @@ unit-tests:
   #  - cd Lib10/
   #  - mvn -v
   #  - mvn $MAVEN_CLI_OPTS test
-    - docker $DOCKER_CI_IMAGE test
+    - docker lib10-api test
   artifacts:
     reports:
       junit:
@@ -110,11 +112,15 @@ bdd-dump:
   needs:
     - job: unit-tests 
   #  - job: build-image
-  image: $DOCKER_CI_IMAGE
+  image: #$DOCKER_CI_IMAGE
+    name: postman/newman:alpine
+    entrypoint: [""]
   services: 
   #  - mysql
     - name: mysql:8.0
       command: [ "--default-authentication-plugin=mysql_native_password" ]
+    - name: $DOCKER_CI_IMAGE
+      alias: lib10-api
   script:
     - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
 
@@ -122,7 +128,9 @@ bdd-dump:
     - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
     - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
 
-    - docker $DOCKER_CI_IMAGE test-integration
+    - newman --version
+    - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var "host=lib10-api"
+  #  - docker $DOCKER_CI_IMAGE test-integration
   #  - mvn clean verify -P test-integration
 
 #test_image:
@@ -217,7 +225,7 @@ api-test:
   #  - mvn $MAVEN_CLI_OPTS compile
   #  - mvn $MAVEN_CLI_OPTS run
     - newman --version
-    - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var "host=lib10-api:8080"
+    - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var "host=lib10-api"
 
  # artifacts:
   #  reports:
