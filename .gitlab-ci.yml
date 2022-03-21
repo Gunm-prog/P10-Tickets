@@ -3,7 +3,7 @@
 #image: inaciofeanor/maven-newmans
 #image: maven
 #image: docker
-image: actency/docker-mysql
+image: tmaier/docker-compose
 
 cache:
   paths:
@@ -32,6 +32,7 @@ variables:
   DOCKER_CI_IMAGE: "$CI_REGISTRY_IMAGE:ci-$CI_COMMIT_SHORT_SHA"
 
 stages:
+  - compose
   - buildImage
   - database-dump
   - test-api
@@ -53,8 +54,16 @@ stages:
 #  service:
 #    - name: docker:dind
 
+test-compose:
+  stage: compose
+  script:
+    - cd Lib10/
+    - docker compose up -p lib10Project
+
 build-image:
   stage: buildImage
+  needs: 
+    - job: test-compose
   image: docker
  # image: actency/docker-mysql
   services: 
@@ -119,6 +128,7 @@ bdd-dump:
    # entrypoint: [""]
   services: 
   #  - mysql
+    - name: docker:dind
     - name: mysql:8.0
       command: [ "--default-authentication-plugin=mysql_native_password" ]
   #  - name: $DOCKER_CI_IMAGE
