@@ -56,9 +56,11 @@ stages:
 
 test-compose:
   stage: compose
+  services:
+    - docker:dind
   script:
     - cd Lib10/docker/init
-    - docker docker-compose up
+    - docker-compose up
 
 build-image:
   stage: buildImage
