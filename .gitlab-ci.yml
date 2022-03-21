@@ -56,8 +56,8 @@ stages:
 
 test-compose:
   stage: compose
-  services:
-    - docker:dind
+#  services:
+#    - docker:dind
   script:
     - cd Lib10/docker/init
     - docker-compose up
