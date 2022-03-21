@@ -30,16 +30,9 @@ variables:
   DOCKER_CI_IMAGE: "$CI_REGISTRY_IMAGE:ci-$CI_COMMIT_SHORT_SHA"
 
 stages:
- # - test
   - buildImage
-#  - test
   - database-dump
-#  - testImage
-#  - test
- # - build
- # - build
   - test-api
-#  - integration-test
 
 .docker-login: &docker-login
     - echo ${p10_pat} | docker login $CI_REGISTRY -u Gunm-prog --password-stdin
@@ -73,7 +66,7 @@ build-image:
 
 ## test run
     #- docker run --rm -it $DOCKER_CI_IMAGE:latest
-  #  - docker run --rm $DOCKER_CI_IMAGE
+    - docker run --rm $DOCKER_CI_IMAGE
   #  - docker ps
   artifacts:
     reports:
@@ -226,7 +219,6 @@ api-test:
   #  - mvn $MAVEN_CLI_OPTS compile
   #  - mvn $MAVEN_CLI_OPTS run
   #  - newman --version
-    - echo lib10-api
     - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} #--env-var "host=lib10-api:8081"
 
  # artifacts:
