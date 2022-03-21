@@ -2,6 +2,7 @@
 #image: zhangpin/docker-maven-mysql-vipkid
 #image: inaciofeanor/maven-newmans
 #image: maven
+#image: docker
 
 cache:
   paths:
@@ -45,6 +46,12 @@ stages:
   - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
   - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
 
+#build-database:
+ # stage: build
+#  image: docker
+#  service:
+#    - name: docker:dind
+
 build-image:
   stage: buildImage
   image: docker
@@ -66,7 +73,7 @@ build-image:
 
 ## test run
     #- docker run --rm -it $DOCKER_CI_IMAGE:latest
-    - docker run --rm $DOCKER_CI_IMAGE
+  #  - docker run --rm $DOCKER_CI_IMAGE
   #  - docker ps
   artifacts:
     reports:
