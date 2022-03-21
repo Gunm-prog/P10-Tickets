@@ -1,9 +1,9 @@
 version: '2'
 
 services:
-    lib10.api:
-        image: maven:3.6.3-jdk-8-openj9
-        container_name: lib10-api
+  lib10.api:
+    image: maven:3.6.3-jdk-8-openj9
+    container_name: lib10-api
     ports:
       # local:container
       - "8081:80"
@@ -19,16 +19,17 @@ services:
       - db:db
 
 
-    db:
-        image: mysql:8.0.25
-        ports:
-        - "3307:3306"
-      #  expose:
-      #  - 3307
-        volumes:
-        - "./init/db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
-        environment:
-        - MYSQL_ROOT_PASSWORD=secret
-        - MYSQL_DATABASE=LIB10
-        - MYSQL_USER=usr_lib10
-        - MYSQL_PASSWORD=secret
+  db:
+    image: mysql:8.0.25
+    container_name: lib10-bdd
+    ports:
+      - "3307:3306"
+  #  expose:
+  #  - 3307
+    volumes:
+      - "./init/db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=LIB10
+      - MYSQL_USER=usr_lib10
+      - MYSQL_PASSWORD=secret
