@@ -10,7 +10,7 @@ services:
     #environment: 
     #volumes:
     build:
-      context: ../dev/init/api
+      context: ../../
       dockerfile: Dockerfile
     depends_on:
       - db
