@@ -35,5 +35,7 @@ services:
       # Lien vers le conteneur "db" (déclaré ci-après)
     #  - db:db
 
-
+volumes:
+  mysql-data:
+    driver: local
   
