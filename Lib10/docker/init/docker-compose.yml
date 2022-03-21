@@ -1,7 +1,7 @@
 version: '2'
 
 services:
-  lib10Api:
+  lib10_api:
    # image: maven:3.6.3-jdk-8-openj9
     container_name: lib10_api
     ports:
