@@ -24,6 +24,7 @@ services:
       # local:container
       - "8081:80"
     hostname: lib10-api
+    tty: true
     #environment: 
     #volumes:
     build:
