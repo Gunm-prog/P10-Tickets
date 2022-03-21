@@ -58,7 +58,7 @@ test-compose:
   stage: compose
   script:
     - cd Lib10/
-    - docker compose up -p lib10Project
+    - docker-compose up
 
 build-image:
   stage: buildImage
