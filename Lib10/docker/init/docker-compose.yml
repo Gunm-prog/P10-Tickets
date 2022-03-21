@@ -32,9 +32,9 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - db
-   # links:
+    links:
       # Lien vers le conteneur "db" (déclaré ci-après)
-    #  - db:db
+      - db:db
 
 volumes:
   mysql-data:
