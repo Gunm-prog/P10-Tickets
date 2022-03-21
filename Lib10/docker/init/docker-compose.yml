@@ -23,7 +23,7 @@ services:
     image: mysql:8.0.25
     container_name: lib10-bdd
     ports:
-      - "3307:3306"
+      - "3306:3306"
   #  expose:
   #  - 3307
     volumes:
