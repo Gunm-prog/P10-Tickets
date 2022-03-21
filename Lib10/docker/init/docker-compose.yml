@@ -7,6 +7,7 @@ services:
     ports:
       # local:container
       - "8081:80"
+    hostname: lib10-api
     #environment: 
     #volumes:
     build:
@@ -25,6 +26,7 @@ services:
     container_name: lib10-bdd
     ports:
       - "3306:3306"
+    hostname: mysql
   #  expose:
   #  - 3307
     volumes:
