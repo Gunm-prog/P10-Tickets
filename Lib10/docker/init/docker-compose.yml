@@ -1,6 +1,22 @@
 version: '2'
 
 services:
+
+  db:
+    image: mysql:8.0.25
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: lib10_bdd
+    ports:
+      - "3306:3306"
+    hostname: mysql
+    volumes:
+      - "./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=LIB10
+      - MYSQL_USER=usr_lib10
+      - MYSQL_PASSWORD=secret
+
   lib10_api:
    # image: maven:3.6.3-jdk-8-openj9
     container_name: lib10_api
@@ -20,19 +36,4 @@ services:
     #  - db:db
 
 
-  db:
-    image: mysql:8.0.25
-    command: --default-authentication-plugin=mysql_native_password
-    container_name: lib10_bdd
-    ports:
-      - "3306:3306"
-    hostname: mysql
-  #  expose:
-  #  - 3307
-    volumes:
-      - "./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
-    environment:
-      - MYSQL_ROOT_PASSWORD=secret
-      - MYSQL_DATABASE=LIB10
-      - MYSQL_USER=usr_lib10
-      - MYSQL_PASSWORD=secret
+  
