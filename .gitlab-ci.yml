@@ -3,6 +3,7 @@
 #image: inaciofeanor/maven-newmans
 #image: maven
 #image: docker
+image: actency/docker-mysql
 
 cache:
   paths:
