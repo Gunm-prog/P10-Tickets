@@ -44,20 +44,20 @@ services:
       # Lien vers le conteneur "db" (déclaré ci-après)
       - db:db
 
-postman:
-  image: postman/newman:alpine
-  container_name: postmanTests
-  command:
-    run postmanTests.postman_collection.json -e postmanTests.postman_collection.json -k
-    -r cli,json
-    --reporter-json-export="reports/fastRestAPITests.json"
-  volumes:
-    - ./fastRest.QA.Tests/postman:/etc/newman
-  depends_on:
-    - "lib10_api"
-    - "db"
-  networks:
-    - app_network
+  postman:
+    image: postman/newman:alpine
+    container_name: postmanTests
+    command:
+      run postmanTests.postman_collection.json -e postmanTests.postman_collection.json -k
+      -r cli,json
+      --reporter-json-export="reports/fastRestAPITests.json"
+    volumes:
+      - ./fastRest.QA.Tests/postman:/etc/newman
+    depends_on:
+      - "lib10_api"
+      - "db"
+    networks:
+      - app_network
     
 #volumes:
  # mysql-data:
