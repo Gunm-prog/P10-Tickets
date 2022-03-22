@@ -57,12 +57,12 @@ test-compose:
     - cd Lib10/docker/init
     #- docker-compose build
     - docker-compose up
-    - docker-compose ps
-    - docker images
-    - docker ps
-    - docker tag init_lib10_api:latest $DOCKER_CI_IMAGE
-    - *docker-login
-    - docker push $DOCKER_CI_IMAGE
+#    - docker-compose ps
+ #   - docker images
+#    - docker ps
+#    - docker tag init_lib10_api:latest $DOCKER_CI_IMAGE
+#    - *docker-login
+#    - docker push $DOCKER_CI_IMAGE
 
 #build-image:
  # stage: buildImage
@@ -216,9 +216,11 @@ api-test:
   image: 
     name: postman/newman:alpine
     entrypoint: [""]
+
     #gladeolus/docker-compose-newman
   #services:
     #- docker:dind
+    
   services:
     - name: $DOCKER_CI_IMAGE
       alias: lib10-api
