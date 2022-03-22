@@ -219,9 +219,9 @@ api-test:
     #name: postman/newman:alpine
     #entrypoint: [""]
     gladeolus/docker-compose-newman
-  services:
-    - name: $DOCKER_CI_IMAGE
-      alias: lib10-api
+ # services:
+  #  - name: $DOCKER_CI_IMAGE
+  #    alias: lib10-api
    # - mysql
    # - name: mysql:8.0
   #    command: [ "--default-authentication-plugin=mysql_native_password" ]
@@ -246,10 +246,10 @@ api-test:
   #  - mvn $MAVEN_CLI_OPTS run
   #  - newman --version
     #- docker-compose lib10-api up
-  #  - cd Lib10/docker/init
+    - cd Lib10/docker/init
     - docker-compose up
     #- newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var "host=lib10-api:8081"
-    - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var "host=lib10-api:8081"
+    - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var "host=init_lib10_api:latest:8081"
 
  # artifacts:
   #  reports:
