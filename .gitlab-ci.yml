@@ -4,6 +4,7 @@
 #image: maven
 #image: docker
 #image: tmaier/docker-compose
+image: gladeolus/docker-compose-newman
 
 cache:
   paths:
@@ -56,9 +57,10 @@ stages:
 
 test-compose:
   stage: compose
-  image: gladeolus/docker-compose-newman
   services:
     - docker:dind
+    - name: postman/newman_alpine33
+      entrypoint: [""]
   script:
     - cd Lib10/docker/init
     #- docker-compose build
