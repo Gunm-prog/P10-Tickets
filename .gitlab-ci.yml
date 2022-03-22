@@ -219,6 +219,8 @@ api-test:
     #name: postman/newman:alpine
     #entrypoint: [""]
     gladeolus/docker-compose-newman
+  services:
+    - docker:dind
  # services:
   #  - name: $DOCKER_CI_IMAGE
   #    alias: lib10-api
