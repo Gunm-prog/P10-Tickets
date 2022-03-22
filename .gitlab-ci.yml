@@ -33,8 +33,8 @@ variables:
 
 stages:
   - compose
-  - buildImage
-  - database-dump
+ # - buildImage
+ # - database-dump
   - test-api
 
 .docker-login: &docker-login
@@ -60,25 +60,28 @@ test-compose:
     - docker:dind
   script:
     - cd Lib10/docker/init
-    - docker-compose up
+    - docker-compose build # -t $DOCKER_CI_IMAGE .
+  #  - docker-compose up
+    - *docker-login
+    - docker push $DOCKER_CI_IMAGE
 
-build-image:
-  stage: buildImage
-  needs: 
-    - job: test-compose
-  image: docker
+#build-image:
+ # stage: buildImage
+ # needs: 
+ #   - job: test-compose
+ # image: docker
  # image: actency/docker-mysql
-  services: 
-    - name: docker:dind
+ # services: 
+ #   - name: docker:dind
   #  - name: mysql:8.0
   #    command: [ "--default-authentication-plugin=mysql_native_password" ]
-  before_script:
+ # before_script:
    # - *init-db
-    - *docker-login
-  script:
-    - cd Lib10/
-    - docker build -t $DOCKER_CI_IMAGE .
-    - docker push $DOCKER_CI_IMAGE
+ #   - *docker-login
+ # script:
+ #   - cd Lib10/
+ #   - docker build -t $DOCKER_CI_IMAGE .
+ #   - docker push $DOCKER_CI_IMAGE
 #temp
 #    - docker images
 #    - docker ps
@@ -87,13 +90,13 @@ build-image:
     #- docker run --rm -it $DOCKER_CI_IMAGE:latest
   #  - docker run --rm $DOCKER_CI_IMAGE
   #  - docker ps
-  artifacts:
-    reports:
-      junit:
-        - "target/surefire-reports/TEST-*.xml"
-    expire_in: 1 hour
-    paths:
-      - "target" # for multi-modules project with directory root as a pom package type
+ # artifacts:
+  #  reports:
+ #     junit:
+ #       - "target/surefire-reports/TEST-*.xml"
+ #   expire_in: 1 hour
+  #  paths:
+  #    - "target" # for multi-modules project with directory root as a pom package type
 
 #unit-tests:
 #  stage: test
@@ -119,28 +122,28 @@ build-image:
  #   paths:
  #     - "**/target" # for multi-modules project with directory root as a pom package type
 
-bdd-dump:
-  stage: database-dump
-  needs:
+#bdd-dump:
+ # stage: database-dump
+ # needs:
    # - job: unit-tests 
-   - job: build-image
+ #  - job: build-image
   #  - job: build-image
   #image: #$DOCKER_CI_IMAGE
    # name: postman/newman:alpine
    # entrypoint: [""]
-  services: 
+#  services: 
   #  - mysql
-    - name: docker:dind
-    - name: mysql:8.0
-      command: [ "--default-authentication-plugin=mysql_native_password" ]
+ #   - name: docker:dind
+ #   - name: mysql:8.0
+  #    command: [ "--default-authentication-plugin=mysql_native_password" ]
   #  - name: $DOCKER_CI_IMAGE
   #    alias: lib10-api
-  script:
-    - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
+ # script:
+ #   - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
 
-    - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
-    - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
-    - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
+ #   - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
+ #   - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
+  #  - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
 
   #  - newman --version
   #  - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var "host=lib10-api:8080:80"
@@ -223,8 +226,9 @@ api-test:
  #   - name: postman/newman_alpine33
  #     entrypoint: [""]
   needs:
+    - job: compose
    # - job: build
-   - job: build-image
+  # - job: build-image
   #  - job: bdd-dump
  # before_script:
   #  - *init-db
