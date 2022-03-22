@@ -60,7 +60,7 @@ test-compose:
     - docker:dind
   script:
     - cd Lib10/docker/init
-    - docker-compose build # -t $DOCKER_CI_IMAGE .
+    - docker-compose build -t $DOCKER_CI_IMAGE
   #  - docker-compose up
     - *docker-login
     - docker push $DOCKER_CI_IMAGE
