@@ -224,8 +224,8 @@ api-test:
   #services:
     #- docker:dind
   services:
-    - name: $DOCKER_CI_IMAGE
-      alias: lib10-api
+ #   - name: $DOCKER_CI_IMAGE
+ #     alias: lib10-api
    # - docker:dind
    # - mysql
    # - name: mysql:8.0
