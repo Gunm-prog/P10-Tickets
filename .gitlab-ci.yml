@@ -58,7 +58,7 @@ stages:
 test-compose:
   stage: compose
   services:
-    - docker:dind
+    - name: docker:dind
     - name: postman/newman_alpine33
       entrypoint: [""]
   script:
