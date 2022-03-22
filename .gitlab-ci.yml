@@ -61,10 +61,10 @@ test-compose:
   script:
     - cd Lib10/docker/init
     - docker-compose build
-    - docker tag init_lib10_api:latest DOCKER_CI_IMAGE
+    - docker tag init_lib10_api:latest $DOCKER_CI_IMAGE
   #  - docker-compose up
     - *docker-login
-    - docker push DOCKER_CI_IMAGE
+    - docker push $DOCKER_CI_IMAGE
 
 #build-image:
  # stage: buildImage
