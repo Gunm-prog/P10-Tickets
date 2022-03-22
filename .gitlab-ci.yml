@@ -216,8 +216,9 @@ test-compose:
 api-test:
   stage: test-api
   image: 
-    name: postman/newman:alpine
-    entrypoint: [""]
+    #name: postman/newman:alpine
+    #entrypoint: [""]
+    gladeolus/docker-compose-newman
   services:
     - name: $DOCKER_CI_IMAGE
       alias: lib10-api
