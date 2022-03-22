@@ -56,7 +56,8 @@ test-compose:
   script:
     - cd Lib10/docker/init
     #- docker-compose build
-    - docker-compose up -d
+    - docker-compose up
+    - docker-compose ps
     - docker images
     - docker ps
     - docker tag init_lib10_api:latest $DOCKER_CI_IMAGE
