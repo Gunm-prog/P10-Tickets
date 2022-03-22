@@ -3,8 +3,8 @@
 #image: inaciofeanor/maven-newmans
 #image: maven
 #image: docker
-#image: tmaier/docker-compose
-image: gladeolus/docker-compose-newman
+image: tmaier/docker-compose
+#image: gladeolus/docker-compose-newman
 
 cache:
   paths:
@@ -49,17 +49,10 @@ stages:
   - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
   - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
 
-#build-database:
- # stage: build
-#  image: docker
-#  service:
-#    - name: docker:dind
-
 test-compose:
   stage: compose
   services:
-    - name: postman/newman_alpine33
-      entrypoint: [""]
+    - name: docker:dind
   script:
     - cd Lib10/docker/init
     #- docker-compose build
