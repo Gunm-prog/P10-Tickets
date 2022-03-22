@@ -226,7 +226,7 @@ api-test:
  #   - name: postman/newman_alpine33
  #     entrypoint: [""]
   needs:
-    - job: compose
+    - job: test-compose
    # - job: build
   # - job: build-image
   #  - job: bdd-dump
