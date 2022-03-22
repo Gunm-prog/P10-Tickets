@@ -250,9 +250,9 @@ api-test:
     #- docker-compose lib10-api up
   #  - cd Lib10/docker/init
    # - docker-compose up
-    - docker run lib10-api
+  #  - docker run lib10-api
     #- newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var "host=lib10-api:8081"
-    - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var "host=init_lib10_api:latest:8081"
+    - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var "host=lib10-api:8081"
 
  # artifacts:
   #  reports:
