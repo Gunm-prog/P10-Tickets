@@ -60,9 +60,9 @@ test-compose:
     - docker:dind
   script:
     - cd Lib10/docker/init
-    - docker-compose build
+    #- docker-compose build
+    - docker-compose up -d
     - docker tag init_lib10_api:latest $DOCKER_CI_IMAGE
-  #  - docker-compose up
     - *docker-login
     - docker push $DOCKER_CI_IMAGE
 
@@ -224,7 +224,7 @@ api-test:
   services:
     - name: $DOCKER_CI_IMAGE
       alias: lib10-api
-    - docker:dind
+   # - docker:dind
    # - mysql
    # - name: mysql:8.0
   #    command: [ "--default-authentication-plugin=mysql_native_password" ]
@@ -235,8 +235,6 @@ api-test:
    # - job: build
   # - job: build-image
   #  - job: bdd-dump
-  before_script:
-    - *docker-login
   #  - *init-db
  #   - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
 
