@@ -44,7 +44,7 @@ services:
       context: ../../
       dockerfile: Dockerfile
     depends_on:
-      - db
+      - "db"
    # links:
       # Lien vers le conteneur "db" (déclaré ci-après)
    #   - db:db
