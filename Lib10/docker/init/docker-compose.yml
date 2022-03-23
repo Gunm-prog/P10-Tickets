@@ -67,7 +67,7 @@ services:
   #  networks:
   #    - app_network
     
-#volumes:
- # mysql-data:
-  #  driver: local
+volumes:
+  mysql-data:
+    driver: local
   
