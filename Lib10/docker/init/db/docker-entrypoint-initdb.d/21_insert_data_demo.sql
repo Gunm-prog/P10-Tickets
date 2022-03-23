@@ -9,7 +9,7 @@
 --
 LOCK TABLES `user` WRITE;
 INSERT INTO `user` VALUES
-    (5,'Lomme',43,'rue laba','59160','moi@moi.moi','Ben ','CTOTO',_binary '','$2a$10$P5Sv/.DHDLP98dJn4dYIZOrroMBRcqKTL0mbbUsR/0LFZAbAJNie6','ADMIN')
+    ('Lomme',43,'rue laba','59160','moi@moi.moi','Ben ','CTOTO',_binary '','$2a$10$P5Sv/.DHDLP98dJn4dYIZOrroMBRcqKTL0mbbUsR/0LFZAbAJNie6','ADMIN')
     ,(6,'LOMME',2,'Allée des acacias','59160','bob@bob.bob','Bob','Bob',_binary '','$2a$10$P5Sv/.DHDLP98dJn4dYIZOrroMBRcqKTL0mbbUsR/0LFZAbAJNie6','CUSTOMER')
     ,(13,'Lomme',43,'rue laba','59160','CTOTO@moi.moi','Ben c\'est moaaaa','CTOTO',_binary '','$2a$10$P5Sv/.DHDLP98dJn4dYIZOrroMBRcqKTL0mbbUsR/0LFZAbAJNie6','CUSTOMER')
     ,(16,'ee',0,'ee','ee','ter@tre.fr','erhyz','sgz',_binary '','$2a$10$VjSp7QmYr/vAMDgMcqTc1eu68ijgE/GFL/1oXl/I12lLJ1ktADW9i','CUSTOMER')
