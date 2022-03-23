@@ -1352,7 +1352,7 @@
 									"            body: {\r",
 									"                mode: 'raw',\r",
 									"                raw: JSON.stringify({\r",
-									"                    \"username\": \"test@postman.com\",\r",
+									"                    \"username\": \"test2@postman.com\",\r",
 									"                    \"password\": \"password\"\r",
 									"                })\r",
 									"            }\r",
