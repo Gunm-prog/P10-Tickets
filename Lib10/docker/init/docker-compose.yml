@@ -3,10 +3,10 @@ version: '2'
 
 ##todo environnement bdd
 
-networks:
- app_network:
-   name: lib10network
-   driver: bridge
+#networks:
+# app_network:
+#   name: lib10network
+#   driver: bridge
 
 services:
 
@@ -34,8 +34,8 @@ services:
     ports:
       # local:container
       - "8081:80"
-    networks:
-      - app_network
+  #  networks:
+  #    - app_network
   #  tty: true
    # environment: 
     #  DB_CONN_STR: "host=db;port=3306;database=LIB10;userid=usr_lib10;password=secret"
@@ -44,10 +44,10 @@ services:
       context: ../../
       dockerfile: Dockerfile
     depends_on:
-      - "db"
-   # links:
+      - db
+    links:
       # Lien vers le conteneur "db" (déclaré ci-après)
-   #   - db:db
+      - db:db
 
   postman:
     image: postman/newman:alpine
@@ -59,10 +59,13 @@ services:
   #  volumes:
  #     - ./fastRest.QA.Tests/postman:/etc/newman
     depends_on:
-      - "api"
-      - "db"
-    networks:
-      - app_network
+      - api
+      - db
+    links:
+      - api:api
+      - bd:bd
+  #  networks:
+  #    - app_network
     
 #volumes:
  # mysql-data:
