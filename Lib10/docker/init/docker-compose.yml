@@ -56,8 +56,8 @@ services:
       run postmanTests.postman_collection.json -e postmanTests.postman_collection.json -k
       -r cli,json
       --reporter-json-export="reports/fastRestAPITests.json"
-    volumes:
-      - ./fastRest.QA.Tests/postman:/etc/newman
+  #  volumes:
+ #     - ./fastRest.QA.Tests/postman:/etc/newman
     depends_on:
       - "lib10_api"
       - "db"
