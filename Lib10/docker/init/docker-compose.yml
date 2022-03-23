@@ -3,10 +3,10 @@ version: '2'
 
 ##todo environnement bdd
 
-#networks:
-# app_network:
-#   name: lib10network
-#   driver: bridge
+networks:
+ app_network:
+   name: lib10network
+   driver: bridge
 
 services:
 
@@ -16,8 +16,8 @@ services:
     container_name: lib10_bdd
     ports:
       - "3306:3306"
-  #  networks:
-  #    - app_network
+    networks:
+      - app_network
     volumes:
       - "./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
     environment:
@@ -27,27 +27,27 @@ services:
       - MYSQL_PASSWORD=secret
       #  DB_CONN_STR: "host=db;port=3306;database=LIB10;userid=usr_lib10;password=secret"
 
- ## api:
+  api:
    # image: maven:3.6.3-jdk-8-openj9
-  ##  container_name: lib10_api
- ##   restart : always
- ##   ports:
+    container_name: lib10_api
+    restart : always
+    ports:
       # local:container
- ##     - "8081:80"
-  #  networks:
-  #    - app_network
+      - "8081:80"
+    networks:
+      - app_network
   #  tty: true
    # environment: 
     #  DB_CONN_STR: "host=db;port=3306;database=LIB10;userid=usr_lib10;password=secret"
     #volumes:
- ##   build:
- ##     context: ../../
- ##     dockerfile: Dockerfile
- ##   depends_on:
- ##     - db
- ##   links:
+    build:
+      context: ../../
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    links:
       # Lien vers le conteneur "db" (déclaré ci-dessus)
- ##     - db:db
+      - db:db
 
  ## postman:
  ##   image: postman/newman:alpine
@@ -67,7 +67,7 @@ services:
   #  networks:
   #    - app_network
     
-volumes:
-  mysql-data:
-    driver: local
+#volumes:
+#  mysql-data:
+#    driver: local
   
