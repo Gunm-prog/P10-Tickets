@@ -9,15 +9,15 @@
 --
 LOCK TABLES `user` WRITE;
 INSERT INTO `user` VALUES
-    ('Lomme',43,'rue laba','59160','moi@moi.moi','Ben ','CTOTO',_binary '','$2a$10$P5Sv/.DHDLP98dJn4dYIZOrroMBRcqKTL0mbbUsR/0LFZAbAJNie6','ADMIN')
-    ,(6,'LOMME',2,'Allée des acacias','59160','bob@bob.bob','Bob','Bob',_binary '','$2a$10$P5Sv/.DHDLP98dJn4dYIZOrroMBRcqKTL0mbbUsR/0LFZAbAJNie6','CUSTOMER')
-    ,(13,'Lomme',43,'rue laba','59160','CTOTO@moi.moi','Ben c\'est moaaaa','CTOTO',_binary '','$2a$10$P5Sv/.DHDLP98dJn4dYIZOrroMBRcqKTL0mbbUsR/0LFZAbAJNie6','CUSTOMER')
-    ,(16,'ee',0,'ee','ee','ter@tre.fr','erhyz','sgz',_binary '','$2a$10$VjSp7QmYr/vAMDgMcqTc1eu68ijgE/GFL/1oXl/I12lLJ1ktADW9i','CUSTOMER')
-    ,(17,'ee',0,'ee','ee','tereee@tre.fr','erhyz','sgz',_binary '','$2a$10$ceKoPvkVB5oVfZdiDoQS0uTwq5DTIsVYpQOWDkEHQttZxcAWeT/fu','CUSTOMER')
-    ,(18,'ee',0,'ee','ee','tereeaaae@tre.fr','erhyz','sgz',_binary '','$2a$10$NXCn3aJTf91xoKlEfgneKOP0SuPQNKf35TjJFmgIzj/jULufsXA9q','CUSTOMER')
-    ,(19,'ee',0,'ee','ee','tereereffeaaae@tre.fr','erhyz','sgz',_binary '','$2a$10$tT15FxLEn0tmjig3Ppu3DujVU.m0Yo7YgWEPCa/PZPAx3nLYXZ01y','CUSTOMER')
-    ,(20,'ff',0,'ff','ff','gt@gt.fr','aezzeg','zaefzae',_binary '','$2a$10$VR.5wxXk9oNZRo1wHTIdielSFVdWZ/NQr0VcA16Kz3Aed4RtYmPWK','CUSTOMER')
-    ,(21,'dd',434,'dd','dd','liou@lou.lou','der','zer',_binary '','$2a$10$2Q3r3zblNunIJ7T7cHBVHuvFw1Faq2irYCy/MS0nozLIxc1j3J1o.','CUSTOMER');
+    (1,'Lomme',43,'rue laba','59160','moi@moi.moi','Ben ','CTOTO',_binary '','$2a$10$P5Sv/.DHDLP98dJn4dYIZOrroMBRcqKTL0mbbUsR/0LFZAbAJNie6','ADMIN')
+    ,(2,'LOMME',2,'Allée des acacias','59160','bob@bob.bob','Bob','Bob',_binary '','$2a$10$P5Sv/.DHDLP98dJn4dYIZOrroMBRcqKTL0mbbUsR/0LFZAbAJNie6','CUSTOMER')
+    ,(3,'Lomme',43,'rue laba','59160','CTOTO@moi.moi','Ben c\'est moaaaa','CTOTO',_binary '','$2a$10$P5Sv/.DHDLP98dJn4dYIZOrroMBRcqKTL0mbbUsR/0LFZAbAJNie6','CUSTOMER')
+    ,(4,'ee',0,'ee','ee','ter@tre.fr','erhyz','sgz',_binary '','$2a$10$VjSp7QmYr/vAMDgMcqTc1eu68ijgE/GFL/1oXl/I12lLJ1ktADW9i','CUSTOMER')
+    ,(5,'ee',0,'ee','ee','tereee@tre.fr','erhyz','sgz',_binary '','$2a$10$ceKoPvkVB5oVfZdiDoQS0uTwq5DTIsVYpQOWDkEHQttZxcAWeT/fu','CUSTOMER')
+    ,(6,'ee',0,'ee','ee','tereeaaae@tre.fr','erhyz','sgz',_binary '','$2a$10$NXCn3aJTf91xoKlEfgneKOP0SuPQNKf35TjJFmgIzj/jULufsXA9q','CUSTOMER')
+    ,(7,'ee',0,'ee','ee','tereereffeaaae@tre.fr','erhyz','sgz',_binary '','$2a$10$tT15FxLEn0tmjig3Ppu3DujVU.m0Yo7YgWEPCa/PZPAx3nLYXZ01y','CUSTOMER')
+    ,(8,'ff',0,'ff','ff','gt@gt.fr','aezzeg','zaefzae',_binary '','$2a$10$VR.5wxXk9oNZRo1wHTIdielSFVdWZ/NQr0VcA16Kz3Aed4RtYmPWK','CUSTOMER')
+    ,(9,'dd',434,'dd','dd','liou@lou.lou','der','zer',_binary '','$2a$10$2Q3r3zblNunIJ7T7cHBVHuvFw1Faq2irYCy/MS0nozLIxc1j3J1o.','CUSTOMER');
 UNLOCK TABLES;
 --
 -- Dumping data for table `library`
