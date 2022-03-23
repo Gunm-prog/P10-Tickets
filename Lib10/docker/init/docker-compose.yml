@@ -3,29 +3,31 @@ version: '2'
 
 ##todo environnement bdd
 
-#networks:
- #app_network:
- #  name: lib10network
- #  driver: bridge
+networks:
+ app_network:
+   name: lib10network
+   driver: bridge
 
 services:
 
-  db:
-    image: mysql:8.0.25
-    command: --default-authentication-plugin=mysql_native_password
-    container_name: lib10_bdd
-    ports:
-      - "3306:3306"
-# #    networks:
- # #     - app_network
+  postman:
+    image: postman/newman:alpine
+    container_name: postmanTests
+    command:
+      run postmanTests.postman_collection.json -e postmanTests.postman_collection.json -k
+      -r cli,json
+      --reporter-json-export="reports/fastRestAPITests.json"
     volumes:
-      - "./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
-    environment:
-      - MYSQL_ROOT_PASSWORD=secret
-      - MYSQL_DATABASE=LIB10
-      - MYSQL_USER=usr_lib10
-      - MYSQL_PASSWORD=secret
-      #  DB_CONN_STR: "host=db;port=3306;database=LIB10;userid=usr_lib10;password=secret"
+   # target/test-classes/com.emilie.lib10/postmanTests..postman_collection.json
+      - ./postmanTests:/target/test-classes/com.emilie.lib10
+    depends_on:
+      - api
+      - db
+  #  links:
+  #    - api:api
+  #    - db:db
+    networks:
+      - app_network
 
   api:
    # image: maven:3.6.3-jdk-8-openj9
@@ -34,8 +36,8 @@ services:
     ports:
       # local:container
       - "8081:80"
- # #  networks:
- # #    - app_network
+    networks:
+      - app_network
   #  tty: true
   #  environment: 
    #   - spring.datasource.url=jdbc:mysql://mysql:3306/LIB10?serverTimezone=UTC
@@ -49,28 +51,26 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - db
-    links:
+  #  links:
       # Lien vers le conteneur "db" (déclaré ci-dessus)
-      - db
+  #    - db
 
-  postman:
-    image: postman/newman:alpine
-    container_name: postmanTests
-    command:
-      run postmanTests.postman_collection.json -e postmanTests.postman_collection.json -k
-      -r cli,json
-      --reporter-json-export="reports/fastRestAPITests.json"
+  db:
+    image: mysql:8.0.25
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: lib10_bdd
+    ports:
+      - "3306:3306"
+    networks:
+      - app_network
     volumes:
-   # target/test-classes/com.emilie.lib10/Lib10_testing.postman_collection.json
-      - ./postmanTests:/target/test-classes/com.emilie.lib10/
-    depends_on:
-      - db
-      - api
-    links:
-      - api
-      - db
-  #  networks:
-  #    - app_network
+      - "./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=LIB10
+      - MYSQL_USER=usr_lib10
+      - MYSQL_PASSWORD=secret
+      #  DB_CONN_STR: "host=db;port=3306;database=LIB10;userid=usr_lib10;password=secret"
     
 #volumes:
 #  mysql-data:
