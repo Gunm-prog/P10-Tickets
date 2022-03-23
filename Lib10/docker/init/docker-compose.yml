@@ -37,7 +37,11 @@ services:
     networks:
       - app_network
   #  tty: true
-   # environment: 
+    environment: 
+      - spring.datasource.url=jdbc:mysql://mysql:3306/LIB10?serverTimezone=UTC
+      - spring.datasource.username=usr_lib10
+      - spring.datasource.password=secret
+
     #  DB_CONN_STR: "host=db;port=3306;database=LIB10;userid=usr_lib10;password=secret"
     #volumes:
     build:
