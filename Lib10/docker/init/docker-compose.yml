@@ -59,8 +59,8 @@ services:
   #  volumes:
  #     - ./fastRest.QA.Tests/postman:/etc/newman
     depends_on:
-      - api
       - db
+      - api
     links:
       - api:api
       - bd:bd
