@@ -21,7 +21,8 @@ services:
     volumes:
    # target/test-classes/com.emilie.lib10/postmanTests..postman_collection.json
     #  - ./postmanTests:/target/test-classes/com.emilie.lib10
-      - "./:/target/test-classes/com.emilie.lib10"
+    #  - "./:/target/test-classes/com.emilie.lib10"
+      - "./:/etc/newman"
     depends_on:
       - api
       - db
