@@ -15,7 +15,8 @@ services:
     container_name: postmanTests
     restart: on-failure
     command:
-      run postmanTests.postman_collection.json -e postmanTests.postman_collection.json -k
+     # run $POSTMAN_COLLECTION -e $POSTMAN_ENVIRONMENT -k
+      run $POSTMAN_COLLECTION -e $POSTMAN_ENVIRONMENT
       -r cli,json
       --reporter-json-export="reports/fastRestAPITests.json"
     volumes:
