@@ -16,8 +16,8 @@ services:
     container_name: lib10_bdd
     ports:
       - "3306:3306"
-    networks:
-      - app_network
+# #    networks:
+ # #     - app_network
     volumes:
       - "./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
     environment:
@@ -34,8 +34,8 @@ services:
     ports:
       # local:container
       - "8081:80"
-    networks:
-      - app_network
+ # #  networks:
+ # #    - app_network
   #  tty: true
   #  environment: 
    #   - spring.datasource.url=jdbc:mysql://mysql:3306/LIB10?serverTimezone=UTC
@@ -53,22 +53,22 @@ services:
       # Lien vers le conteneur "db" (déclaré ci-dessus)
       - db
 
- ## postman:
- ##   image: postman/newman:alpine
- #   container_name: postmanTests
-  ##  command:
-  ##    run postmanTests.postman_collection.json -e postmanTests.postman_collection.json -k
- ##     -r cli,json
- ##     --reporter-json-export="reports/fastRestAPITests.json"
- ##   volumes:
+  postman:
+    image: postman/newman:alpine
+    container_name: postmanTests
+    command:
+      run postmanTests.postman_collection.json -e postmanTests.postman_collection.json -k
+      -r cli,json
+      --reporter-json-export="reports/fastRestAPITests.json"
+    volumes:
    # target/test-classes/com.emilie.lib10/Lib10_testing.postman_collection.json
- ##     - ./postmanTests:/target/test-classes/com.emilie.lib10/
- ##   depends_on:
- ##     - db
- ##     - api
-##    links:
- ##     - api:api
-##      - db:db
+      - ./postmanTests:/target/test-classes/com.emilie.lib10/
+    depends_on:
+      - db
+      - api
+    links:
+      - api
+      - db
   #  networks:
   #    - app_network
     
