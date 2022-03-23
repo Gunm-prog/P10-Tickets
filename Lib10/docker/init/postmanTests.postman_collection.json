@@ -34,7 +34,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"moi@moi.moi\",\r\n    \"password\": \"Zokori61\"\r\n}",
+							"raw": "{\r\n    \"username\": \"{{adminEmail}}\",\r\n    \"password\": \"{{adminPass}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -60,31 +60,12 @@
 			"item": [
 				{
 					"name": "log_admin",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"    pm.collectionVariables.set(\"jwtAdminToken\", pm.response.json()[0])\r",
-									"//    console.log(pm.response.json());\r",
-									" //   postman.setNextRequest(\"testNext\")\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
 					"request": {
-						"auth": {
-							"type": "noauth"
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"moi@moi.moi\",\r\n    \"password\": \"Zokori61\"\r\n}",
+							"raw": "{\r\n    \"username\": \"{{adminEmail}}\",\r\n    \"password\": \"{{adminPass}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
