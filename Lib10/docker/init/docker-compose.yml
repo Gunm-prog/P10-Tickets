@@ -63,7 +63,7 @@ services:
       - api
     links:
       - api:api
-      - bd:bd
+      - db:db
   #  networks:
   #    - app_network
     
