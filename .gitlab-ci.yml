@@ -65,8 +65,8 @@ test-compose:
 #    - docker push $DOCKER_CI_IMAGE
   artifacts:
     reports:
-      postman:
-        - "target/lib10RestAPITests.json"
+     # postman:
+      #  - "target/lib10RestAPITests.json"
       junit:
         - "target/surefire-reports/TEST-*.xml"
     expire_in: 1 hour
