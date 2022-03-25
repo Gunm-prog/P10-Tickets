@@ -22,9 +22,8 @@ services:
     container_name: postmanTests
     restart: on-failure
     command:
-      run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var host=api:8081 -k
-      -r cli,json
-      --reporter-json-export="reports/lib10RestAPITests.json"
+      - npm install -g newman-reporter-htmlextra
+      - run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var host=api:8081 -k -r htmlextra,cli,json --reporter-htmlextra-export="reports/lib10APITests.html" --reporter-json-export="reports/lib10APITests.json"
     volumes:
       - "./:/etc/newman"
     depends_on:
