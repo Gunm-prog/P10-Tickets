@@ -19,7 +19,7 @@ services:
       #./wait-for-it.sh api:8081 --
      # sh 'docker run --name uiTestingWaitForServer ${CYPRESS_IMAGE} /bin/bash -c "/node_modules/.bin/wait-on http://${UI_TESTING_TARGET}:80/LaunchPad"'
      #    -c "/node_modules/.bin/wait-on api:8081"
-
+      ./wait-for-it.sh api:8081 --
       run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var host=api:8081 
       -k
       -r cli,json
