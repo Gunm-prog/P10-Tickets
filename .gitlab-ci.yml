@@ -56,7 +56,7 @@ test-compose:
   script:
     - cd Lib10/docker/init
     #- docker-compose build
-    - docker-compose up --exit-code-from=postman
+    - docker-compose up #--exit-code-from=postman
 #    - docker-compose ps
  #   - docker images
 #    - docker ps
