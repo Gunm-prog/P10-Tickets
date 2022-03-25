@@ -24,7 +24,7 @@ variables:
   MYSQL_ROOT_PASSWORD: rootPass
   MYSQL_USER: usr_lib10
 #  MYSQL_PASSWORD: secret
-  MYSQL_DATABASE: LIB10
+  MYSQL_DATABASE: lib10
   MYSQL_HOST: mysql
 
   POSTMAN_COLLECTION : postmanTests.postman_collection.json
