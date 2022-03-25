@@ -64,14 +64,17 @@ test-compose:
 #    - *docker-login
 #    - docker push $DOCKER_CI_IMAGE
   artifacts:
-    reports:
+    when: always
+    paths:
+      - testReport.html
+  #  reports:
      # postman:
       #  - "target/lib10RestAPITests.json"
-      junit:
-        - "target/surefire-reports/TEST-*.xml"
+   #   junit:
+     #   - "target/surefire-reports/TEST-*.xml"
     expire_in: 1 hour
-    paths:
-      - "target" # for multi-modules project with directory root as a pom package type
+  #  paths:
+  #    - "target" # for multi-modules project with directory root as a pom package type
 
 
 #build-image:
