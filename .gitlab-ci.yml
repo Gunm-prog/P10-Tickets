@@ -56,13 +56,21 @@ test-compose:
   script:
     - cd Lib10/docker/init
     #- docker-compose build
-    - docker-compose up
+    - docker-compose up --exit-code-from=postman
 #    - docker-compose ps
  #   - docker images
 #    - docker ps
 #    - docker tag init_lib10_api:latest $DOCKER_CI_IMAGE
 #    - *docker-login
 #    - docker push $DOCKER_CI_IMAGE
+  artifacts:
+    reports:
+      junit:
+        - "target/surefire-reports/TEST-*.xml"
+    expire_in: 1 hour
+    paths:
+      - "target" # for multi-modules project with directory root as a pom package type
+
 
 #build-image:
  # stage: buildImage
