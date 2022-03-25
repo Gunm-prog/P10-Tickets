@@ -46,6 +46,8 @@ services:
     build:
       context: ../../
       dockerfile: Dockerfile
+    command:
+       ./wait-for-it.sh db:3306 -- run
     depends_on:
       - db
 
