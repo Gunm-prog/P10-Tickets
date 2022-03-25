@@ -14,7 +14,10 @@ services:
     image: postman/newman:alpine
     container_name: postmanTests
     restart: on-failure
+    #-wait tcp://mysql:3306 -timeout 300s -wait-retry-interval 30s
+    #command: sh -c "/wait && /sayhello"
     command:
+      sh -c -wait tcp://api:8081 -timeout 300s -wait-retry-interval 30s
       run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var host=api:8081 -k
       -r cli,json
       --reporter-json-export="reports/fastRestAPITests.json"
