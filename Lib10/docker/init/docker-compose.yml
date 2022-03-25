@@ -17,7 +17,9 @@ services:
     #-wait tcp://mysql:3306 -timeout 300s -wait-retry-interval 30s
     #command: sh -c "/wait && /sayhello"
     command:
-      sh -c -wait tcp://api:8081 -timeout 300s -wait-retry-interval 30s
+      #command: ["./wait-for-it.sh", "db:5432", "--", "python", "app.py"]
+      #sh -c -wait tcp://api:8081 -timeout 300s -wait-retry-interval 30s
+      ./wait-for-it.sh api:8081 --
       run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var host=api:8081 -k
       -r cli,json
       --reporter-json-export="reports/fastRestAPITests.json"
