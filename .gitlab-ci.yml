@@ -56,7 +56,10 @@ test-compose:
   script:
     - cd Lib10/docker/init
     #- docker-compose build
+
+## problème il faut faire attendre aux services leurs dépendances sinon postman retourne un exit-code=1 (echec)
     - docker-compose up #--exit-code-from=postman
+
 #    - docker-compose ps
  #   - docker images
 #    - docker ps
