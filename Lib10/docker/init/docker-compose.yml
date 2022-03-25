@@ -28,12 +28,14 @@ services:
     depends_on:
       - api
       - db
+    links: 
+      - api
     networks:
       - app_network
 
   api:
     container_name: lib10_api
-    restart : always
+    restart : on-failure #always
 ###    restart: on-failure
     ports:
       # local:container
@@ -48,6 +50,8 @@ services:
  #   command:
   #     ./wait-for-it.sh db:3306 -- run
     depends_on:
+      - db
+    links:
       - db
 
   db:
