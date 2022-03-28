@@ -89,7 +89,7 @@ public class UserUnitTest {
     }
 
     @Test
-    void usserReservationsUT() {
+    void userReservationsUT() {
         Set<Reservation> reservations = new HashSet<>();
         for(int i=0; i<10; i++){
             reservations.add( mock(Reservation.class) );

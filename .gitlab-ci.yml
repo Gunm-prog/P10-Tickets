@@ -1,4 +1,12 @@
-image: pankui/docker-maven-mysql
+
+#image: pankui/docker-maven-mysql
+#image: aritrasasmal/maven-mysql-java
+#image: zhangpin/docker-maven-mysql-vipkid
+#image: inaciofeanor/maven-newmans
+#image: maven
+#image: docker
+image: tmaier/docker-compose
+#image: gladeolus/docker-compose-newman
 
 cache:
   paths:
@@ -6,60 +14,303 @@ cache:
 
 services:
   - mysql:latest
+  #services:
+  # - name: mysql:8.0
+  #  command: [ "--default-authentication-plugin=mysql_native_password" ]
+#  - name: postman/newman:alpine
+#    entrypoint: [""]
 
 variables:
   MAVEN_CLI_OPTS: "--batch-mode"
   #config maven pour stocker le repository dans un emplacement connu
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
-  MYSQL_ROOT_PASSWORD: root
+  MYSQL_ROOT_PASSWORD: rootPass
   MYSQL_USER: usr_lib10
-  MYSQL_PASSWORD: secret
-  MYSQL_DATABASE: LIB10
-  DB_HOST: mysql
+  #  MYSQL_PASSWORD: secret
+  MYSQL_DATABASE: lib10
+  MYSQL_HOST: mysql
+
+  POSTMAN_COLLECTION : postmanTests.postman_collection.json
+  POSTMAN_ENVIRONMENT: postmanTests.postman_environment.json
+
+  DOCKER_CI_IMAGE: "$CI_REGISTRY_IMAGE:ci-$CI_COMMIT_SHORT_SHA"
 
 stages:
-  - build
-  - test
-  - integration-test
+  - compose
+#  - build
+#  - test
+#  - integration-test
+
+#build:
+#  stage: build
+#  coverage: '/Total.*?([0–9]{1,3})%/'
+#  script:
+#    - cd src/
+#    - mvn $MAVEN_CLI_OPTS compile
+#  - compose
+  # - buildImage
+  # - database-dump
+ # - test-api
+
+.docker-login: &docker-login
+  - echo ${p10_pat} | docker login $CI_REGISTRY -u Gunm-prog --password-stdin
 
 .init-db: &init-db
   #connexion et test de connexion
-  #- export PGPASSWORD=$POSTGRES_PASSWORD
-  #- psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 'OK' AS status;"
+  - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
 
-  #load demo data
-  - mysql -u "MYSQL_USER" -p "MYSQL_DATABASE" < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
-  - mysql -u "MYSQL_USER" -p "MYSQL_DATABASE" < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
-  - mysql -u "MYSQL_USER" -p "MYSQL_DATABASE" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
+  - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
+  - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
+  - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
 
-build:
-  stage: build
-  coverage: '/Total.*?([0–9]{1,3})%/'
+test-compose:
+  stage: compose
+  services:
+    - name: docker:dind
   script:
-    - cd src/
-    - mvn $MAVEN_CLI_OPTS compile
+    - cd Lib10/docker/init
+    #- docker-compose build
+
+    ## problème il faut faire attendre aux services leurs dépendances sinon postman retourne un exit-code=1 (echec)
+    - docker-compose up #--exit-code-from=postman
+
+  #    - docker-compose ps
+  #   - docker images
+  #    - docker ps
+  #    - docker tag init_lib10_api:latest $DOCKER_CI_IMAGE
+  #    - *docker-login
+  #    - docker push $DOCKER_CI_IMAGE
+
   artifacts:
-    expire_in: 1 hour
+    when: always
     paths:
+
       - '**/target' # for multi-modules project with directory root as a pom package type
 
-unit-test:
-  stage: test
-  coverage: '/Total.*?([0–9]{1,3})%/'
-  needs:
-    - job: build
-  before_script:
-    - *init-db
-  script:
-    #remet a jour les dates de modif des fichiers .class pour eviter une recompilation
-    - find . -name "*.class" -exec touch {} \+
-    - cd src/
-    - mvn $MAVEN_CLI_OPTS test
-  artifacts:
-    reports:
-      junit:
-        - "**/target/surefire-reports/TEST-*.xml"
-    expire_in: 1 hour
-    paths:
-      - "**/target" # for multi-modules project with directory root as a pom package type
+#unit-test:
+#  stage: test
+#  coverage: '/Total.*?([0–9]{1,3})%/'
+#  needs:
+#    - job: build
+#  before_script:
+#    - *init-db
+#  script:
+#    #remet a jour les dates de modif des fichiers .class pour eviter une recompilation
+#    - find . -name "*.class" -exec touch {} \+
+#    - cd src/
+#    - mvn $MAVEN_CLI_OPTS test
+#  artifacts:
+#    reports:
+#      junit:
+#        - "**/target/surefire-reports/TEST-*.xml"
+#      - testReport.html
+#      #  reports:
+#      # postman:
+#      #  - "target/lib10RestAPITests.json"
+#      #   junit:
+#      #   - "target/surefire-reports/TEST-*.xml"
+#    expire_in: 1 hour
+#      #  paths:
+#      #    - "target" # for multi-modules project with directory root as a pom package type
+
+
+      #build-image:
+      # stage: buildImage
+      # needs:
+      #   - job: test-compose
+      # image: docker
+      # image: actency/docker-mysql
+      # services:
+      #   - name: docker:dind
+      #  - name: mysql:8.0
+      #    command: [ "--default-authentication-plugin=mysql_native_password" ]
+      # before_script:
+      # - *init-db
+      #   - *docker-login
+      # script:
+      #   - cd Lib10/
+      #   - docker build -t $DOCKER_CI_IMAGE .
+      #   - docker push $DOCKER_CI_IMAGE
+      #temp
+      #    - docker images
+      #    - docker ps
+
+      ## test run
+      #- docker run --rm -it $DOCKER_CI_IMAGE:latest
+      #  - docker run --rm $DOCKER_CI_IMAGE
+      #  - docker ps
+      # artifacts:
+      #  reports:
+      #     junit:
+      #       - "target/surefire-reports/TEST-*.xml"
+      #   expire_in: 1 hour
+      #  paths:
+      #    - "target" # for multi-modules project with directory root as a pom package type
+
+      #unit-tests:
+      #  stage: test
+      #  needs:
+      #    - job: build-image
+      # image: docker
+      # services:
+      #   - name: $DOCKER_CI_IMAGE
+      #     alias: lib10-api
+      #   - name: postman/newman:alpine
+      #     entrypoint: [""]
+      #  coverage: '/Total.*?([0–9]{1,3})%/'
+      # script:
+      #  - cd Lib10/
+      #  - mvn -v
+      #  - mvn $MAVEN_CLI_OPTS test
+      #   - docker lib10-api test
+      # artifacts:
+      #   reports:
+      #     junit:
+      #       - "**/target/surefire-reports/TEST-*.xml"
+      #   expire_in: 1 hour
+      #   paths:
+      #     - "**/target" # for multi-modules project with directory root as a pom package type
+
+      #bdd-dump:
+      # stage: database-dump
+      # needs:
+      # - job: unit-tests
+      #  - job: build-image
+      #  - job: build-image
+      #image: #$DOCKER_CI_IMAGE
+      # name: postman/newman:alpine
+      # entrypoint: [""]
+      #  services:
+      #  - mysql
+      #   - name: docker:dind
+      #   - name: mysql:8.0
+      #    command: [ "--default-authentication-plugin=mysql_native_password" ]
+      #  - name: $DOCKER_CI_IMAGE
+      #    alias: lib10-api
+      # script:
+      #   - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
+
+      #   - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
+      #   - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
+      #  - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
+
+      #  - newman --version
+      #  - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var "host=lib10-api:8080:80"
+      #  - docker $DOCKER_CI_IMAGE test-integration
+      #  - mvn clean verify -P test-integration
+
+      #test_image:
+      #stage: testImage
+      # needs:
+      #   - job: bdd-dump
+      # image: $DOCKER_CI_IMAGE
+      # services:
+      #     - name: mysql:8.0
+      #       command: [ "--default-authentication-plugin=mysql_native_password" ]
+      # before_script:
+      #   - *docker-login
+      #   - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
+
+      #   - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
+      #   - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
+      #   - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
+      #  script:
+      #    - docker container ls
+      #    - mvn $MAVEN_CLI_OPTS test
+
+      #build:
+      # stage: build
+      # needs:
+      #   - job: test_image
+      # script:
+      #     - cd Lib10/
+      #     - mvn $MAVEN_CLI_OPTS compile
+      # environment:
+      #     name: staging
+      #     url: https://staging.example.com
+      # artifacts:
+      #   reports:
+      #     junit:
+      #       - "**/target/surefire-reports/TEST-*.xml"
+      #   expire_in: 1 hour
+      #   paths:
+      #     - "**/target" # for multi-modules project with directory root as a pom package type
+
+      #build:
+      #  stage: build
+      #  needs:
+      #   - job: unit-test
+      # services:
+      #- name: mysql:8.0
+    # command: [ "--default-authentication-plugin=mysql_native_password" ]
+    #    - name: docker:latest
+    #  before_script:
+    #    - *init-db
+    #    - docker login registry.gitlab.com -u Gunm-prog -p ${p10_pat}
+    # script:
+    #   - cd Lib10/
+    #- docker build mvn $MAVEN_CLI_OPTS compile
+    #   - mvn $MAVEN_CLI_OPTS compile
+    #- mvn compile
+    #  - mvn verify
+    #    - docker build -t registry.Gunm-prog/P10-Tickets/t5-templates-db_app:$CI_COMMIT_REF_NAME --build-arg UID=$(id -u).
+    # - docker build -t registry.Gunm-prog/P10-Tickets/t5-templates-db_app:$CI_COMMIT_REF_NAME --build-arg UID=$(id -u).
+  # artifacts:
+  #   expire_in: 1 hour
+  #   paths:
+  #    - '**/target' # for multi-modules project with directory root as a pom package type
+
+#
+#api-test:
+#  stage: test-api
+#  image:
+#    name: postman/newman:alpine
+#    entrypoint: [""]
+#
+#    #gladeolus/docker-compose-newman
+#    #services:
+#    #- docker:dind
+#
+#  services:
+#    - name: $DOCKER_CI_IMAGE
+#      alias: lib10-api
+#    # - docker:dind
+#    # - mysql
+#    # - name: mysql:8.0
+#  #    command: [ "--default-authentication-plugin=mysql_native_password" ]
+#  #   - name: postman/newman_alpine33
+#  #     entrypoint: [""]
+#  needs:
+#    - job: test-compose
+#    # - job: build
+#  # - job: build-image
+#  #  - job: bdd-dump
+#  #  - *init-db
+#  #   - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
+#
+#  #   - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
+#  #   - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
+#  #   - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
+#
+#  #  - docker login -u "$CI_REGISTRY_USER" -P "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+#  script:
+#    #  - mvn $MAVEN_CLI_OPTS compile
+#    #  - mvn $MAVEN_CLI_OPTS run
+#    #  - newman --version
+#    #- docker-compose lib10-api up
+#    #  - cd Lib10/docker/init
+#    # - docker-compose up
+#    #  - docker run lib10-api
+#    #- newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var "host=lib10-api:8081"
+#    - newman run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var "host=$DOCKER_CI_IMAGE:8081"
+#
+#    # artifacts:
+#    #  reports:
+#    #   junit:
+#    #    - "**/target/surefire-reports/TEST-*.xml"
+#    #expire_in: 1 hour
+#    #paths:
+#    #  - "**/target" # for multi-modules project with directory root as a pom package type
+
+

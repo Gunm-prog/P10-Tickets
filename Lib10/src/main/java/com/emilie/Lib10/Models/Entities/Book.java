@@ -32,7 +32,7 @@ public class Book implements Serializable {
     @Column(name="isbn", length=30, nullable=false)
     private String isbn;
 
-    @Column(name="summary", length=800)
+    @Column(name="summary", length=1000)
     private String summary;
 
     @ManyToOne

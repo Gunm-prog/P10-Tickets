@@ -33,7 +33,7 @@ public class UserPrincipalUnitTest {
         when(u.getRolesList()).thenReturn( rList );
 
         when(u.getRoles()).thenReturn("ADMIN,EMPLOYEE,CUSTOMER");
-        when(u.getPassword()).thenReturn("passwordKNONPIONPIN");
+        when(u.getPassword()).thenReturn("password");
         when(u.getUsername()).thenReturn("mail@mail.net");
         when(u.isActive()).thenReturn( true );
 
