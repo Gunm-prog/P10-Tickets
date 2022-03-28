@@ -14,16 +14,18 @@ HELP.md
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
-#*.iws
- .idea/artifacts
- .idea/compiler.xml
- .idea/jarRepositories.xml
- .idea/modules.xml
- .idea/*.iml
- .idea/modules
- *.iml
- *.ipr
+.idea/workspace.xml
+.idea/tasks.xml
+#.idea
+#.idea/artifacts
+#.idea/compiler.xml
+#.idea/jarRepositories.xml
+#.idea/modules.xml
+#.idea/*.iml
+#.idea/modules
+#*.iml
+#*.ipr
+*.iws
 
 ### NetBeans ###
 /nbproject/private/
