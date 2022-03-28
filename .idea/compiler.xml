@@ -13,10 +13,10 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Lib10" target="11" />
+      <module name="Lib10" target="1.8" />
       <module name="P10-Tickets" target="1.5" />
       <module name="SpringBatch" target="1.8" />
-      <module name="WebClient" target="16" />
+      <module name="WebClient" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
