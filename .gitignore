@@ -1,8 +1,8 @@
 HELP.md
 #Lib10/target/
 !Lib10/.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+**/**/target/
+**/test/**/target/
 
 ### STS ###
 .apt_generated
