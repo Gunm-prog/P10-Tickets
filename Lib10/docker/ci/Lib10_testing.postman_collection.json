@@ -34,7 +34,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"moi@moi.moi\",\r\n    \"password\": \"Zokori61\"\r\n}",
+							"raw": "{\r\n    \"username\": \"{{adminEmail}}\",\r\n    \"password\": \"{{adminPass}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -84,7 +84,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"moi@moi.moi\",\r\n    \"password\": \"Zokori61\"\r\n}",
+							"raw": "{\r\n    \"username\": \"{{adminEmail}}\",\r\n    \"password\": \"{{adminPass}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
