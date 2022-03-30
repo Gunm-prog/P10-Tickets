@@ -1,7 +1,7 @@
 FROM node:alpine
 
-COPY wait-for.sh ./etc
-RUN ["chmod", "+x", "/etc/wait-for.sh"]
+COPY --chmod=777 wait-for.sh ./etc
+#RUN ["chmod", "+x", "/etc/wait-for.sh"]
 RUN npm install -g newman newman-reporter-htmlextra
 WORKDIR /etc/newman
 #RUN chmod +x wait-for.sh
