@@ -69,10 +69,9 @@ test-compose:
   services:
     - name: docker:dind
   script:
-    - cd Lib10/
+    - cd Lib10/docker/ci
     #- docker-compose build
 
-    ## problème il faut faire attendre aux services leurs dépendances sinon postman retourne un exit-code=1 (echec)
   #  - docker-compose up #--exit-code-from=postman
     - docker-compose up --exit-code-from=postman
 
