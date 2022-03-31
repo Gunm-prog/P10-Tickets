@@ -85,8 +85,9 @@ test-compose:
   artifacts:
     when: always
     paths:
-
-      - '**/target' # for multi-modules project with directory root as a pom package type
+      - "/target/reports/*.html"
+     # - "/reports"
+      - '*/target' # for multi-modules project with directory root as a pom package type
 
 #unit-test:
 #  stage: test

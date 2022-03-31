@@ -18,8 +18,9 @@ services:
     command:
      # - sh -c './wait-for.sh api:8081 -- run Lib10_testing.postman_collection.json -e localhost.postman_environment.json --env-var host=api:8081 -k -r cli,json --reporter-json-export="reports/lib10RestAPITests.json"'
       run Lib10_testing.postman_collection.json -e localhost.postman_environment.json --env-var host=api:8081 -k
-      -r cli,json
+      -r htmlextra,cli,json
       --reporter-json-export="reports/lib10RestAPITests.json"
+      --reporter-htmlextra-export="reports/lib10RestAPITests.html"
     volumes:
       - "./:/etc/newman"
     depends_on:
