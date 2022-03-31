@@ -70,6 +70,9 @@ test-unit:
   #image: maven:3.6.3-jdk-8-openj9
  # image: aritrasasmal/maven-mysql-java
   image: zhangpin/docker-maven-mysql-vipkid
+  services:
+    - name: mysql:8.0
+      command: [ "--default-authentication-plugin=mysql_native_password" ]
   before_script:
     - *init-db
   script:
