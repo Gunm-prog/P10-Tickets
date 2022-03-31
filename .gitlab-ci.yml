@@ -92,8 +92,9 @@ test-compose:
     - job: test-unit
   services:
     - name: docker:dind
+  coverage: '/Total.*?([0–9]{1,3})%/'
   script:
-    - cd Lib10/src
+    - cd Lib10/
     #- docker-compose build
 ##retrieve rapport
   #  - docker-compose up #--exit-code-from=postman
