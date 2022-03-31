@@ -37,7 +37,7 @@ variables:
   DOCKER_CI_IMAGE: "$CI_REGISTRY_IMAGE:ci-$CI_COMMIT_SHORT_SHA"
 
 stages:
-  - test
+  - unit
   - compose
 #  - build
 #  - test
