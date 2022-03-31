@@ -67,7 +67,8 @@ stages:
 
 test-unit:
   stage: unit
-  image: maven:3.6.3-jdk-8-openj9
+  #image: maven:3.6.3-jdk-8-openj9
+  image: pankui/docker-maven-mysql
   before_script:
     - *init-db
   script:
@@ -90,10 +91,10 @@ test-compose:
   script:
     - cd Lib10/docker/ci
     #- docker-compose build
-
+##retrieve rapport
   #  - docker-compose up #--exit-code-from=postman
     - docker-compose up --exit-code-from=postman
-
+  #  - docker cp 135950565ad8:/geeksforgeeks.txt ~/Desktop/geeksforgeeks.txt
   #    - docker-compose ps
   #   - docker images
   #    - docker ps
@@ -104,7 +105,7 @@ test-compose:
   artifacts:
     when: always
     paths:
-      - "/reports/*.html"
+      - "/docker/ci/reports/*.html"
      # - "/reports"
       - '*/target' # for multi-modules project with directory root as a pom package type
 
