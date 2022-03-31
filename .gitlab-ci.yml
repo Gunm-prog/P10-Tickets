@@ -93,7 +93,7 @@ test-compose:
   services:
     - name: docker:dind
   script:
-    - cd Lib10/docker/ci
+    - cd Lib10/src
     #- docker-compose build
 ##retrieve rapport
   #  - docker-compose up #--exit-code-from=postman
