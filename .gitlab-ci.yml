@@ -37,6 +37,7 @@ variables:
   DOCKER_CI_IMAGE: "$CI_REGISTRY_IMAGE:ci-$CI_COMMIT_SHORT_SHA"
 
 stages:
+  - test
   - compose
 #  - build
 #  - test
@@ -64,8 +65,26 @@ stages:
   - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
   - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
 
+test-unit:
+  stage: unit
+  image: maven:3.6.3-jdk-8-openj9
+  before_script:
+    - *init-db
+  script:
+    - cd Lib10/src/
+    - mvn $MAVEN_CLI_OPTS test
+  artifacts:
+    reports:
+      junit:
+        - "**/target/surefire-reports/TEST-*.xml"
+    expire_in: 1 hour
+    paths:
+      - "**/target" # for multi-modules project with directory root as a pom package type
+
 test-compose:
   stage: compose
+  needs:
+    - job: test-unit
   services:
     - name: docker:dind
   script:
