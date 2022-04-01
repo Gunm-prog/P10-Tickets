@@ -117,7 +117,7 @@ test-compose:
     #  - "/docker/ci/reports/*.html"
     #  - "/newman-report/reports/*.html"
      # - "/reports"
-      - "/etc/newman/reports"
+      - "*/etc/newman/reports"
       - '*/target' # for multi-modules project with directory root as a pom package type
 
 #unit-test:
