@@ -110,12 +110,14 @@ test-compose:
   #    - *docker-login
   #    - docker push $DOCKER_CI_IMAGE
 
+##just found the just parth ??
   artifacts:
     when: always
     paths:
     #  - "/docker/ci/reports/*.html"
-      - "/newman-report/reports/*.html"
+    #  - "/newman-report/reports/*.html"
      # - "/reports"
+      - "/etc/newman/reports"
       - '*/target' # for multi-modules project with directory root as a pom package type
 
 #unit-test:
