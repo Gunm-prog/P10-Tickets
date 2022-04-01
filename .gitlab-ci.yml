@@ -77,11 +77,11 @@ test-unit:
 #    - *init-db
   script:
     - cd Lib10/
-    - mvn $MAVEN_CLI_OPTS verify
+    - mvn $MAVEN_CLI_OPTS test
   artifacts:
     reports:
       junit:
-        - "/target/surefire-reports/TEST-*.xml"
+        - "target/surefire-reports/TEST-*.xml"
     expire_in: 1 hour
   #  paths:
    #   - "*/target" # for multi-modules project with directory root as a pom package type
