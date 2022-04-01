@@ -99,7 +99,7 @@ test-compose:
   #  - docker-compose up --exit-code-from=postman
 
     ##retrieve rapport
-    - docker-compose up --exit-code-from=postman cp /reports /docker/ci/reports
+    - docker-compose up --exit-code-from=postman postman /reports /docker/ci/reports
   #  - docker cp 135950565ad8:/geeksforgeeks.txt ~/Desktop/geeksforgeeks.txt
   #    - docker-compose ps
   #   - docker images
