@@ -77,7 +77,7 @@ test-unit:
 #    - *init-db
   script:
     - cd Lib10/
-    - mvn $MAVEN_CLI_OPTS test
+    - mvn $MAVEN_CLI_OPTS verify
   artifacts:
     reports:
       junit:
