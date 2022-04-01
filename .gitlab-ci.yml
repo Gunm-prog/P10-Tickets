@@ -82,7 +82,7 @@ test-unit:
     reports:
       junit:
         - "**/target/surefire-reports/TEST-*.xml"
-        - "**/target/site"
+        - "**/target/site/*"
     expire_in: 1 hour
   #  paths:
    #   - "*/target" # for multi-modules project with directory root as a pom package type
