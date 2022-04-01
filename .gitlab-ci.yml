@@ -96,10 +96,12 @@ test-compose:
     - name: docker:dind
   script:
     - cd Lib10/docker/ci
-  #  - docker-compose up --exit-code-from=postman
+    - docker-compose up --exit-code-from=postman
 
     ##retrieve rapport
-    - docker-compose up --exit-code-from=postman postman cp /reports /docker/ci/reports
+    ##creer un volume dans image postman??
+#    - docker-compose build
+#    - docker-compose up --exit-code-from=postman postman cp /reports /docker/ci/reports
   #  - docker cp 135950565ad8:/geeksforgeeks.txt ~/Desktop/geeksforgeeks.txt
   #    - docker-compose ps
   #   - docker images
@@ -111,7 +113,8 @@ test-compose:
   artifacts:
     when: always
     paths:
-      - "/docker/ci/reports/*.html"
+    #  - "/docker/ci/reports/*.html"
+      - "/newman-report/reports/*.html"
      # - "/reports"
       - '*/target' # for multi-modules project with directory root as a pom package type
 

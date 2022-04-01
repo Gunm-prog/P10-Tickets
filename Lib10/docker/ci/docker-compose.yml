@@ -23,6 +23,7 @@ services:
       --reporter-htmlextra-export="reports/lib10RestAPITests.html"
     volumes:
       - "./:/etc/newman"
+      - newman-report:/reports
     depends_on:
       - api
       - db
@@ -67,3 +68,6 @@ services:
       - MYSQL_DATABASE=lib10
       - MYSQL_USER=usr_lib10
       - MYSQL_PASSWORD=secret
+
+volumes:
+  newman-report:
