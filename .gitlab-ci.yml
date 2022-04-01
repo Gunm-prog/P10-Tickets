@@ -68,6 +68,7 @@ stages:
 test-unit:
   stage: unit
   image: maven:3.6.3-jdk-8-openj9
+  coverage: '/Total.*?([0–9]{1,3})%/'
  # image: aritrasasmal/maven-mysql-java
   #image: zhangpin/docker-maven-mysql-vipkid
 #  services:
@@ -85,7 +86,7 @@ test-unit:
    #     - "**/target/site/*"
     expire_in: 1 hour
     paths:
-      - "**/target" 
+      - "**/target"
 
 test-compose:
   stage: compose
@@ -93,13 +94,12 @@ test-compose:
     - job: test-unit
   services:
     - name: docker:dind
-  coverage: '/Total.*?([0–9]{1,3})%/'
   script:
     - cd Lib10/docker/ci
-    #- docker-compose build
-##retrieve rapport
-  #  - docker-compose up #--exit-code-from=postman
-    - docker-compose up --exit-code-from=postman
+  #  - docker-compose up --exit-code-from=postman
+
+    ##retrieve rapport
+    - docker-compose up --exit-code-from=postman cp /reports /docker/ci/reports
   #  - docker cp 135950565ad8:/geeksforgeeks.txt ~/Desktop/geeksforgeeks.txt
   #    - docker-compose ps
   #   - docker images
