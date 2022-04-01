@@ -19,10 +19,11 @@ services:
      # - sh -c './wait-for.sh api:8081 -- run Lib10_testing.postman_collection.json -e localhost.postman_environment.json --env-var host=api:8081 -k -r cli,json --reporter-json-export="reports/lib10RestAPITests.json"'
       run Lib10_testing.postman_collection.json -e localhost.postman_environment.json --env-var host=api:8081 -k
       -r htmlextra,cli,json
-      --reporter-json-export="/etc/newman/reports/lib10RestAPITests.json"
-      --reporter-htmlextra-export="/etc/newman/reports/lib10RestAPITests.html"
+      --reporter-json-export="/etc/newman/lib10RestAPITests.json"
+      --reporter-htmlextra-export="/etc/newman/lib10RestAPITests.html"
     volumes:
-      - "./:/etc/newman"
+    #  - "./:/etc/newman"
+      - "$PWD/reports:/etc/newman"
    #   - newman-report:/reports
     depends_on:
       - api
