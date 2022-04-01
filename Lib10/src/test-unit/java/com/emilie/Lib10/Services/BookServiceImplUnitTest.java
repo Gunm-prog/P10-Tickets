@@ -126,16 +126,16 @@ public class BookServiceImplUnitTest {
     private AuthorDto getMockedAuthorDto(){
         AuthorDto authorDto = mock (AuthorDto.class);
         when( authorDto.getAuthorId() ).thenReturn( 1L );
-       /* when( authorDto.getFirstName() ).thenReturn( "author firstname");
-        when( authorDto.getLastName() ).thenReturn( "author lastname");*/
+        when( authorDto.getFirstName() ).thenReturn( "author firstname");
+        when( authorDto.getLastName() ).thenReturn( "author lastname");
         return authorDto;
     }
 
     private Author getMockedAuthor(){
         Author author = mock (Author.class);
         when( author.getAuthorId() ).thenReturn( 1L );
-     /*   when( author.getFirstName() ).thenReturn( "author firstname");
-        when( author.getLastName() ).thenReturn( "author lastname");*/
+        when( author.getFirstName() ).thenReturn( "author firstname");
+        when( author.getLastName() ).thenReturn( "author lastname");
         return author;
     }
 
@@ -522,6 +522,7 @@ public class BookServiceImplUnitTest {
         Book mockedBook = getMockedBook(1,false);
 
         when( mockBookRepository.findByTitle( any(String.class) ) ).thenReturn( Optional.of( mockedBook ) );
+        when( mockAuthorRepository.findById( any(Long.class ) ) ).thenReturn( Optional.of( mock( Author.class ) ) );
         bookServiceUnderTest = new BookServiceImpl( mockBookRepository, mockAuthorRepository );
 
         try{
