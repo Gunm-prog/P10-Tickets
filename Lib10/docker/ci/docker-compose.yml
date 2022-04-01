@@ -23,7 +23,7 @@ services:
       --reporter-htmlextra-export="/etc/newman/reports/lib10RestAPITests.html"
     volumes:
       - "./:/etc/newman"
-      - "$PWD/reports:/etc/newman"
+    #  - "$PWD/reports:/etc/newman/reports"
    #   - newman-report:/reports
     depends_on:
       - api

@@ -114,9 +114,9 @@ test-compose:
   artifacts:
     when: always
     paths:
-    #  - "/docker/ci/reports/*.html"
+      - "*/docker/ci/reports/*.html"
     #  - "/newman-report/reports/*.html"
-      - "/reports"
+    #  - "/reports"
      # - "lib10RestAPITests.html"
       - '*/target' # for multi-modules project with directory root as a pom package type
 
