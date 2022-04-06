@@ -246,7 +246,7 @@ public class LoanServiceImplUnitTest {
             fail("LoanNotFoundException expected but not thrown");
         }catch( Exception e ){
             assertThat( e ).isInstanceOf(LoanNotFoundException.class);
-            assertThat( e.getMessage() ).isEqualTo("loanDto id param is required");
+            assertThat( e.getMessage() ).isEqualTo("loanDto param is required");
         }
     }
 
