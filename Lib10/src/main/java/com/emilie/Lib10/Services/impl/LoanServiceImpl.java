@@ -65,7 +65,7 @@ public class LoanServiceImpl implements LoanService {
                    CopyNotFoundException,
                    LoanAlreadyExistsException {
         if(loanDto == null){
-            throw new LoanNotFoundException("loanDto id param is required");
+            throw new LoanNotFoundException("loanDto param is required");
         }
         if(loanDto.getUserDto() == null || loanDto.getUserDto().getUserId() == null){
             throw new UserNotFoundException("user id param is required");
