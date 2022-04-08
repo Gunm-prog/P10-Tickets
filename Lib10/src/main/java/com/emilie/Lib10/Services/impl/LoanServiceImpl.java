@@ -217,7 +217,7 @@ public class LoanServiceImpl implements LoanService {
     @Override
     public void haveAccess(UserDto loggedUser, LoanDto loanDto){
         //if loggedUser is a customer
-        if(loggedUser.getRoles() == "CUSTOMER"){
+        if(Objects.equals(loggedUser.getRoles(), "CUSTOMER")){
             //check if the reservation is owned by loggedUser
             if(!Objects.equals( loggedUser.getUserId(), loanDto.getUserDto().getUserId() )){
                 throw new UnauthorizedException( "access denied" );

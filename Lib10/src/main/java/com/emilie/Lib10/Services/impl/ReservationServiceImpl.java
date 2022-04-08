@@ -187,7 +187,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public void haveAccess(UserDto loggedUser, ReservationDto reservationDto){
         //if loggedUser is a customer
-        if(loggedUser.getRoles() == "CUSTOMER"){
+        if(Objects.equals(loggedUser.getRoles(), "CUSTOMER")){
             //check if the reservation is owned by loggedUser
             if(!Objects.equals( loggedUser.getUserId(), reservationDto.getUserDto().getUserId() )){
                 throw new UnauthorizedException( "access denied" );
