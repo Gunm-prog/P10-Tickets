@@ -85,7 +85,7 @@ public class ReservationServiceImpl implements ReservationService {
             }
         }
 
-        //if the book have not yet reservation
+        //if the book have not reservation yet
         if(book.getReservationList().isEmpty()){
             //check if the book have a copy available and throw exception if it's found.
             for( Copy copy : book.getCopies() ){
