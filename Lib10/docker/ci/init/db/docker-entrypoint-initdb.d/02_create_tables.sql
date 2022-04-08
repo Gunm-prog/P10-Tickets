@@ -1,10 +1,9 @@
-CREATE DATABASE  IF NOT EXISTS `lib10` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `lib10`;
--- MySQL dump 10.13  Distrib 8.0.24, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.25, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: lib10
+-- Host: localhost    Database: lib10
 -- ------------------------------------------------------
--- Server version	8.0.24
+-- Server version	8.0.25
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -29,7 +28,7 @@ CREATE TABLE `author` (
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
   PRIMARY KEY (`author_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -48,7 +47,7 @@ CREATE TABLE `book` (
   PRIMARY KEY (`id`),
   KEY `FKsytpuhl67g1174cx7iqlw6os9` (`author_id`),
   CONSTRAINT `FKsytpuhl67g1174cx7iqlw6os9` FOREIGN KEY (`author_id`) REFERENCES `author` (`author_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,19 +67,7 @@ CREATE TABLE `copy` (
   KEY `FKe5y2cips0e9f7u0wsssgunkgv` (`library_id`),
   CONSTRAINT `FKe5y2cips0e9f7u0wsssgunkgv` FOREIGN KEY (`library_id`) REFERENCES `library` (`library_id`),
   CONSTRAINT `FKh0uyi7khdijjmtqbyat3qgjnw` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `hibernate_sequence`
---
-
-DROP TABLE IF EXISTS `hibernate_sequence`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `hibernate_sequence` (
-  `next_val` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -91,7 +78,7 @@ DROP TABLE IF EXISTS `library`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `library` (
-  `library_id` bigint NOT NULL,
+  `library_id` bigint NOT NULL AUTO_INCREMENT,
   `city` varchar(255) NOT NULL,
   `number` int NOT NULL,
   `street` varchar(50) NOT NULL,
@@ -99,7 +86,7 @@ CREATE TABLE `library` (
   `name` varchar(255) NOT NULL,
   `phone_number` varchar(20) NOT NULL,
   PRIMARY KEY (`library_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -122,7 +109,7 @@ CREATE TABLE `loan` (
   KEY `FKmrnfyic6xh8yqf30t2fd8x5ge` (`user_id`),
   CONSTRAINT `FK3dgelu2cvvq3xe4wfmnb7rowy` FOREIGN KEY (`copy_id`) REFERENCES `copy` (`copy_id`),
   CONSTRAINT `FKmrnfyic6xh8yqf30t2fd8x5ge` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -144,7 +131,7 @@ CREATE TABLE `reservation` (
   KEY `FKdbt6w2ran0620tsp1edlr6qq7` (`user_id`),
   CONSTRAINT `FK64a41qc5bfy5efj1f60i1atgi` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`),
   CONSTRAINT `FKdbt6w2ran0620tsp1edlr6qq7` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -193,7 +180,7 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
-  `id` bigint NOT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `active` bit(1) DEFAULT NULL,
   `city` varchar(255) NOT NULL,
   `number` int NOT NULL,
@@ -206,7 +193,7 @@ CREATE TABLE `user` (
   `roles` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_ob8kqyqqgmefl0aco34akdtpe` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -218,4 +205,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-03-24 13:46:11
+-- Dump completed on 2022-04-08 18:02:40
