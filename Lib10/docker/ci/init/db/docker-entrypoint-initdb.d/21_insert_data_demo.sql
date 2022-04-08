@@ -47,16 +47,6 @@ INSERT INTO `copy` VALUES (1,_binary '\0',3,7),(2,_binary '\0',3,7),(3,_binary '
 UNLOCK TABLES;
 
 --
--- Dumping data for table `hibernate_sequence`
---
-
-LOCK TABLES `hibernate_sequence` WRITE;
-/*!40000 ALTER TABLE `hibernate_sequence` DISABLE KEYS */;
-INSERT INTO `hibernate_sequence` VALUES (1),(1),(10),(10);
-/*!40000 ALTER TABLE `hibernate_sequence` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Dumping data for table `library`
 --
 
