@@ -132,7 +132,7 @@ public class LoanController {
             return ResponseEntity
                     .status( HttpStatus.CONFLICT )
                     .body( e.getMessage() );
-        } catch ( UserNotFoundException | CopyNotFoundException e) {
+        } catch ( UserNotFoundException | CopyNotFoundException | BookNotFoundException e) {
             log.error( e.getMessage() );
             return ResponseEntity
                     .status( HttpStatus.NOT_FOUND )
