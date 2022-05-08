@@ -157,7 +157,7 @@ public class LoanServiceImpl implements LoanService {
             throw new ImpossibleExtendLoanException( "this loan " + loanId + " has already been extended" );
         }
 
-
+//if loanEndDate si older than current date, the loan his expired, throw ImpossibleExtendLoan
         if(loan.getLoanEndDate().before( makePeriodDate(0, null) ) ) {
             throw new ImpossibleExtendLoanException( "unauthorize extend, loan's endDate is expired" );
         }
@@ -399,7 +399,14 @@ public class LoanServiceImpl implements LoanService {
         return address;
     }
 
-
+    /**
+     * retourne initialEndDate avec le numbre numberOfDays ajouté,
+     * si initialEndDate est null, il prendra la valeur now()
+     * si numberOfDays vaut 0, aucun jour n'est ajouté à initialeEndDate
+     * @param numberOfDays nombre de jour a ajouter à initialEndDate
+     * @param initialEndDate prend la valeur Date donnée, si null prend la valeur now()
+     * @return
+     */
     private Date makePeriodDate(int numberOfDays, Date initialEndDate) {
 
         LocalDate localDate=LocalDate.now();
@@ -407,7 +414,6 @@ public class LoanServiceImpl implements LoanService {
         if (initialEndDate != null) {
             localDate=initialEndDate.toInstant().atZone( ZoneId.systemDefault() ).toLocalDate();
         }
-
         localDate=localDate.plusDays( numberOfDays );
         Instant instant=localDate.atStartOfDay( ZoneId.systemDefault() ).toInstant();
         Date date=Date.from( instant );
