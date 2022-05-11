@@ -1,0 +1,6129 @@
+{
+	"info": {
+		"_postman_id": "25eb9345-331d-47e4-8283-9b1a2994a4a9",
+		"name": "Lib10_testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Customer_CRUD_Tests",
+			"item": [
+				{
+					"name": "Create_WhenAddressMissing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Bad request\", function () {\r",
+									"    pm.response.to.have.body(\"Address not found\");\r",
+									"    pm.response.to.have.status(404);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"lastName\":\"testApi lastname\",\r\n    \"firstName\":\"testAPI firstname\",\r\n    \"email\":\"test@postman.com\",\r\n    \"password\":\"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/register/customer",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"register",
+								"customer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create_Success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									" pm.test(\"Create success\", function (){\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.collectionVariables.set(\"customer_1_id\", jsonData.userId);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"lastName\":\"testApi lastname\",\r\n    \"firstName\":\"testAPI firstname\",\r\n    \"email\":\"test@postman.com\",\r\n    \"password\":\"password\",\r\n    \"addressDto\":{\r\n        \"number\":3445,\r\n        \"street\":\"road Tanton\",\r\n        \"zipCode\":59240,\r\n        \"city\":\"Dunkirk\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/register/customer",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"register",
+								"customer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create_WhenAlreadyExist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"duplicate exception\", function(){\r",
+									"    pm.response.to.have.status(409);\r",
+									"    pm.response.to.have.body(\"Email already exists\");\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"lastName\":\"testApi lastname\",\r\n    \"firstName\":\"testAPI firstname\",\r\n    \"email\":\"test@postman.com\",\r\n    \"password\":\"password\",\r\n    \"addressDto\":{\r\n        \"number\":3445,\r\n        \"street\":\"road Tanton\",\r\n        \"zipCode\":59240,\r\n        \"city\":\"Dunkirk\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/register/customer",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"register",
+								"customer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login_Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									" pm.test(\"login with new user\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"    var jsonData = pm.response.json()\r",
+									"    pm.collectionVariables.set(\"customer_1_jwtToken\", jsonData[0]);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"test@postman.com\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/authenticate",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"authenticate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put_UserAccount",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									" pm.test(\"update success\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									" //   pm.collectionVariables.set(\"jwtToken\", pm.response);\r",
+									" })"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{customer_1_jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"{{customer_1_id}}\",\r\n    \"lastName\":\"lastname update\",\r\n    \"firstName\":\"firstname update\",\r\n    \"addressDto\":{\r\n        \"number\": 9910,\r\n        \"street\":\"Postman Street\",\r\n        \"zipCode\":59740,\r\n        \"city\":\"Dunkirk\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{domain}}/users/update",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"users",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get_UserById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"get the user\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"check updated data\", function(){\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(\"lastname update\").to.equals(jsonData.lastName)\r",
+									"    pm.expect(\"firstname update\").to.equals(jsonData.firstName)\r",
+									"    pm.expect(9910).to.equals(jsonData.addressDto.number)\r",
+									"    pm.expect(\"Postman Street\").to.equals(jsonData.addressDto.street)\r",
+									"    pm.expect(\"59740\").to.equals(jsonData.addressDto.zipCode)\r",
+									"    pm.expect(\"Dunkirk\").to.equals(jsonData.addressDto.city)\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{customer_1_jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{domain}}/users/{{customer_1_id}}",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"users",
+								"{{customer_1_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get_LoggedUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"get logged user\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"check updated data\", function(){\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(\"lastname update\").to.equals(jsonData.lastName)\r",
+									"    pm.expect(\"firstname update\").to.equals(jsonData.firstName)\r",
+									"    pm.expect(9910).to.equals(jsonData.addressDto.number)\r",
+									"    pm.expect(\"Postman Street\").to.equals(jsonData.addressDto.street)\r",
+									"    pm.expect(\"59740\").to.equals(jsonData.addressDto.zipCode)\r",
+									"    pm.expect(\"Dunkirk\").to.equals(jsonData.addressDto.city)\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{customer_1_jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{domain}}/users/userAccount",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"users",
+								"userAccount"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete_When_NotFoundUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"delete user with notFound exception\", function(){\r",
+									"    pm.response.to.have.status(404);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{customer_1_jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{domain}}/users/delete/0",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"users",
+								"delete",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete_customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"delete new user\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{customer_1_jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{domain}}/users/delete/{{customer_1_id}}",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"users",
+								"delete",
+								"{{customer_1_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Employee_CRUD_Tests",
+			"item": [
+				{
+					"name": "Init_Log_Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.collectionVariables.set(\"jwtAdminToken\", pm.response.json()[0])\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"{{adminUsername}}\",\r\n    \"password\": \"{{adminPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/authenticate",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"authenticate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create_WhenAddressMissing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Bad request\", function () {\r",
+									"    pm.response.to.have.body(\"Address not found\");\r",
+									"    pm.response.to.have.status(404);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtAdminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"lastName\":\"testApi lastname\",\r\n    \"firstName\":\"testAPI firstname\",\r\n    \"email\":\"test@postman.com\",\r\n    \"password\":\"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/register/employee",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"register",
+								"employee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create_Success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									" pm.test(\"Create success\", function (){\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.collectionVariables.set(\"customer_1_id\", jsonData.userId);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtAdminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"lastName\":\"testApi lastname\",\r\n    \"firstName\":\"testAPI firstname\",\r\n    \"email\":\"test@postman.com\",\r\n    \"password\":\"password\",\r\n    \"addressDto\":{\r\n        \"number\":3445,\r\n        \"street\":\"road Tanton\",\r\n        \"zipCode\":59240,\r\n        \"city\":\"Dunkirk\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/register/employee",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"register",
+								"employee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create_WhenAlreadyExist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"duplicate exception\", function(){\r",
+									"    pm.response.to.have.status(409);\r",
+									"    pm.response.to.have.body(\"Email already exists\");\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtAdminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"lastName\":\"testApi lastname\",\r\n    \"firstName\":\"testAPI firstname\",\r\n    \"email\":\"test@postman.com\",\r\n    \"password\":\"password\",\r\n    \"addressDto\":{\r\n        \"number\":3445,\r\n        \"street\":\"road Tanton\",\r\n        \"zipCode\":59240,\r\n        \"city\":\"Dunkirk\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/register/employee",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"register",
+								"employee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login_Employee",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									" pm.test(\"login with new user\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"    var jsonData = pm.response.json()\r",
+									"    pm.collectionVariables.set(\"customer_1_jwtToken\", jsonData[0]);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"test@postman.com\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/authenticate",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"authenticate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put_UserAccount",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									" pm.test(\"update success\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									" //   pm.collectionVariables.set(\"jwtToken\", pm.response);\r",
+									" })"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{customer_1_jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"{{customer_1_id}}\",\r\n    \"lastName\":\"lastname update\",\r\n    \"firstName\":\"firstname update\",\r\n    \"addressDto\":{\r\n        \"number\": 9910,\r\n        \"street\":\"Postman Street\",\r\n        \"zipCode\":59740,\r\n        \"city\":\"Dunkirk\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{domain}}/users/update",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"users",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get_UserById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"get the user\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"check updated data\", function(){\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(\"lastname update\").to.equals(jsonData.lastName)\r",
+									"    pm.expect(\"firstname update\").to.equals(jsonData.firstName)\r",
+									"    pm.expect(9910).to.equals(jsonData.addressDto.number)\r",
+									"    pm.expect(\"Postman Street\").to.equals(jsonData.addressDto.street)\r",
+									"    pm.expect(\"59740\").to.equals(jsonData.addressDto.zipCode)\r",
+									"    pm.expect(\"Dunkirk\").to.equals(jsonData.addressDto.city)\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{customer_1_jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{domain}}/users/{{customer_1_id}}",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"users",
+								"{{customer_1_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get_LoggedUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"get logged user\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"check updated data\", function(){\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(\"lastname update\").to.equals(jsonData.lastName)\r",
+									"    pm.expect(\"firstname update\").to.equals(jsonData.firstName)\r",
+									"    pm.expect(9910).to.equals(jsonData.addressDto.number)\r",
+									"    pm.expect(\"Postman Street\").to.equals(jsonData.addressDto.street)\r",
+									"    pm.expect(\"59740\").to.equals(jsonData.addressDto.zipCode)\r",
+									"    pm.expect(\"Dunkirk\").to.equals(jsonData.addressDto.city)\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{customer_1_jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{domain}}/users/userAccount",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"users",
+								"userAccount"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete_When_NotFoundUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"delete user with notFound exception\", function(){\r",
+									"    pm.response.to.have.status(404);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{customer_1_jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{domain}}/users/delete/0",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"users",
+								"delete",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete_customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"delete new user\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{customer_1_jwtToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{domain}}/users/delete/{{customer_1_id}}",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"users",
+								"delete",
+								"{{customer_1_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Library_CRUD_Tests",
+			"item": [
+				{
+					"name": "Init_Log_Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.collectionVariables.set(\"jwtAdminToken\", pm.response.json()[0])\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"{{adminUsername}}\",\r\n    \"password\": \"{{adminPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/authenticate",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"authenticate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "404_Create_whenAddressMissing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Bad request address missing\", function () {\r",
+									"    pm.response.to.have.body(\"Address not found\");\r",
+									"    pm.response.to.have.status(404);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtAdminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"postman library\",\r\n    \"phoneNumber\":\"07-25-45-68-95\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{domain}}/libraries/newLibrary",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"libraries",
+								"newLibrary"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "201_Create_success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Bad request\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.collectionVariables.set(\"libraryId\", pm.response.json().libraryId)\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtAdminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"postman library\",\r\n    \"phoneNumber\":\"07-25-45-68-95\",\r\n    \"addressDto\":{\r\n        \"number\":7,\r\n        \"street\":\"road Danton\",\r\n        \"zipCode\":59240,\r\n        \"city\":\"Dunkirk\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{domain}}/libraries/newLibrary",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"libraries",
+								"newLibrary"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200_Put_sucess",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									" pm.test(\"update success\", function(){\r",
+									"    pm.response.to.have.property('code', 200);\r",
+									" })"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtAdminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"libraryId\":\"{{libraryId}}\",\r\n    \"name\":\"postman library updated\",\r\n    \"phoneNumber\":\"09-25-45-68-95\",\r\n    \"addressDto\":{\r\n        \"number\": 1010,\r\n        \"street\":\"Liem\",\r\n        \"zipCode\":59740,\r\n        \"city\":\"Dunkirk\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{domain}}/libraries/updateLibrary",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"libraries",
+								"updateLibrary"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "404_Get_WhenNotFound",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Library not found\", function(){\r",
+									"    pm.response.to.have.status(404);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtAdminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{domain}}/libraries/0",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"libraries",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200_Get_success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Library not found\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"    let jsonData = pm.response.json();\r",
+									"    pm.expect(\"postman library updated\").to.equals(jsonData.name)\r",
+									"    pm.expect(\"09-25-45-68-95\").to.equals(jsonData.phoneNumber)\r",
+									"    pm.expect(1010).to.equals(jsonData.addressDto.number)\r",
+									"    pm.expect(\"Liem\").to.equals(jsonData.addressDto.street)\r",
+									"    pm.expect(\"59740\").to.equals(jsonData.addressDto.zipCode)\r",
+									"    pm.expect(\"Dunkirk\").to.equals(jsonData.addressDto.city)\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtAdminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{domain}}/libraries/{{libraryId}}",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"libraries",
+								"{{libraryId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "404_Delete_WhenNotFound",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Library delete not found\", function(){\r",
+									"    pm.response.to.have.status(404);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtAdminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{domain}}/libraries/delete/0",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"libraries",
+								"delete",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "404_Delete_WhenNotFound Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Library delete success\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtAdminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{domain}}/libraries/delete/{{libraryId}}",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"libraries",
+								"delete",
+								"{{libraryId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Author_CRUD_Tests",
+			"item": [
+				{
+					"name": "Init_Log_Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.collectionVariables.set(\"jwtAdminToken\", pm.response.json()[0])\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"{{adminUsername}}\",\r\n    \"password\": \"{{adminPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/authenticate",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"authenticate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "201_Create_success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create author success\", function(){\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.collectionVariables.set(\"authorId\", pm.response.json().authorId)\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtAdminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\":\"Postman\",\r\n    \"lastName\":\"For test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{domain}}/authors/newAuthor",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"authors",
+								"newAuthor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "409_Create_WhenAlreadyExist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Author already exist\", function(){\r",
+									"    pm.response.to.have.status(409);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtAdminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\":\"Postman\",\r\n    \"lastName\":\"For test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{domain}}/authors/newAuthor",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"authors",
+								"newAuthor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "404_Get_WhenNotFound",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get author when not found\", function(){\r",
+									"    pm.response.to.have.status(404);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtAdminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{domain}}/authors/0",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"authors",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200_Get_success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get author when not found\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtAdminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{domain}}/authors/{{authorId}}",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"authors",
+								"{{authorId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200_Put_success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create author success\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"    let jsonData = pm.response.json();\r",
+									"    pm.expect(\"Postman updated\").to.equals(jsonData.firstName)\r",
+									"    pm.expect(\"For test updated\").to.equals(jsonData.lastName)\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtAdminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"authorId\":\"{{authorId}}\",\r\n    \"firstName\":\"Postman updated\",\r\n    \"lastName\":\"For test updated\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{domain}}/authors/updateAuthor",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"authors",
+								"updateAuthor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "404_Delete_WhenNotFound",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Delete author when not found\", function(){\r",
+									"    pm.response.to.have.status(404);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtAdminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{domain}}/authors/delete/0",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"authors",
+								"delete",
+								"0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "200_Delete_WhenNotFound",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Delete author success\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwtAdminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{domain}}/authors/delete/{{authorId}}",
+							"host": [
+								"{{host}}{{domain}}"
+							],
+							"path": [
+								"authors",
+								"delete",
+								"{{authorId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Book_CRUD_Tests",
+			"item": [
+				{
+					"name": "Initialize_necessary_data",
+					"item": [
+						{
+							"name": "Init_Log_Admin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.collectionVariables.set(\"jwtAdminToken\", pm.response.json()[0])\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"{{adminUsername}}\",\r\n    \"password\": \"{{adminPassword}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/authenticate",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Init_Create_Author",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Create author success\", function (){\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.collectionVariables.set(\"authorId\", pm.response.json().authorId);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\":\"Postman\",\r\n    \"lastName\":\"For test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/authors/newAuthor",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"authors",
+										"newAuthor"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Tests",
+					"item": [
+						{
+							"name": "404_Create_WhenAuthorMissing",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Bad request, missing auhtor param\", function () {\r",
+											"    pm.response.to.have.body(\"author is required\");\r",
+											"    pm.response.to.have.status(404);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Postman testBook\",\r\n    \"isbn\":9999,\r\n    \"summary\":\"Just a book for testing Api with Postman\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/books/newBook",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"books",
+										"newBook"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "404_Create_WhenNotFoundAuthor",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Create not found author\", function () {\r",
+											"    pm.response.to.have.body(\"author 0 not found\");\r",
+											"    pm.response.to.have.status(404);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Postman testBook\",\r\n    \"isbn\":9999,\r\n    \"summary\":\"Just a book for testing Api with Postman\",\r\n    \"authorDto\":{\r\n        \"authorId\":0\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/books/newBook",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"books",
+										"newBook"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "201_Create_success",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Create book success\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.collectionVariables.set(\"bookId\", pm.response.json().bookId)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Postman testBook\",\r\n    \"isbn\":9999,\r\n    \"summary\":\"Just a book for testing Api with Postman\",\r\n    \"authorDto\":{\r\n        \"authorId\":\"{{authorId}}\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/books/newBook",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"books",
+										"newBook"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "409_Create_success",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Create book success\", function () {\r",
+											"    pm.response.to.have.status(409);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Postman testBook\",\r\n    \"isbn\":9999,\r\n    \"summary\":\"Just a book for testing Api with Postman\",\r\n    \"authorDto\":{\r\n        \"authorId\":\"{{authorId}}\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/books/newBook",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"books",
+										"newBook"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "404_Get_WhenNotFound",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Get book not found\", function () {\r",
+											"    pm.response.to.have.body(\"Book 0 not found\");\r",
+											"    pm.response.to.have.status(404);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/books/0",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"books",
+										"0"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "200_Get_Success",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Get book success\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/books/{{bookId}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"books",
+										"{{bookId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "200_Put_Success",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Put book success\", function () {\r",
+											"    pm.response.to.have.status(200)\r",
+											"    var jsonData = pm.response.json()\r",
+											"    pm.expect(\"Postman testBook updated\").to.equals(jsonData.title)\r",
+											"    pm.expect(\"9999\").to.equals(jsonData.isbn)\r",
+											"    pm.expect(\"Just a book for testing Api with Postman\").to.equals(jsonData.summary)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"bookId\": \"{{bookId}}\",\r\n    \"title\": \"Postman testBook updated\",\r\n    \"isbn\":\"9999\",\r\n    \"summary\":\"Just a book for testing Api with Postman\",\r\n    \"authorDto\":{\r\n        \"authorId\":\"{{authorId}}\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/books/{{bookId}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"books",
+										"{{bookId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "404_Delete_WhenNotFound",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Delete with missing auhtor param\", function () {\r",
+											"    pm.response.to.have.body(\"book 0 not found\");\r",
+											"    pm.response.to.have.status(404);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/books/delete/0",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"books",
+										"delete",
+										"0"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "409_DeleteAuthor_WhenAuthorHaveBook",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Can't delete Author with book\", function () {\r",
+											"    pm.response.to.have.status(409)\r",
+											"    pm.response.to.have.body(\"This author \" + pm.collectionVariables.get(\"authorId\") + \" have existing books\")\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/authors/delete/{{authorId}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"authors",
+										"delete",
+										"{{authorId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "200_Delete_success",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Delete book success\", function () {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/books/delete/{{bookId}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"books",
+										"delete",
+										"{{bookId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Remove_Initialized_Data",
+					"item": [
+						{
+							"name": "delete_init_author",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Delete author success\", function () {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/authors/delete/{{authorId}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"authors",
+										"delete",
+										"{{authorId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Copy_CRUD_Tests",
+			"item": [
+				{
+					"name": "Initialize_necessary_data",
+					"item": [
+						{
+							"name": "Init_Log_Admin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.collectionVariables.set(\"jwtAdminToken\", pm.response.json()[0])\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"{{adminUsername}}\",\r\n    \"password\": \"{{adminPassword}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/authenticate",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Init_Create_Library",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Create library success\", function (){\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.collectionVariables.set(\"libraryId\", pm.response.json().libraryId);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\":\"postman library\",\r\n    \"phoneNumber\":\"0725456895\",\r\n    \"addressDto\":{\r\n        \"number\":7,\r\n        \"street\":\"road Danton\",\r\n        \"zipCode\":59240,\r\n        \"city\":\"Dunkirk\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/libraries/newLibrary",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"libraries",
+										"newLibrary"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Init_Create_Author",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Create author success\", function (){\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.collectionVariables.set(\"authorId\", pm.response.json().authorId);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\":\"Postman\",\r\n    \"lastName\":\"For test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/authors/newAuthor",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"authors",
+										"newAuthor"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Init_Create_Book",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"Create book success\", function (){\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.collectionVariables.set(\"bookId\", pm.response.json().bookId);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Postman testBook\",\r\n    \"isbn\":9999,\r\n    \"summary\":\"Just a book for testing Api with Postman\",\r\n    \"authorDto\":{\r\n        \"authorId\":\"{{authorId}}\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/books/newBook",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"books",
+										"newBook"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Tests",
+					"item": [
+						{
+							"name": "404_Create_WhenBookMissing",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Bad request, missing book param\", function(){\r",
+											"    pm.response.to.have.status(404);\r",
+											"    pm.response.to.have.body(\"book param is required\");\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"available\":1,\r\n    \"libraryDto\":{\r\n        \"libraryId\": \"{{libraryId}}\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/copies/newCopy",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"copies",
+										"newCopy"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "404_Create_WhenLibraryMissing Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Bad request, missing library param\", function(){\r",
+											"    pm.response.to.have.status(404);\r",
+											"    pm.response.to.have.body(\"library param is required\");\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"available\":1,\r\n    \"bookDto\":{\r\n        \"bookId\": \"{{bookId}}\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/copies/newCopy",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"copies",
+										"newCopy"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "201_Create_success",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Create Copy success\", function(){\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.collectionVariables.set(\"copyId\", pm.response.json().id)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"available\":1,\r\n    \"bookDto\":{\r\n        \"bookId\": \"{{bookId}}\"\r\n    },\r\n    \"libraryDto\":{\r\n        \"libraryId\": \"{{libraryId}}\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/copies/newCopy",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"copies",
+										"newCopy"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "409_DeleteBook_WhenBookHaveCopy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Delete book success\", function () {\r",
+											"    pm.response.to.have.status(409)\r",
+											"    pm.response.to.have.body(\"This book \" + pm.collectionVariables.get(\"bookId\") + \" have existing copy\")\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/books/delete/{{bookId}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"books",
+										"delete",
+										"{{bookId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "200_DeleteCopy_success",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"delete copy\", function(){\r",
+											"    pm.response.to.have.status(200)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/copies/delete/{{copyId}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"copies",
+										"delete",
+										"{{copyId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Remove_Initialized_Data",
+					"item": [
+						{
+							"name": "delete_init_book",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"delete book\", function(){\r",
+											"    pm.response.to.have.status(200)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/books/delete/{{bookId}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"books",
+										"delete",
+										"{{bookId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete_init_author",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Delete author success\", function () {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/authors/delete/{{authorId}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"authors",
+										"delete",
+										"{{authorId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete_init_library",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Delete author success\", function () {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/libraries/delete/{{libraryId}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"libraries",
+										"delete",
+										"{{libraryId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Loan_CRUD_Tests",
+			"item": [
+				{
+					"name": "Initialize_necessary_data",
+					"item": [
+						{
+							"name": "Init_Log_Admin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.collectionVariables.set(\"jwtAdminToken\", pm.response.json()[0])\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"{{adminUsername}}\",\r\n    \"password\": \"{{adminPassword}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/authenticate",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Init_Create_Library",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Create library success\", function (){\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.collectionVariables.set(\"libraryId\", pm.response.json().libraryId);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\":\"postman library\",\r\n    \"phoneNumber\":\"0725456895\",\r\n    \"addressDto\":{\r\n        \"number\":7,\r\n        \"street\":\"road Danton\",\r\n        \"zipCode\":59240,\r\n        \"city\":\"Dunkirk\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/libraries/newLibrary",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"libraries",
+										"newLibrary"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Init_Create_Author",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Create author success\", function (){\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.collectionVariables.set(\"authorId\", pm.response.json().authorId);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\":\"Postman\",\r\n    \"lastName\":\"For test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/authors/newAuthor",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"authors",
+										"newAuthor"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Init_Create_Book",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"Create book success\", function (){\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.collectionVariables.set(\"bookId\", pm.response.json().bookId);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Postman testBook\",\r\n    \"isbn\":9999,\r\n    \"summary\":\"Just a book for testing Api with Postman\",\r\n    \"authorDto\":{\r\n        \"authorId\":\"{{authorId}}\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/books/newBook",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"books",
+										"newBook"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Init_Create_Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Create copy success\", function(){\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.collectionVariables.set(\"copyId\", pm.response.json().id)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"available\":1,\r\n    \"bookDto\":{\r\n        \"bookId\": \"{{bookId}}\"\r\n    },\r\n    \"libraryDto\":{\r\n        \"libraryId\": \"{{libraryId}}\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/copies/newCopy",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"copies",
+										"newCopy"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Init_Create_Customer_1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"Create success\", function (){\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.collectionVariables.set(\"customer_1_id\", pm.response.json().userId);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"lastName\":\"testApi lastname\",\r\n    \"firstName\":\"testAPI firstname\",\r\n    \"email\":\"customer_1@postman.com\",\r\n    \"password\":\"password\",\r\n    \"addressDto\":{\r\n        \"number\":1,\r\n        \"street\":\"road Tanton\",\r\n        \"zipCode\":59240,\r\n        \"city\":\"Dunkirk\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/register/customer",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"register",
+										"customer"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login_Customer_1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"login with new user\", function(){\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.collectionVariables.set(\"customer_1_jwtToken\", pm.response.json()[0]);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"customer_1@postman.com\",\r\n    \"password\": \"password\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/authenticate",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Tests",
+					"item": [
+						{
+							"name": "404_Create_WhenUserMissing",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Bad request, missing user param\", function(){\r",
+											"    pm.response.to.have.status(404);\r",
+											"    pm.response.to.have.body(\"user param is required\");\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"copyDto\":{\r\n        \"id\":\"{{copyId}}\",\r\n        \"bookDto\": {\r\n            \"bookId\": \"{{bookId}}\"\r\n        }\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/loans/newLoan",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"loans",
+										"newLoan"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "404_Create_WhenCopyMissing Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Bad request, missing copy param\", function(){\r",
+											"    pm.response.to.have.status(404);\r",
+											"    pm.response.to.have.body(\"copy param is required\");\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userDto\":{\r\n        \"userId\":\"{{customer_1_id}}\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/loans/newLoan",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"loans",
+										"newLoan"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "404_Create_WhenBookMissing",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Bad request, missing book param\", function(){\r",
+											"    pm.response.to.have.status(404);\r",
+											"    pm.response.to.have.body(\"book param in copy param is required\");\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userDto\":{\r\n        \"userId\": \"{{customer_1_id}}\"\r\n    },\r\n    \"copyDto\":{\r\n        \"id\": \"{{copyId}}\"\r\n    } \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/loans/newLoan",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"loans",
+										"newLoan"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "404_Create_WhenUserNotFound",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Bad request, user not found\", function(){\r",
+											"    pm.response.to.have.status(404);\r",
+											"    pm.response.to.have.body(\"user 0 not found\");\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userDto\":{\r\n        \"userId\":0\r\n    },\r\n    \"copyDto\":{\r\n        \"id\":\"{{copyId}}\",\r\n        \"bookDto\": {\r\n            \"bookId\": \"{{bookId}}\"\r\n        }\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/loans/newLoan",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"loans",
+										"newLoan"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "404_Create_WhenCopyNotFound",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Bad request, copy not found\", function(){\r",
+											"    pm.response.to.have.status(404);\r",
+											"    pm.response.to.have.body(\"copy 0 not found\");\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userDto\":{\r\n        \"userId\":\"{{customer_1_id}}\"\r\n    },\r\n    \"copyDto\":{\r\n        \"id\":0,\r\n        \"bookDto\": {\r\n            \"bookId\": \"{{bookId}}\"\r\n        }\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/loans/newLoan",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"loans",
+										"newLoan"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "201_Create_success",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Create Loan for customer_1 success\", function(){\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.collectionVariables.set(\"loan_1_id\", pm.response.json().id)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userDto\":{\r\n        \"userId\":\"{{customer_1_id}}\"\r\n    },\r\n    \"copyDto\":{\r\n        \"id\":\"{{copyId}}\",\r\n        \"bookDto\": {\r\n            \"bookId\": \"{{bookId}}\"\r\n        }\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/loans/newLoan",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"loans",
+										"newLoan"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "409_Create_WhenLoanAlreadyExist",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Create Loan for customer_1 success\", function(){\r",
+											"    pm.response.to.have.status(409);\r",
+											"    pm.response.to.have.body(\"loan for copy \" + pm.collectionVariables.get(\"copyId\") + \" already exists\");\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userDto\":{\r\n        \"userId\":\"{{customer_1_id}}\"\r\n    },\r\n    \"copyDto\":{\r\n        \"id\":\"{{copyId}}\",\r\n        \"bookDto\": {\r\n            \"bookId\": \"{{bookId}}\"\r\n        }\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/loans/newLoan",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"loans",
+										"newLoan"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "403_DeleteLoan_WhenCopyNotReturned",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"can't delete a not returned loan\", function (){\r",
+											"    pm.response.to.have.status(403)\r",
+											"    pm.response.to.have.body(\"copy of loan \" + pm.collectionVariables.get(\"loan_1_id\") + \" have not been returned\")\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/loans/delete/{{loan_1_id}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"loans",
+										"delete",
+										"{{loan_1_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "404_Put_Extend_WhenLoanNotFound",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"Badrequest, loan not found\", function(){\r",
+											"    pm.response.to.have.status(404)\r",
+											"    pm.response.to.have.body(\"loan 0 not found\");\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{customer_1_jwtToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/loans/extendLoan/0",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"loans",
+										"extendLoan",
+										"0"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "200_Put_ExtendLoanSuccess",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"extend loan\", function(){\r",
+											"    pm.response.to.have.status(200)\r",
+											"    pm.expect(true).to.equals(pm.response.json().extended)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{customer_1_jwtToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/loans/extendLoan/{{loan_1_id}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"loans",
+										"extendLoan",
+										"{{loan_1_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "403_Put_Extend_WhenLoanAlreadyExtended",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"extend loan\", function(){\r",
+											"    pm.response.to.have.status(403)\r",
+											"    pm.response.to.have.body(\"this loan \" + pm.collectionVariables.get(\"loan_1_id\") + \" has already been extended\");\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{customer_1_jwtToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/loans/extendLoan/{{loan_1_id}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"loans",
+										"extendLoan",
+										"{{loan_1_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "403_Put_Extend_WhenLoanIsExpired",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"can't extend expired loan\", function(){\r",
+											"    pm.response.to.have.status(403)\r",
+											"    pm.response.to.have.body(\"unauthorize extend, loan's endDate is expired\")\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const getLoan = {\r",
+											"    url: pm.environment.get(\"host\") + pm.environment.get(\"domain\") + \"/loans/\" + pm.collectionVariables.get(\"loan_1_id\"),\r",
+											"    method: 'GET',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"        'Authorization': 'Bearer '+pm.collectionVariables.get(\"jwtAdminToken\")\r",
+											"    }\r",
+											"}\r",
+											"pm.sendRequest(getLoan, (error, response)=>{\r",
+											"    if(error){console.log(error)}\r",
+											"    var jsonData  = response.json();\r",
+											"    jsonData.loanStartDate = \"2021-01-01T22:00:00.000+00:00\"\r",
+											"    jsonData.loanEndDate = \"2021-02-01T22:00:00.000+00:00\"\r",
+											"    jsonData.extended = false\r",
+											"    const putLoan = {\r",
+											"        url: pm.environment.get(\"host\") + pm.environment.get(\"domain\") + \"/loans/updateLoan\",\r",
+											"        method: 'PUT',\r",
+											"        header: {\r",
+											"            'Content-Type': 'application/json',\r",
+											"            'Authorization': 'Bearer '+pm.collectionVariables.get(\"jwtAdminToken\")\r",
+											"        },\r",
+											"        body: {\r",
+											"            mode: 'raw',\r",
+											"            raw: JSON.stringify(jsonData)\r",
+											"        }\r",
+											"    }\r",
+											"\r",
+											"    pm.sendRequest(putLoan, (error, response)=>{\r",
+											"        if(error){console;log(error)}\r",
+											"        pm.test(\"update loan for make it expired and not extend\", function (){\r",
+											"            pm.expect(response).to.have.status(200)\r",
+											"        })\r",
+											"    })\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{customer_1_jwtToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/loans/extendLoan/{{loan_1_id}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"loans",
+										"extendLoan",
+										"{{loan_1_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "404_return_WhenNotFoundLoan",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Badrequest return loan not found\", function (){\r",
+											"    pm.response.to.have.status(404)\r",
+											"    pm.response.to.have.body(\"Loan not found\")\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/loans/return/0",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"loans",
+										"return",
+										"0"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "200_return_success",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Badrequest return loan not found\", function (){\r",
+											"    pm.response.to.have.status(200)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/loans/return/{{loan_1_id}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"loans",
+										"return",
+										"{{loan_1_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "200_Delete_Success",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"can't delete a not returned loan\", function (){\r",
+											"    pm.response.to.have.status(200)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/loans/delete/{{loan_1_id}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"loans",
+										"delete",
+										"{{loan_1_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Remove_Initialized_Data",
+					"item": [
+						{
+							"name": "delete_init_copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"delete copy\", function(){\r",
+											"    pm.response.to.have.status(200)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/copies/delete/{{copyId}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"copies",
+										"delete",
+										"{{copyId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete_init_book",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"delete book\", function(){\r",
+											"    pm.response.to.have.status(200)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/books/delete/{{bookId}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"books",
+										"delete",
+										"{{bookId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete_init_author",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Delete author success\", function () {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/authors/delete/{{authorId}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"authors",
+										"delete",
+										"{{authorId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete_init_library",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Delete author success\", function () {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/libraries/delete/{{libraryId}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"libraries",
+										"delete",
+										"{{libraryId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete_init_customer_1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Delete author success\", function () {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/users/delete/{{customer_1_id}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"users",
+										"delete",
+										"{{customer_1_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Reservation_CRUD_Tests",
+			"item": [
+				{
+					"name": "Initialize_necessary_data",
+					"item": [
+						{
+							"name": "Init_Log_Admin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.collectionVariables.set(\"jwtAdminToken\", pm.response.json()[0])\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"{{adminUsername}}\",\r\n    \"password\": \"{{adminPassword}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/authenticate",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Init_Create_Library",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Create library success\", function (){\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.collectionVariables.set(\"libraryId\", pm.response.json().libraryId);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\":\"postman library\",\r\n    \"phoneNumber\":\"0725456895\",\r\n    \"addressDto\":{\r\n        \"number\":7,\r\n        \"street\":\"road Danton\",\r\n        \"zipCode\":59240,\r\n        \"city\":\"Dunkirk\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/libraries/newLibrary",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"libraries",
+										"newLibrary"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Init_Create_Author",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Create author success\", function (){\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.collectionVariables.set(\"authorId\", pm.response.json().authorId);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\":\"Postman\",\r\n    \"lastName\":\"For test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/authors/newAuthor",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"authors",
+										"newAuthor"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Init_Create_Book",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"Create book success\", function (){\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.collectionVariables.set(\"bookId\", pm.response.json().bookId);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Postman testBook\",\r\n    \"isbn\":9999,\r\n    \"summary\":\"Just a book for testing Api with Postman\",\r\n    \"authorDto\":{\r\n        \"authorId\":\"{{authorId}}\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/books/newBook",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"books",
+										"newBook"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Init_Create_Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Create copy success\", function(){\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.collectionVariables.set(\"copyId\", pm.response.json().id)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"available\":1,\r\n    \"bookDto\":{\r\n        \"bookId\": \"{{bookId}}\"\r\n    },\r\n    \"libraryDto\":{\r\n        \"libraryId\": \"{{libraryId}}\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/copies/newCopy",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"copies",
+										"newCopy"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Init_Create_Customer_1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"Create success\", function (){\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.collectionVariables.set(\"customer_1_id\", pm.response.json().userId);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"lastName\":\"testApi lastname\",\r\n    \"firstName\":\"testAPI firstname\",\r\n    \"email\":\"customer_1@postman.com\",\r\n    \"password\":\"password\",\r\n    \"addressDto\":{\r\n        \"number\":1,\r\n        \"street\":\"road Tanton\",\r\n        \"zipCode\":59240,\r\n        \"city\":\"Dunkirk\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/register/customer",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"register",
+										"customer"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Init_Create_Customer_2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"Create success\", function (){\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.collectionVariables.set(\"customer_2_id\", pm.response.json().userId);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"lastName\":\"testApi lastname\",\r\n    \"firstName\":\"testAPI firstname\",\r\n    \"email\":\"customer_2@postman.com\",\r\n    \"password\":\"password\",\r\n    \"addressDto\":{\r\n        \"number\":2,\r\n        \"street\":\"road Tanton\",\r\n        \"zipCode\":59240,\r\n        \"city\":\"Dunkirk\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/register/customer",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"register",
+										"customer"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Init_Create_Customer_3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"Create success\", function (){\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.collectionVariables.set(\"customer_3_id\", pm.response.json().userId);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"lastName\":\"testApi lastname\",\r\n    \"firstName\":\"testAPI firstname\",\r\n    \"email\":\"customer_3@postman.com\",\r\n    \"password\":\"password\",\r\n    \"addressDto\":{\r\n        \"number\":3,\r\n        \"street\":\"road Tanton\",\r\n        \"zipCode\":59240,\r\n        \"city\":\"Dunkirk\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/register/customer",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"register",
+										"customer"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Init_Create_Customer_4",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"Create success\", function (){\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.collectionVariables.set(\"customer_4_id\", pm.response.json().userId);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"lastName\":\"testApi lastname\",\r\n    \"firstName\":\"testAPI firstname\",\r\n    \"email\":\"customer_4@postman.com\",\r\n    \"password\":\"password\",\r\n    \"addressDto\":{\r\n        \"number\":4,\r\n        \"street\":\"road Tanton\",\r\n        \"zipCode\":59240,\r\n        \"city\":\"Dunkirk\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/register/customer",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"register",
+										"customer"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login_Customer_1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"login with new user\", function(){\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.collectionVariables.set(\"customer_1_jwtToken\", pm.response.json()[0]);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"customer_1@postman.com\",\r\n    \"password\": \"password\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/authenticate",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login_Customer_2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"login with new user\", function(){\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.collectionVariables.set(\"customer_2_jwtToken\", pm.response.json()[0]);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"customer_2@postman.com\",\r\n    \"password\": \"password\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/authenticate",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login_Customer_3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"login with new user\", function(){\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.collectionVariables.set(\"customer_3_jwtToken\", pm.response.json()[0]);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"customer_3@postman.com\",\r\n    \"password\": \"password\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/authenticate",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login_Customer_4",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"login with new user\", function(){\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.collectionVariables.set(\"customer_4_jwtToken\", pm.response.json()[0]);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"customer_4@postman.com\",\r\n    \"password\": \"password\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/authenticate",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Tests",
+					"item": [
+						{
+							"name": "404_WhenUserDtoMissing",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"missing user param\", function(){\r",
+											"        pm.response.to.have.status(404)\r",
+											"        pm.response.to.have.body(\"user param is required\")\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{customer_1_jwtToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/reservations/new",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"reservations",
+										"new"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "404_WhenBookDtoMissing Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"missing book param\", function(){\r",
+											"    pm.response.to.have.status(404)\r",
+											"    pm.response.to.have.body(\"book param is required\")\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{customer_1_jwtToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userDto\":{ \r\n        \"userId\":{{customer_1_id}}\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/reservations/new",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"reservations",
+										"new"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "401_WhenBookIsAvailable",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"can't reserve an available book\", function (){\r",
+											"    pm.response.to.have.status(401)\r",
+											"    pm.response.to.have.body(\"a copy for this book is available, reservation isn't enabled\")\r",
+											" })"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{customer_1_jwtToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userDto\":{\r\n        \"userId\":\"{{customer_1_id}}\"\r\n    },\r\n    \"bookDto\":{\r\n        \"bookId\":\"{{bookId}}\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/reservations/new",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"reservations",
+										"new"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "401_WhenCopyAlreadyLoanByTheUser",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"can't reserve a copy the user have already loaned\", function(){\r",
+											"    pm.response.to.have.status(401)\r",
+											"    pm.response.to.have.body(\"this book is already loaned by this user\")\r",
+											" })"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const createLoanForCustomer_1 = {\r",
+											"    url: pm.environment.get(\"host\") + pm.environment.get(\"domain\") + \"/loans/newLoan\",\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"        'Authorization': 'Bearer ' + pm.collectionVariables.get('jwtAdminToken')\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: JSON.stringify({\r",
+											"            \"userDto\":{\r",
+											"                \"userId\": pm.collectionVariables.get(\"customer_1_id\")\r",
+											"            },\r",
+											"            \"copyDto\":{\r",
+											"                \"id\": pm.collectionVariables.get(\"copyId\"),\r",
+											"                \"bookDto\": {\r",
+											"                    \"bookId\": pm.collectionVariables.get(\"bookId\")\r",
+											"                }\r",
+											"            } \r",
+											"        })\r",
+											"    }\r",
+											"}\r",
+											"pm.sendRequest(createLoanForCustomer_1, (error, response) => {\r",
+											"    if(error){console.log(error)}\r",
+											"     pm.test(\"create a loan for customer_1\", function(){\r",
+											"        pm.expect(response).to.have.status(201)\r",
+											"        pm.collectionVariables.set(\"loan_1_id\", response.json().id)\r",
+											"     })\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{customer_1_jwtToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userDto\":{\r\n        \"userId\":\"{{customer_1_id}}\"\r\n    },\r\n    \"bookDto\":{\r\n        \"bookId\":\"{{bookId}}\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/reservations/new",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"reservations",
+										"new"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "401_WhenUserTargetIsntUserLogged",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"can't reserve for other user, only logged for user \", function(){\r",
+											"    pm.response.to.have.status(401)\r",
+											"    pm.response.to.have.body(\"access denied\")\r",
+											" })"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{customer_1_jwtToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userDto\":{\r\n        \"userId\":\"{{customer_2_id}}\"\r\n    },\r\n    \"bookDto\":{\r\n        \"bookId\":\"{{bookId}}\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/reservations/new",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"reservations",
+										"new"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "201_success_for_customer_2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"Create reservation for customer 2\", function(){\r",
+											"    pm.response.to.have.status(201)\r",
+											"    pm.collectionVariables.set(\"reservation_1_id\", pm.response.json().id)\r",
+											" })"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{customer_2_jwtToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userDto\":{\r\n        \"userId\":\"{{customer_2_id}}\"\r\n    },\r\n    \"bookDto\":{\r\n        \"bookId\":\"{{bookId}}\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/reservations/new",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"reservations",
+										"new"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "401_WhenReservationAlreadyExist",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"can't reserve with same user\", function(){\r",
+											"    pm.response.to.have.status(409)\r",
+											"    pm.response.to.have.body(\"the book is already reserved by this user\")\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{customer_2_jwtToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userDto\":{\r\n        \"userId\":\"{{customer_2_id}}\"\r\n    },\r\n    \"bookDto\":{\r\n        \"bookId\":\"{{bookId}}\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/reservations/new",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"reservations",
+										"new"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "409_DeleteBook_WhenHaveReservation",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"can't delete book with reservation\", function(){\r",
+											"    pm.response.to.have.status(409)\r",
+											"    pm.response.to.have.body(\"This book \" + pm.collectionVariables.get(\"bookId\") + \" have existing reservation\")\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/books/delete/{{bookId}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"books",
+										"delete",
+										"{{bookId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "201_success_for_customer_3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"Create reservation for customer 3\", function(){\r",
+											"    pm.response.to.have.status(201)\r",
+											"    pm.collectionVariables.set(\"reservation_2_id\", pm.response.json().id)\r",
+											" })"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{customer_3_jwtToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userDto\":{\r\n        \"userId\":\"{{customer_3_id}}\"\r\n    },\r\n    \"bookDto\":{\r\n        \"bookId\":\"{{bookId}}\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/reservations/new",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"reservations",
+										"new"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "401_WhenReservationListIsFull",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											" pm.test(\"can't reserve because reservation list is full\", function(){\r",
+											"    pm.response.to.have.status(401)\r",
+											"    pm.response.to.have.body(\"reservation list is full for this book\")\r",
+											" })\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{customer_4_jwtToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userDto\":{\r\n        \"userId\":\"{{customer_4_id}}\"\r\n    },\r\n    \"bookDto\":{\r\n        \"bookId\":\"{{bookId}}\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/reservations/new",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"reservations",
+										"new"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "200_ nextReservationIsActive_WhenLoanIsReturned",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"return loan to active first reservation\", function(){\r",
+											"    pm.response.to.have.status(200)\r",
+											"    pm.expect(true).to.equals( pm.response.json().returned)\r",
+											"\r",
+											"    const getCustomer_2 = {\r",
+											"        url: pm.environment.get(\"host\") + pm.environment.get(\"domain\") + \"/users/\" + pm.collectionVariables.get(\"customer_2_id\"),\r",
+											"        method: 'GET',\r",
+											"        header: {\r",
+											"            'Content-Type': 'application/json',\r",
+											"            'Authorization': 'Bearer '+pm.variables.get(\"customer_2_jwtToken\")\r",
+											"        }\r",
+											"    }\r",
+											"    pm.sendRequest(getCustomer_2, (error, response)=>{\r",
+											"        if(error){console.log(error)}\r",
+											"        pm.test(\"check if customer_2's reservation is active\", function(){\r",
+											"            pm.expect(response).to.have.status(200)\r",
+											"            var jsonData = response.json()\r",
+											"            var userRsv = jsonData.reservationDtos.find(r => r.id == pm.collectionVariables.get(\"reservation_1_id\") )\r",
+											"            pm.expect(userRsv).not.to.equal(\"undefined\")\r",
+											"            pm.expect(userRsv).to.have.property(\"active\", true)\r",
+											"        })\r",
+											"    })                      \r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/loans/return/{{loan_1_id}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"loans",
+										"return",
+										"{{loan_1_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "401_createLoanForUserHaventReservation_WhenBookIsReserved",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"can't loan a resserved book\", function(){\r",
+											"    pm.response.to.have.status(401)\r",
+											"    pm.response.to.have.body(\"loan can't be accept, the book is reserved\")\r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userDto\":{\r\n        \"userId\":\"{{customer_1_id}}\"\r\n    },\r\n    \"copyDto\":{\r\n        \"id\":\"{{copyId}}\",\r\n        \"bookDto\": {\r\n            \"bookId\": \"{{bookId}}\"\r\n        }\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/loans/newLoan",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"loans",
+										"newLoan"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "401_createLoanForUserHaventActiveReservation_WhenBookIsReserved",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"can't loan a resserved book\", function(){\r",
+											"    pm.response.to.have.status(401)\r",
+											"    pm.response.to.have.body(\"loan can't be accept, the book is reserved\")\r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userDto\":{\r\n        \"userId\":\"{{customer_3_id}}\"\r\n    },\r\n    \"copyDto\":{\r\n        \"id\":\"{{copyId}}\",\r\n        \"bookDto\": {\r\n            \"bookId\": \"{{bookId}}\"\r\n        }\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{domain}}/loans/newLoan",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"loans",
+										"newLoan"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "200_nextReservationIsActive_WhenActiveReservationIsCanceled",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"delete reservation_1 for customer_2\", function(){\r",
+											"        pm.response.to.have.status(200)\r",
+											"\r",
+											"    const getCustomer_3 = {\r",
+											"        url: pm.environment.get(\"host\") + pm.environment.get(\"domain\") + \"/users/\" + pm.collectionVariables.get(\"customer_3_id\"),\r",
+											"        method: 'GET',\r",
+											"        header: {\r",
+											"            'Content-Type': 'application/json',\r",
+											"            'Authorization': 'Bearer '+pm.variables.get(\"customer_3_jwtToken\")\r",
+											"        }\r",
+											"    }\r",
+											"    pm.sendRequest(getCustomer_3, (error, response)=>{\r",
+											"        if(error){console.log(error)}\r",
+											"        pm.test(\"check if customer_3's reservation is active\", function(){\r",
+											"            pm.expect(response).to.have.status(200)\r",
+											"            var jsonData = response.json()\r",
+											"            var userRsv = jsonData.reservationDtos.find(r => r.id == pm.collectionVariables.get(\"reservation_2_id\"))\r",
+											"            pm.expect(userRsv).not.to.equal(\"undefined\")\r",
+											"            pm.expect(userRsv).to.have.property(\"active\", true)\r",
+											"        })\r",
+											"    })          \r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{customer_2_jwtToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/reservations/cancel/{{reservation_1_id}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"reservations",
+										"cancel",
+										"{{reservation_1_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Remove_Initialized_Data",
+					"item": [
+						{
+							"name": "delete_reservation_2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"delete reservation_2\", function(){\r",
+											"    pm.response.to.have.status(200)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/reservations/cancel/{{reservation_2_id}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"reservations",
+										"cancel",
+										"{{reservation_2_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete_init_loan",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"delete loan\", function(){\r",
+											"    pm.response.to.have.status(200)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/loans/delete/{{loan_1_id}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"loans",
+										"delete",
+										"{{loan_1_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete_init_copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"delete copy\", function(){\r",
+											"    pm.response.to.have.status(200)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/copies/delete/{{copyId}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"copies",
+										"delete",
+										"{{copyId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete_init_book",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"delete book\", function(){\r",
+											"    pm.response.to.have.status(200)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/books/delete/{{bookId}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"books",
+										"delete",
+										"{{bookId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete_init_author",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"delete author\", function(){\r",
+											"    pm.response.to.have.status(200)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/authors/delete/{{authorId}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"authors",
+										"delete",
+										"{{authorId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete_init_library",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Delete author success\", function () {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/libraries/delete/{{libraryId}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"libraries",
+										"delete",
+										"{{libraryId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete_init_customer_1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Delete author success\", function () {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/users/delete/{{customer_1_id}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"users",
+										"delete",
+										"{{customer_1_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete_init_customer_2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Delete author success\", function () {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/users/delete/{{customer_2_id}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"users",
+										"delete",
+										"{{customer_2_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete_init_customer_3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Delete author success\", function () {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/users/delete/{{customer_3_id}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"users",
+										"delete",
+										"{{customer_3_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete_init_customer_4",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Delete author success\", function () {\r",
+											"    pm.response.to.have.status(200)\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwtAdminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}{{domain}}/users/delete/{{customer_4_id}}",
+									"host": [
+										"{{host}}{{domain}}"
+									],
+									"path": [
+										"users",
+										"delete",
+										"{{customer_4_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwtToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "jwtToken",
+			"value": ""
+		},
+		{
+			"key": "jwtAdminToken",
+			"value": ""
+		},
+		{
+			"key": "libraryId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "authorId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "bookId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "customer_1_id",
+			"value": "null",
+			"type": "string"
+		},
+		{
+			"key": "customer_2_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "customer_3_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "customer_4_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "customer_1_jwtToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "customer_2_jwtToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "customer_3_jwtToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "customer_4_jwtToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "loan_1_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "reservation_1_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "reservation_2_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "customer_1_Id",
+			"value": ""
+		},
+		{
+			"key": "customer_2_Id",
+			"value": ""
+		},
+		{
+			"key": "customer_3_Id",
+			"value": ""
+		},
+		{
+			"key": "customer_4_Id",
+			"value": ""
+		},
+		{
+			"key": "copyId",
+			"value": ""
+		}
+	]
+}

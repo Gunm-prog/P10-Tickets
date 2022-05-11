@@ -16,6 +16,8 @@ HELP.md
 ### IntelliJ IDEA ###
 .idea/workspace.xml
 .idea/tasks.xml
+.idea/libraries/*.xml
+
 #.idea
 #.idea/artifacts
 #.idea/compiler.xml
@@ -39,6 +41,21 @@ build/
 
 ### VS Code ###
 .vscode/
+
 .idea/libraries/Maven__junit_junit_4_13.xml
 .idea/libraries/Maven__org_hamcrest_hamcrest_core_2_2.xml
 Lib10/docker/ci/reports/lib10RestAPITests.html
+
+
+/Lib10/docker/ci/reports/*html
+/Lib10/docker/ci/reports/*json
+.idea/misc.xml
+.idea/jarRepositories.xml
+.idea/jpa-buddy.xml
+.idea/encodings.xml
+.idea/compiler.xml
+.idea/modules.xml
+.idea/uiDesigner.xml
+.idea/vcs.xml
+Lib10/target/classes/application.properties
+

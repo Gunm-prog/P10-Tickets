@@ -1,0 +1,15 @@
+version: '2'
+services:
+  lib10.db:
+    image: mysql:8.0.25
+    ports:
+      - 3307:3306
+#    expose:
+#      - 3307
+    volumes:
+      - "./init/db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
+    environment:
+    - MYSQL_ROOT_PASSWORD=rootPass
+    - MYSQL_DATABASE=lib10
+    - MYSQL_USER=usr_lib10
+    - MYSQL_PASSWORD=secret

@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+
+  postman:
+    build:
+      context: init/newman
+      dockerfile: Dockerfile
+    container_name: postmanTests
+    restart: on-failure
+    command:
+      run Lib10_testing.postman_collection.json -e localhost.postman_environment.json --env-var host=api:8081 -k
+      -r htmlextra,cli,json
+      --reporter-json-export="/etc/newman/reports/lib10RestAPITests.json"
+      --reporter-htmlextra-export="/etc/newman/reports/lib10RestAPITests.html"
+    volumes:
+      - "./:/etc/newman"
+    depends_on:
+      - api
+      - db
+    entrypoint: [ "/etc/wait-for.sh", "api:8081", "-t", "0", "--", "newman" ]
+
+  api:
+    build:
+      context: ../../
+      dockerfile: Dockerfile
+    container_name: lib10_api
+    restart : always
+    ports:
+      - 8081:80
+    environment:
+      - spring.datasource.url=jdbc:mysql://db/lib10?serverTimezone=UTC
+      - spring.datasource.username=usr_lib10
+      - spring.datasource.password=secret
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0.25
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - 3307:3306
+    volumes:
+      - "./init/db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootPass
+      - MYSQL_DATABASE=lib10
+      - MYSQL_USER=usr_lib10
+      - MYSQL_PASSWORD=secret

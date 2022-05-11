@@ -1,4 +1,5 @@
-image: aritrasasmal/maven-mysql-java
+
+image: tmaier/docker-compose
 
 cache:
   paths:
@@ -17,66 +18,58 @@ variables:
   #config maven pour stocker le repository dans un emplacement connu
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
-  MYSQL_ROOT_PASSWORD: root
+  MYSQL_ROOT_PASSWORD: rootPass
   MYSQL_USER: usr_lib10
-  MYSQL_PASSWORD: secret
-  MYSQL_DATABASE: LIB10
-  DB_HOST: mysql
+  #  MYSQL_PASSWORD: secret
+  MYSQL_DATABASE: lib10
+  MYSQL_HOST: mysql
+
+  POSTMAN_COLLECTION : postmanTests.postman_collection.json
+  POSTMAN_ENVIRONMENT: postmanTests.postman_environment.json
+
+  DOCKER_CI_IMAGE: "$CI_REGISTRY_IMAGE:ci-$CI_COMMIT_SHORT_SHA"
 
 stages:
-  - build
-  - test
-#  - integration-test
+  - unit
+  - compose
 
-.init-db: &init-db
-  #connexion et test de connexion
-  #- export PGPASSWORD=$POSTGRES_PASSWORD
-  #- psql -h "postgres" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 'OK' AS status;"
-  # - mysql stop
-  # - sudo usermod -d /var/lib/mysql/ mysql
-  # - start mysql
+#.docker-login: &docker-login
+#  - echo ${p10_pat} | docker login $CI_REGISTRY -u Gunm-prog --password-stdin
 
-  #- mysql -u root
-  # - CREATE USER 'usr_lib10'@'localhost' IDENTIFIED BY 'secret';
+#.init-db: &init-db
+#  #connexion et test de connexion
+#  - echo "SELECT 'OK';" | mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql "${MYSQL_DATABASE}"
+#
+#  - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
+#  - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
+#  - mysql --user=root --password="${MYSQL_ROOT_PASSWORD}" --host=mysql --database="${MYSQL_DATABASE}" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
 
-  # - mysql -h DB_HOST -U MYSQL_USER -d MYSQL_DATABASE -c "SELECT 'OK' AS status;"
-  #load demo data
-  #- mysql -u "MYSQL_USER" -p "MYSQL_PASSWORD" < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
-  - mysql < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
-  #- mysql -u $MYSQL_USER -p $MYSQL_PASSWORD < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
-  #- mysql -u root < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
-  #- mysql -u root -p "MYSQL_DATABASE" < ./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql
-  - mysql -u "MYSQL_USER" -p "MYSQL_DATABASE" < ./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql
-  - mysql -u "MYSQL_USER" -p "MYSQL_DATABASE" < ./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql
-
-## a remettre
-build:
-  stage: build
+test-unit:
+  stage: unit
+  image: maven:3.6.3-jdk-8-openj9
   coverage: '/Total.*?([0–9]{1,3})%/'
   script:
     - cd Lib10/
-    - mvn $MAVEN_CLI_OPTS compile
-  artifacts:
-    expire_in: 1 hour
-    paths:
-      - '**/target' # for multi-modules project with directory root as a pom package type
-
-unit-test:
-  stage: test
-  coverage: '/Total.*?([0–9]{1,3})%/'
-  needs:
-    - job: build
-  # before_script:
-  #   - *init-db
-  script:
-    #remet a jour les dates de modif des fichiers .class pour eviter une recompilation
-    - find . -name "*.class" -exec touch {} \+
-    - cd Lib10/
-    - mvn $MAVEN_CLI_OPTS test
+    - mvn $MAVEN_CLI_OPTS site
   artifacts:
     reports:
       junit:
         - "**/target/surefire-reports/TEST-*.xml"
     expire_in: 1 hour
     paths:
-      - "**/target" # for multi-modules project with directory root as a pom package type
+      - "**/target"
+
+test-compose:
+  stage: compose
+  needs:
+    - job: test-unit
+  services:
+    - name: docker:dind
+  script:
+    - cd Lib10/docker/ci
+    - docker-compose up --exit-code-from=postman
+  artifacts:
+    when: always
+    paths:
+      - "*/docker/ci/reports/*.html"
+      - '*/target' # for multi-modules project with directory root as a pom package type

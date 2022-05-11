@@ -116,7 +116,7 @@ public class LoanController {
                     //delete the finished reservation
                     reservationService.deleteById( userReservationDto.getId() );
 
-                }catch(NotFoundException e){//if user can't loan the book because it's reserved.
+                }catch(NotFoundException e){//if user can't loan the book because it's reserved by other user.
                     log.info( "loan can't be accept, the book is reserved" );
                     return ResponseEntity
                             .status( HttpStatus.UNAUTHORIZED )
@@ -132,7 +132,7 @@ public class LoanController {
             return ResponseEntity
                     .status( HttpStatus.CONFLICT )
                     .body( e.getMessage() );
-        } catch ( UserNotFoundException | CopyNotFoundException e) {
+        } catch ( UserNotFoundException | CopyNotFoundException | BookNotFoundException e) {
             log.error( e.getMessage() );
             return ResponseEntity
                     .status( HttpStatus.NOT_FOUND )
