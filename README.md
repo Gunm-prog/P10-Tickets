@@ -20,7 +20,10 @@ Le projet :
 
 Le site permettra aux utilisateurs de suivre leurs prêts de livres via l'interface web avec une nouvelle fonctionnalité :
 
-Recherchez des livres et voyez le nombre d'exemplaires disponibles. Voir leurs prêts en cours. Le prêt d'un livre ne peut être prolongé qu'une seule fois. La prolongation ajoute une nouvelle période de prêt (4 semaines) à la période initiale. Les utilisateurs pourront réserver un livre. Un batch : Ce logiciel de traitement automatisé enverra des emails de rappel aux utilisateurs n'ayant pas rendu les livres à la fin de la période de prêt. L'envoi sera automatique à la fréquence d'un par jour.
+Les utilisateurs pouvaient déjà recherchez des livres et voyez le nombre d'exemplaires disponibles. Voir leurs prêts en cours. Le prêt d'un livre ne peut être prolongé qu'une seule fois. La prolongation ajoute une nouvelle période de prêt (4 semaines) à la période initiale.
+ Un batch : Ce logiciel de traitement automatisé enverra des emails de rappel aux utilisateurs n'ayant pas rendu les livres à la fin de la période de prêt. L'envoi sera automatique à la fréquence d'un par jour.
+
+Les utilisateurs pourront désormais réserver un livre. 
 
 
 Contraintes fonctionnelles:
@@ -45,6 +48,7 @@ Docker
 Postman
 Newman
 Gitlab
+
 L'application a été développée selon une architecture multimodule.
 
 
@@ -58,11 +62,7 @@ Ouvrez le projet dans Intellij Idea.
 
 Allez dans le fichier application.properties file du module Lib10; à la ligne "spring.jpa.hibernate.ddl-auto =", mettez le mode de configuration sur "create".
 
-Créez une base de données via un éditeur SQL (j'ai utilisé MySQLWorkbench), utilisez les données contenuez dans le dossier Dump, puis allez dans le fichier application.properties: "spring.datasource.url=" et entrez le lien de votre base de données "spring.datasource.username=" your username et "spring.datasource.password=" your password.
-
-
-
-
+Créez une base de données via un éditeur SQL (j'ai utilisé MySQLWorkbench), utilisez les données contenues dans Lib10/docker/ci/init/db/docker-entrypoint-initdb.d, puis allez dans le fichier application.properties: "spring.datasource.url=" et entrez le lien de votre base de données "spring.datasource.username=" your username et "spring.datasource.password=" your password.
 
 
 Afin de voir ce que peut faire l'utilisateur connecté (voir le détail de ses emprunts de livres et la liste des emprunts de livres dans son tableau de bord, idem pour les réservations), voici les identifiants nécessaires (identifiant et mot de passe) lors de la connexion :
@@ -84,9 +84,16 @@ Vous avez également la possibilité d'enregistrer un nouvel utilisateur.
 
 Démarrez:
 
-- En premier le module Lib10,
-- Puis Lib10WebClient,
-- Et finalement SpringBatch (ce microservice communiquera avec le microservice backend (Lib10). Il n'est pas connecté à la base de données. Il enverra un mail (toutes les 24 heures) aux utilisateurs qui n'auront pas respecté la date prévue de restitution du ou des livres qu'ils auront prêtés. Des mails de notification de possibilité de retrait de livre(s) réservé(s) (à retirer en bibliothèque sous 48 heures). Afin de tester le batch, j'ai utilisé Mailtrap (un faux service SMTP, principalement destiné aux utilisateurs de Nodemailer (mais sans s'y limiter). C'est un service de messagerie anti-transactionnel entièrement gratuit où les messages ne sont jamais livrés).
+- En premier l'API backend Lib10,
+
+- Puis l'application Frontend Lib10WebClient,
+
+- Et finalement SpringBatch.
+
+Ce microservice communiquera avec le microservice backend (Lib10). Il n'est pas connecté à la base de données. Il demande au backend d'envoyer un mail (toutes les 24 heures) aux utilisateurs qui n'auront pas respecté la date prévue de restitution du ou des livres qu'ils auront emprunté.  Des mails de notification de possibilité de retrait de livre(s) réservé(s) (à retirer en bibliothèque sous 48 heures). Les réservations expirées sont supprimées automatiquement avec éventuelle activation de la réservation suivante.
+ 
+J'ai utilisé Mailtrap (un faux service SMTP, principalement destiné aux utilisateurs de Nodemailer (mais sans s'y limiter). C'est un service de messagerie anti-transactionnel entièrement gratuit où les messages ne sont jamais livrés) pour simuler les mails.
+
 
 Vous pouvez accéder à l'application Web au port localhost:/8083 à partir de votre navigateur si vous n'avez pas modifié le "server.port.properties" dans le fichier application.properties.
 
@@ -94,7 +101,7 @@ Vous trouverez la configuration des propriétés de chaque microservice dans :
 
 src/main/resources/application.properties.
 
-Créez un compte Mailtrap afin de voir les mails et notifications envoyées aux utilisateurs. 
+Créez un compte Mailtrap afin de voir les mails et notifications envoyés aux utilisateurs. 
 
 Il vous faudra inscrire vos identifiants Mailtrap dans le fichier application.properties du batch: "spring.mail.username=" your mailtrap username, "spring.mail.password=" your mailtrap password.
 
@@ -105,13 +112,17 @@ docker : répertoire relatifs aux conteneurs docker utiles pour le projet.
 src : code source de l'application.
 
 
-Environnement de développement:
+Gitlab-ci:
 
-Les composants nécessaires lors du développement sont disponibles via des conteneurs docker. L'environnement de développement est assemblé grâce à docker-compose (cf docker/ci/init/db/docker-compose.yml).
+Les composants nécessaires lors du l'intégration continue sont exécutés via des conteneurs docker. 
 
-Il comporte :
 
-une base de données MySQL contenant un jeu de données de démo (mysql://127.0.0.1:9032/db_lib10)
+Le fichier Gitlab-ci.yml va assembler les images de la base de données (avec son jeu de données) de l'API backend et une image de postman/newman pour les tests.
+
+
+Docker:
+
+Comme les tests sont exécutés via un fichier docker-compose, si vous disposez de Docker sur votre machine, vous pouvez également lancer ces tests en local par le biais du fichier docker-compose (Lib10/docker/ci/docker-compose.yml)
 
 Lancement:
 
