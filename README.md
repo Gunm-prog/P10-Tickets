@@ -90,6 +90,40 @@ Vous trouverez la configuration des propriétés de chaque microservice dans :
 src/main/resources/application.properties.
 
 
+Organisation du répertoire:
+
+docker : répertoire relatifs aux conteneurs docker utiles pour le projet.
+src : code source de l'application.
+
+
+Environnement de développement:
+
+Les composants nécessaires lors du développement sont disponibles via des conteneurs docker. L'environnement de développement est assemblé grâce à docker-compose (cf docker/ci/init/db/docker-compose.yml).
+
+Il comporte :
+
+une base de données MySQL contenant un jeu de données de démo (mysql://127.0.0.1:9032/db_lib10)
+
+Lancement:
+
+cd docker/dev
+docker-compose up
+
+
+Arrêt:
+
+cd docker/dev
+docker-compose stop
+
+
+Remise à zero:
+
+cd docker/dev
+docker-compose stop
+docker-compose rm -v
+docker-compose up
+
+
 Auteur:
 
 Emilie Balsen - dans le cadre de ma formation de développeur d'applications java chez OpenClassrooms.
