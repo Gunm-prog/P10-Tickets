@@ -69,7 +69,7 @@ public class LoginController {
     }
 
 
-    @GetMapping(path="/login")
+    @GetMapping(path= {"/login", "/"})
     public String loginForm(@CookieValue(value=JwtProperties.HEADER, required=false) String accessToken, Model model) {
         if (accessToken != null) return REDIRECT_USER_HOME_VIEW;
         model.addAttribute( USER_ATT, new User() );
