@@ -42,6 +42,9 @@ Feign Proxy
 LOMBOK
 Spring DATA JPA Hibernate
 Docker
+Postman
+Newman
+Gitlab
 L'application a été développée selon une architecture multimodule.
 
 
@@ -81,13 +84,19 @@ Vous avez également la possibilité d'enregistrer un nouvel utilisateur.
 
 Démarrez:
 
-En premier le module Lib10, puis le module library10WebClient et finalement le module SpringBatch.
+- En premier le module Lib10,
+- Puis Lib10WebClient,
+- Et finalement SpringBatch (ce microservice communiquera avec le microservice backend (Lib10). Il n'est pas connecté à la base de données. Il enverra un mail (toutes les 24 heures) aux utilisateurs qui n'auront pas respecté la date prévue de restitution du ou des livres qu'ils auront prêtés. Des mails de notification de possibilité de retrait de livre(s) réservé(s) (à retirer en bibliothèque sous 48 heures). Afin de tester le batch, j'ai utilisé Mailtrap (un faux service SMTP, principalement destiné aux utilisateurs de Nodemailer (mais sans s'y limiter). C'est un service de messagerie anti-transactionnel entièrement gratuit où les messages ne sont jamais livrés).
 
 Vous pouvez accéder à l'application Web au port localhost:/8083 à partir de votre navigateur si vous n'avez pas modifié le "server.port.properties" dans le fichier application.properties.
 
 Vous trouverez la configuration des propriétés de chaque microservice dans :
 
 src/main/resources/application.properties.
+
+Créez un compte Mailtrap afin de voir les mails et notifications envoyées aux utilisateurs. 
+
+Il vous faudra inscrire vos identifiants Mailtrap dans le fichier application.properties du batch: "spring.mail.username=" your mailtrap username, "spring.mail.password=" your mailtrap password.
 
 
 Organisation du répertoire:
