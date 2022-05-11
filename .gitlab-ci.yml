@@ -5,13 +5,11 @@ cache:
   paths:
     - "**/.m2/repository"
 
-  # command:[ "--default-authentication-plugin=mysql_native_password" ]
-  #services:
-  # - mysql:latest
-  # - name: mysql:latest
-  #   alias: db
-  #   entrypoint: ["./docker/dev/init/db/docker-entrypoint-initdb.d/01_create_schema.sql", "./docker/dev/init/db/docker-entrypoint-initdb.d/02_create_tables.sql", "./docker/dev/init/db/docker-entrypoint-initdb.d/21_insert_data_demo.sql"]
-  #   command: ["myslq"]
+#services:
+ # - name: mysql:8.0
+  #  command: [ "--default-authentication-plugin=mysql_native_password" ]
+#  - name: postman/newman:alpine
+#    entrypoint: [""]
 
 variables:
   MAVEN_CLI_OPTS: "--batch-mode"

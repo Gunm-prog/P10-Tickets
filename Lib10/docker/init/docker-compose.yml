@@ -1,0 +1,68 @@
+version: '2'
+
+networks:
+ app_network:
+   name: lib10network
+   driver: bridge
+
+## for dependance waiting ?
+#-wait tcp://mysql:3306 -timeout 300s -wait-retry-interval 30s
+    #command: sh -c "/wait && /sayhello"
+    #command: ["./wait-for-it.sh", "db:5432", "--", "python", "app.py"]
+      #sh -c -wait tcp://api:8081 -timeout 300s -wait-retry-interval 30s
+      #./wait-for-it.sh api:8081 --
+     # sh 'docker run --name uiTestingWaitForServer ${CYPRESS_IMAGE} /bin/bash -c "/node_modules/.bin/wait-on http://${UI_TESTING_TARGET}:80/LaunchPad"'
+     #    -c "/node_modules/.bin/wait-on api:8081"
+    #  ./wait-for-it.sh api:8081 --
+
+services:
+
+  postman:
+    image: postman/newman:alpine
+    container_name: postmanTests
+    restart: on-failure
+    command:
+  #    - npm install -g newman-reporter-htmlextra
+    #  run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var host=api:8081 -k -r htmlextra,cli,json --reporter-htmlextra-export="reports/lib10APITests.html" --reporter-json-export="reports/lib10APITests.json"
+       run ${POSTMAN_COLLECTION} -e ${POSTMAN_ENVIRONMENT} --env-var host=api:8081 -k -r cli,json --reporter-json-export="reports/lib10APITests.json"
+    volumes:
+      - "./:/etc/newman"
+    depends_on:
+      - api
+      - db
+    networks:
+      - app_network
+
+  api:
+    container_name: lib10_api
+    restart : on-failure #always
+###    restart: on-failure
+    ports:
+      # local:container
+      - "8081:80"
+    networks:
+      - app_network
+    environment: 
+      - spring.datasource.url=jdbc:mysql://db:3306/lib10
+    build:
+      context: ../../
+      dockerfile: Dockerfile
+ #   command:
+  #     ./wait-for-it.sh db:3306 -- run
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0.25
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3306:3306"
+    networks:
+      - app_network
+    volumes:
+      - "./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+      - MYSQL_USER=$MYSQL_USER
+      - MYSQL_PASSWORD=secret

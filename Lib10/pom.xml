@@ -284,6 +284,119 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+            <!-- ===== Test / Reporting (Unit Test) ===== -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+                <!-- <configuration>
+                        <argLine>@{argLine} -your -extra -arguments</argLine>
+                    </configuration>-->
+                <dependencies>
+                    <dependency>
+                        <groupId>org.junit.platform</groupId>
+                        <artifactId>junit-platform-surefire-provider</artifactId>
+                        <version>1.2.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.junit.jupiter</groupId>
+                        <artifactId>junit-jupiter-engine</artifactId>
+                        <version>5.6.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>add-test-source</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/test-unit/java</source>
+                              <!--  <source>src/test-integration/java</source> -->
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+<!-- it's work for install npm dependance, but maybe finnaly don't need it -->
+<!--            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.12.1</version>
+                <executions>
+                    <execution>
+-->
+                        <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
+<!--                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+-->
+                        <!-- optional: default phase is "generate-resources" -->
+<!--                        <phase>generate-resources</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <nodeVersion>v4.6.0</nodeVersion>
+-->
+                    <!-- optional: with node version greater than 4.0.0 will use npm provided by node distribution -->
+<!--                    <npmVersion>2.15.9</npmVersion>
+ -->                   
+                    <!-- optional: where to download node and npm from. Defaults to https://nodejs.org/dist/ -->
+                  <!--  <downloadRoot>http://myproxy.example.org/nodejs/</downloadRoot> -->
+ <!--               </configuration>
+            </plugin>
+-->
+<!--
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+-->
+              <!--  <version>1.3.2</version> -->
+ <!--               <version>3.0.0</version>
+                <executions>
+-->
+                <!-- npm install -->
+    <!--           <execution>
+                    <id>npm-install</id>
+                    <phase>test</phase>
+                    <goals>
+                    <goal>exec</goal>
+                    </goals>
+                    <configuration>
+                    <executable>npm</executable>
+                    <commandlineArgs>
+                        install
+                    </commandlineArgs>
+                    </configuration>
+                </execution>
+    -->
+                <!-- Integration Testing-->
+ <!--               <execution>
+                    <id>integration-tests</id>
+                    <phase>install</phase> 
+-->
+                 <!--   <phase>test</phase>-->
+ <!--                   <goals>
+                    <goal>exec</goal>
+                    </goals>
+                    <configuration>
+                    <executable>node_modules/newman/bin/newman.js</executable>
+                    <commandlineArgs>
+                        run target/test-classes/com.emilie.lib10/postmanTests.postman_collection.json -e target/test-classes/com.emilie.lib10/postmanTests.postman_environment.json
+                    </commandlineArgs>
+                    </configuration>
+                </execution>
+                </executions>
+            </plugin>
+-->
         </plugins>
 
         <pluginManagement>
