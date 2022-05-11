@@ -53,3 +53,5 @@ build/
 .idea/uiDesigner.xml
 .idea/vcs.xml
 Lib10/target/classes/application.properties
+
+/Lib10/target/
