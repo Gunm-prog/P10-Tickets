@@ -42,4 +42,15 @@ build/
 ### VS Code ###
 .vscode/
 
-/Lib10/docker/ci/reports/
+/Lib10/docker/ci/reports/*html
+/Lib10/docker/ci/reports/*json
+.idea/misc.xml
+.idea/jarRepositories.xml
+.idea/jpa-buddy.xml
+.idea/encodings.xml
+.idea/compiler.xml
+.idea/modules.xml
+.idea/uiDesigner.xml
+.idea/vcs.xml
+Lib10/target/classes/application.properties
+.idea/P10-Tickets.iml
