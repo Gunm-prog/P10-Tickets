@@ -16,24 +16,19 @@ Ticket#2 - Correction d'un bug dans la gestion des prolongations de prêt
 Ticket#3 - Mise en place d'une stratégie de tests
 
 
+Le projet :
 
+Le site permettra aux utilisateurs de suivre leurs prêts de livres via l'interface web avec une nouvelle fonctionnalité :
 
+Recherchez des livres et voyez le nombre d'exemplaires disponibles. Voir leurs prêts en cours. Le prêt d'un livre ne peut être prolongé qu'une seule fois. La prolongation ajoute une nouvelle période de prêt (4 semaines) à la période initiale. Les utilisateurs pourront réserver un livre. Un batch : Ce logiciel de traitement automatisé enverra des emails de rappel aux utilisateurs n'ayant pas rendu les livres à la fin de la période de prêt. L'envoi sera automatique à la fréquence d'un par jour.
 
-The project :
-
-The website will allow users to follow their book loans through the web interface:
-
-Search for books and see the number of available copies. View their current loans. The loan of a book can be extended only once. The extension adds a new loan period (4 weeks) to the initial period. A batch: This software for automated processing will send reminder emails to users who have not returned the books at the end of the loan period. The sending will be automatic at the frequency of one per day.
-
-The web API:
-
-The website as well as the batch will communicate with this software in REST in order to know the information related to the Database.
 
 Contraintes fonctionnelles:
 
 - Application web avec un framework MVC.
 - API web en REST (Les clients (site web, batch) communiqueront avec cette API web) 
 - Packaging avec Maven.
+
 
 Développement réalisé avec:
 
@@ -49,9 +44,10 @@ Spring DATA JPA Hibernate
 Docker
 L'application a été développée selon une architecture multimodule.
 
+
 Installation:
 
-Install Tomcat(9).
+Installez Tomcat(9).
 
 Effectuez un git clone du présent repository P10-Tickets (https://github.com/Gunm-Prog/P10-Tickets):
 
@@ -66,7 +62,7 @@ Créez une base de données via un éditeur SQL (j'ai utilisé MySQLWorkbench), 
 
 
 
-Pour voir ce que peut faire l'utilisateur connecté (voir le détail de ses emprunts de livres et la liste des emprunts de livres dans son tableau de bord, idem pour les réservations), voici les identifiants nécessaires (identifiant et mot de passe) lors de la connexion :
+Afin de voir ce que peut faire l'utilisateur connecté (voir le détail de ses emprunts de livres et la liste des emprunts de livres dans son tableau de bord, idem pour les réservations), voici les identifiants nécessaires (identifiant et mot de passe) lors de la connexion :
 
 username = lily@hotmail.com password = password
 
@@ -82,6 +78,7 @@ username = marthe@hotmail.com password = password
 
 Vous avez également la possibilité d'enregistrer un nouvel utilisateur.
 
+
 Démarrez:
 
 En premier le module Lib10, puis le module library10WebClient et finalement le module SpringBatch.
@@ -91,6 +88,7 @@ Vous pouvez accéder à l'application Web au port localhost:/8083 à partir de v
 Vous trouverez la configuration des propriétés de chaque microservice dans :
 
 src/main/resources/application.properties.
+
 
 Auteur:
 
