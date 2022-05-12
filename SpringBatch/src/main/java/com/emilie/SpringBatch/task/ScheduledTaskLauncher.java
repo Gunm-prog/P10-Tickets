@@ -45,7 +45,7 @@ public class ScheduledTaskLauncher {
      */
   //  (cron="*/10 * * * * *") //10 seconds for presentation
   //  (cron="0 0 1 * * ?") // for one day
-    @Scheduled(cron="*/10 * * * * *")
+    @Scheduled(cron="0 0 1 * * ?")
     public void runScheduledRecoveryTask() {
         try{
             List<String> dataResponse=loginService.authenticateBatch();

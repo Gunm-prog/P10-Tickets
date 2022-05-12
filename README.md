@@ -44,6 +44,7 @@ Spring Boot
 Feign Proxy
 LOMBOK
 Spring DATA JPA Hibernate
+Flyway (version 6.4.4)
 Docker
 Postman
 Newman
@@ -62,7 +63,9 @@ Ouvrez le projet dans Intellij Idea.
 
 Allez dans le fichier application.properties file du module Lib10; à la ligne "spring.jpa.hibernate.ddl-auto =", mettez le mode de configuration sur "create".
 
-Créez une base de données via un éditeur SQL (j'ai utilisé MySQLWorkbench), utilisez les données contenues dans Lib10/docker/ci/init/db/docker-entrypoint-initdb.d, puis allez dans le fichier application.properties: "spring.datasource.url=" et entrez le lien de votre base de données "spring.datasource.username=" your username et "spring.datasource.password=" your password.
+Créez une base de données appelée "lib10" via un éditeur SQL (j'ai utilisé MySQLWorkbench),  puis allez dans le fichier application.properties: "spring.datasource.url=" et entrez le lien de votre base de données "spring.datasource.username=" your username et "spring.datasource.password=" your password.
+
+Lancez l'API "Lib10", les fichiers de migration seront exécutés par Flyway et un jeu de données sera injecté.
 
 
 Afin de voir ce que peut faire l'utilisateur connecté (voir le détail de ses emprunts de livres et la liste des emprunts de livres dans son tableau de bord, idem pour les réservations), voici les identifiants nécessaires (identifiant et mot de passe) lors de la connexion :
