@@ -20,7 +20,6 @@
 --
 DROP TABLE IF EXISTS `authenticate`;
 DROP TABLE IF EXISTS `category`;
-DROP TABLE IF EXISTS `hibernate_sequence`;
 
 --
 -- Table structure for table `author`
@@ -34,7 +33,7 @@ CREATE TABLE `author` (
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
   PRIMARY KEY (`author_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -63,7 +62,7 @@ CREATE TABLE `book` (
   PRIMARY KEY (`id`),
   KEY `FKsytpuhl67g1174cx7iqlw6os9` (`author_id`),
   CONSTRAINT `FKsytpuhl67g1174cx7iqlw6os9` FOREIGN KEY (`author_id`) REFERENCES `author` (`author_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +92,7 @@ CREATE TABLE `copy` (
   KEY `FKe5y2cips0e9f7u0wsssgunkgv` (`library_id`),
   CONSTRAINT `FKe5y2cips0e9f7u0wsssgunkgv` FOREIGN KEY (`library_id`) REFERENCES `library` (`library_id`),
   CONSTRAINT `FKh0uyi7khdijjmtqbyat3qgjnw` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -122,7 +121,7 @@ CREATE TABLE `library` (
   `name` varchar(255) NOT NULL,
   `phone_number` varchar(20) NOT NULL,
   PRIMARY KEY (`library_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -155,7 +154,7 @@ CREATE TABLE `loan` (
   KEY `FKmrnfyic6xh8yqf30t2fd8x5ge` (`user_id`),
   CONSTRAINT `FK3dgelu2cvvq3xe4wfmnb7rowy` FOREIGN KEY (`copy_id`) REFERENCES `copy` (`copy_id`),
   CONSTRAINT `FKmrnfyic6xh8yqf30t2fd8x5ge` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -187,7 +186,7 @@ CREATE TABLE `reservation` (
   KEY `FKdbt6w2ran0620tsp1edlr6qq7` (`user_id`),
   CONSTRAINT `FK64a41qc5bfy5efj1f60i1atgi` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`),
   CONSTRAINT `FKdbt6w2ran0620tsp1edlr6qq7` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 
@@ -222,7 +221,7 @@ CREATE TABLE `user` (
   `roles` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_ob8kqyqqgmefl0aco34akdtpe` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `reservation`
