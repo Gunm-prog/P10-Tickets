@@ -40,6 +40,7 @@ INSERT INTO `author` VALUES (1,'J.R.R.','Tolkien'),(2,'J.K.','Rawling'),(3,'Marc
 /*!40000 ALTER TABLE `author` ENABLE KEYS */;
 UNLOCK TABLES;
 
+
 --
 -- Table structure for table `book`
 --
